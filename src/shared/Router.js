@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MainPage from '../pages/MainPage';
+import MyPage from '../pages/MyPage';
+import ErrorPage from '../pages/ErrorPage';
+import SignInPage from '../pages/SignInPage';
+import SignUpPage from '../pages/SignUpPage';
+import DetailPage from '../pages/DetailPage';
+import EditPage from '../pages/EditPage';
 import Layout from './Layout';
-import MainPage from './../pages/MainPage';
-import MyPage from './../pages/MyPage';
-import SignInPage from './../pages/SignInPage';
-import SignUpPage from './../pages/SignUpPage';
-import DetailPage from './../pages/DetailPage';
-import EditPage from './../pages/EditPage';
-import ErrorPage from './../pages/ErrorPage';
 
 const Router = () => {
   return (
