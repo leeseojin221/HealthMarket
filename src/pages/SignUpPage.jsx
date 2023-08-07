@@ -28,14 +28,13 @@ function SignUpPage() {
 
   return (
     <>
-      <div>회원가입 페이지</div>
+      <div></div>
       <StSignup>
         <StSignPic>
-          <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
+          <StLogo src={healthmarket_logo} />
         </StSignPic>
         <StSignInputDiv>
           <StSignForm>
-            회원가입 입력창
             <div>
               <StSignInput placeholder="이메일" type="email" name="email" value={email} onChange={onChange} />
             </div>
@@ -58,7 +57,13 @@ function SignUpPage() {
               </div>
               <div>
                 <StSignupBtn>회원가입</StSignupBtn>
-                <StSigninBtn>로그인하러가기</StSigninBtn>
+                <StSigninBtn
+                  onClick={() => {
+                    navigate('/signinPage');
+                  }}
+                >
+                  로그인하러가기
+                </StSigninBtn>
               </div>
               <div>
                 <StSigninBtnSns>구글로그인</StSigninBtnSns>
@@ -78,7 +83,7 @@ const StSignup = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 60%;
   height: 500px;
   text-align: center;
   color: #1a4475;
@@ -99,21 +104,21 @@ const StLogo = styled.img`
   width: 300px;
   height: auto;
   cursor: pointer;
-  margin-top: 25%;
+  margin-top: 100px;
 `;
 
 const StSignForm = styled.form`
-  padding-top: 30px;
+  padding-top: 60px;
 `;
 const StSignInput = styled.input`
   width: 80%;
-  height: 40px;
+  height: 35px;
   font-size: 16px;
   border-radius: 8px;
   border: 1px solid lightgrey;
   padding: 8px;
   boxsizing: border-box;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
   margin-top: 5px;
 `;
 
@@ -138,7 +143,7 @@ const StSigninBtn = styled.button`
   margin-top: 9px;
 `;
 const StSigninBtnSns = styled.button`
-  width: 37%;
+  flex: 1;
   border: none;
   padding: 12px;
   border-radius: 6px;
@@ -146,5 +151,5 @@ const StSigninBtnSns = styled.button`
   color: #1a4475;
   cursor: pointer;
   margin-top: 9px;
-  display: inline-block;
+  margin-right: 5px;
 `;
