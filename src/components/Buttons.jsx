@@ -29,7 +29,7 @@ export const EditLinkButton = () => {
       navigate('/editPage');
     }
   };
-  return <button onClick={editLinkButton}>수정</button>;
+  return <EditBtn onClick={editLinkButton}>수정</EditBtn>;
 };
 
 export const CancelButton = () => {
@@ -39,9 +39,23 @@ export const CancelButton = () => {
       navigate('/detailPage');
     }
   };
-  return <button onClick={cancelLinkButton}>취소</button>;
+  return <CancelBtn onClick={cancelLinkButton}>취소</CancelBtn>;
+};
+
+export const EditButton = () => {
+  const editButton = () => {};
+  return <EditBtn onClick={editButton}>수정</EditBtn>;
 };
 
 const DeleteBtn = styled.button`
   background-color: red;
+`;
+
+const EditBtn = styled.button`
+  background-color: blue;
+  margin-right: 10px;
+`;
+
+const CancelBtn = styled.button`
+  background-color: green;
 `;

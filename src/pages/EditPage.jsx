@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { useState } from 'react';
-import { CancelButton } from '../components/Buttons';
+import { CancelButton, EditButton } from '../components/Buttons';
 
 function DetailPage() {
   const [image, setImage] = useState(null);
@@ -26,6 +26,7 @@ function DetailPage() {
             <p>상품명</p>
             <p>가격</p>
             <p>판매자정보</p>
+            <EditButton />
             <CancelButton />
           </div>
         </StProductDetails>
