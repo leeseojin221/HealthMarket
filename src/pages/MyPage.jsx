@@ -8,7 +8,7 @@ import React from 'react';
 function MyPage() {
   return (
     <>
-      <div>a</div>
+      <div></div>
     </>
   );
 }

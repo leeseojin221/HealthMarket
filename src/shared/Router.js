@@ -12,16 +12,17 @@ import ErrorPage from './../pages/ErrorPage';
 const Router = () => {
   return (
     <BrowserRouter>
-      <Layout />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/myPage" element={<MyPage />} />
-        <Route path="/signinPage" element={<SignInPage />} />
-        <Route path="/signupPage" element={<SignUpPage />} />
-        <Route path="/detailPage" element={<DetailPage />} />
-        <Route path="/editPage" element={<EditPage />} />
-        <Route path="/*" element={<ErrorPage />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/myPage" element={<MyPage />} />
+          <Route path="/signinPage" element={<SignInPage />} />
+          <Route path="/signupPage" element={<SignUpPage />} />
+          <Route path="/detailPage" element={<DetailPage />} />
+          <Route path="/editPage" element={<EditPage />} />
+          <Route path="/*" element={<ErrorPage />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 };
