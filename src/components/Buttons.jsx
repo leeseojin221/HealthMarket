@@ -32,6 +32,16 @@ export const EditLinkButton = () => {
   return <button onClick={editLinkButton}>수정</button>;
 };
 
+export const CancelButton = () => {
+  const navigate = useNavigate();
+  const cancelLinkButton = () => {
+    if (cancelLinkButton) {
+      navigate('/detailPage');
+    }
+  };
+  return <button onClick={cancelLinkButton}>취소</button>;
+};
+
 const DeleteBtn = styled.button`
   background-color: red;
 `;
