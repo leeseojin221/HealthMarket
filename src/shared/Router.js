@@ -8,13 +8,6 @@ import SignUpPage from './../pages/SignUpPage';
 import DetailPage from './../pages/DetailPage';
 import EditPage from './../pages/EditPage';
 import ErrorPage from './../pages/ErrorPage';
-import MainPage from './../pages/MainPage';
-import MyPage from './../pages/MyPage';
-import SignInPage from './../pages/SignInPage';
-import SignUpPage from './../pages/SignUpPage';
-import DetailPage from './../pages/DetailPage';
-import EditPage from './../pages/EditPage';
-import ErrorPage from './../pages/ErrorPage';
 
 const Router = () => {
   return (
