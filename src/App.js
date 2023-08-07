@@ -1,12 +1,12 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css';
-import Layout from './shared/Layout';
-
+import Router from './shared/Router';
+const queryClient = new QueryClient();
 function App() {
   return (
-    <div className="App">
-      <Layout />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router />
+    </QueryClientProvider>
   );
 }
-
 export default App;
