@@ -41,14 +41,14 @@ const StFooterP = styled.div`
 `;
 
 const StLayout = styled.div`
-  // color: #e9e6d8;
+  color: black;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 90vh;
   padding: 40px;
-  font-family: 'Hahmlet', serif;
+  /* font-family: 'Hahmlet', serif; */
 `;
 
 const StLogo = styled.img`
