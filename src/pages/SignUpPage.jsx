@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import healthmarket_logo from '../assets/healthmarket_logo.png';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../axios/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -23,6 +25,40 @@ function SignUpPage() {
     }
     if (name === 'confirmPassword') {
       setConfirmPassword(value);
+    }
+  };
+
+  const Signup = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      alert('이메일을 입력해주세요');
+    } else if (!password || !confirmPassword) {
+      alert('비밀번호를 입력해주세요');
+    } else if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다');
+    }
+
+    if (password === confirmPassword) {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        alert('회원가입에 성공했습니다.');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        navigate('/');
+        console.log(userCredential); //user정보 확인하기
+      } catch (error) {
+        console.error(error.code); //에러메세지 확인하기
+        if (error.code === 'auth/email-already-in-use') {
+          alert('이미 사용된 이메일입니다.');
+        } else if (error.code === 'auth/weak-password') {
+          alert('비밀번호가 6자리 이하입니다.');
+        } else if (error.code === 'auth/invalid-email') {
+          alert('이메일 형식을 확인 해주세요.');
+        } else {
+          alert('회원가입에 실패 했습니다.');
+        }
+      }
     }
   };
 
@@ -49,14 +85,14 @@ function SignUpPage() {
               <div>
                 <StSignInput
                   placeholder="비밀번호확인"
-                  tname="confirmPassword"
+                  name="confirmPassword"
                   type="password"
                   value={confirmPassword}
                   onChange={onChange}
                 />
               </div>
               <div>
-                <StSignupBtn>회원가입</StSignupBtn>
+                <StSignupBtn onClick={Signup}>회원가입</StSignupBtn>
                 <StSigninBtn
                   onClick={() => {
                     navigate('/signinPage');
@@ -64,10 +100,6 @@ function SignUpPage() {
                 >
                   로그인하러가기
                 </StSigninBtn>
-              </div>
-              <div>
-                <StSigninBtnSns>구글로그인</StSigninBtnSns>
-                <StSigninBtnSns>깃헙로그인</StSigninBtnSns>
               </div>
             </div>
           </StSignForm>
@@ -141,15 +173,4 @@ const StSigninBtn = styled.button`
   color: #1a4475;
   cursor: pointer;
   margin-top: 9px;
-`;
-const StSigninBtnSns = styled.button`
-  flex: 1;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  border: 2px solid #1a4475;
-  color: #1a4475;
-  cursor: pointer;
-  margin-top: 9px;
-  margin-right: 5px;
 `;

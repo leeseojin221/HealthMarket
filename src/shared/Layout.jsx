@@ -2,6 +2,9 @@ import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import healthmarket_logo from '../assets/healthmarket_logo.png';
+import { useEffect } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../axios/firebase';
 
 const StHeader = styled.div`
   width: 100%;
@@ -60,26 +63,57 @@ const StLogo = styled.img`
 function Header() {
   const navigate = useNavigate();
 
+  //로그아웃
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const Logout = async () => {
+    const confirmLogout = window.confirm('로그아웃하시겠습니까?');
+    if (confirmLogout) {
+      await signOut(auth);
+      setCurrentUser(null); // 이용자 정보 초기화 하기
+    }
+  };
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setCurrentUser(user?.email);
+    });
+  }, []);
+
   return (
-    <StHeader>
-      <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
-      <StAuthLink>
-        <StAuth
-          onClick={() => {
-            navigate('/signinPage');
-          }}
-        >
-          로그인
-        </StAuth>
-        <StAuth
-          onClick={() => {
-            navigate('/signupPage');
-          }}
-        >
-          회원가입
-        </StAuth>
-      </StAuthLink>
-    </StHeader>
+    <>
+      {currentUser ? (
+        <StHeader>
+          <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
+          <StAuthLink>
+            <div>
+              <div>{currentUser}</div>
+              <button onClick={Logout}>로그아웃</button>
+            </div>
+          </StAuthLink>
+        </StHeader>
+      ) : (
+        <StHeader>
+          <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
+          <StAuthLink>
+            <StAuth
+              onClick={() => {
+                navigate('/signinPage');
+              }}
+            >
+              로그인
+            </StAuth>
+            <StAuth
+              onClick={() => {
+                navigate('/signupPage');
+              }}
+            >
+              회원가입
+            </StAuth>
+          </StAuthLink>
+        </StHeader>
+      )}
+    </>
   );
 }
 
