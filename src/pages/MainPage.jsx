@@ -3,7 +3,8 @@ import { styled } from 'styled-components';
 import SelectBox from '../form/selectBox';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
-import { nanoid } from '@reduxjs/toolkit';
+import { useQuery } from 'react-query';
+import { getItems } from '../axios/api';
 
 function MainPage() {
   const options = [
@@ -13,38 +14,10 @@ function MainPage() {
     { value: '테니스', name: '테니스' },
     { value: '헬스', name: '헬스' }
   ];
-
-  const items = [
-    {
-      id: nanoid(),
-      title: 'item 1',
-      price: 20000,
-      category: '축구'
-    },
-    {
-      id: nanoid(),
-      title: 'item 2',
-      price: 20000,
-      category: '농구'
-    },
-    {
-      id: nanoid(),
-      title: 'item 3',
-      price: 20000,
-      category: '테니스'
-    },
-    {
-      id: nanoid(),
-      title: 'item 4',
-      price: 20000,
-      category: '헬스'
-    }
-  ];
+  const { data, isLoading } = useQuery('상품들', getItems);
 
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
-
-  const filteredItems = items.filter((item) => item.title.toLowerCase().includes(searchItem.toLowerCase()));
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
@@ -62,19 +35,23 @@ function MainPage() {
         </Stcontainer2>
       </Stcontainer1>
       <StContainer>
-        {filteredItems.map((item) => (
-          <StCard
-            key={item.id}
-            onClick={() => {
-              navigate(`detailPage/${item.id}`);
-            }}
-          >
-            <StImg src="health" />
-            <Stp>{item.title}</Stp>
-            <Stp>{item.price}원</Stp>
-            <Stp>{item.category}</Stp>
-          </StCard>
-        ))}
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          data.map((item) => (
+            <StCard
+              key={item.id}
+              onClick={() => {
+                navigate(`detailPage/${item.id}`);
+              }}
+            >
+              <StImg src="health" />
+              <Stp>{item.title}</Stp>
+              <Stp>{item.price}원</Stp>
+              <Stp>{item.category}</Stp>
+            </StCard>
+          ))
+        )}
       </StContainer>
     </>
   );
