@@ -14,7 +14,8 @@ function MainPage() {
     { value: '테니스', name: '테니스' },
     { value: '헬스', name: '헬스' }
   ];
-  const { data, isLoading } = useQuery('상품들', getItems);
+  const { data, isLoading } = useQuery('info', getItems);
+  console.log('data=>', data);
 
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
