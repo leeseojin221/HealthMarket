@@ -1,5 +1,4 @@
 import { collection, getDocs, query } from "firebase/firestore";
-import { useEffect } from "react";
 import { db } from "./firebase";
 
 const getHealth = async () => {
@@ -9,18 +8,17 @@ const getHealth = async () => {
     const initialInfos = [];
 
     querySnapshot.forEach((doc) => {
+        // console.log('doc=>', doc)
         const data = {
             id: doc.id,
             ...doc.data()
         };
-        console.log('data=>', data);
+        // console.log('data=>', data);
         initialInfos.push(data);
-        console.log('initialInfos=>', initialInfos)
+        // console.log('initialInfos=>', initialInfos)
     });
     return initialInfos;
 
 };
-
-
 
 export { getHealth }

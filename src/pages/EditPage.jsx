@@ -2,9 +2,23 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 import { CancelButton, EditButton } from '../components/Buttons';
+import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getHealth } from '../axios/api';
 
 function DetailPage() {
   const [image, setImage] = useState(null);
+
+  const { id } = useParams();
+  console.log('id=>', id);
+
+  const { isLoading, data } = useQuery('info', getHealth);
+
+  if (isLoading) {
+    return <div>로딩중 ...</div>;
+  }
+
+  const productInfo = data.find((item) => item.id == id);
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
@@ -18,7 +32,7 @@ function DetailPage() {
           {image ? <img src={image} alt="이미지" /> : <p>이미지를 선택하세요</p>}
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </StImgDiv>
-        <StDescription>설명:</StDescription>
+        <StDescription>설명:{productInfo.body}</StDescription>
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
@@ -27,9 +41,9 @@ function DetailPage() {
             <CancelButton />
           </StContainerBtn>
           <div>
-            <p>상품명:</p>
-            <p>가격:</p>
-            <div>판매자정보:</div>
+            <p>상품명:{productInfo.title}</p>
+            <p>가격:{productInfo.price}</p>
+            <div>판매자정보:{productInfo.SellerInformation}</div>
           </div>
         </StProductDetails>
       </StRightColumn>

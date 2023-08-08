@@ -21,12 +21,13 @@ export const DeleteButton = () => {
   return <DeleteBtn onClick={deleteButton}>삭제</DeleteBtn>;
 };
 
-export const EditLinkButton = () => {
+export const EditLinkButton = ({ id }) => {
+  console.log('id=>', id);
   const navigate = useNavigate();
   const editLinkButton = () => {
     if (editLinkButton) {
       alert('수정페이지로 이동합니다.');
-      navigate('/editPage');
+      navigate(`/editPage/${id}`);
     }
   };
   return <EditBtn onClick={editLinkButton}>수정</EditBtn>;
@@ -36,7 +37,7 @@ export const CancelButton = () => {
   const navigate = useNavigate();
   const cancelLinkButton = () => {
     if (cancelLinkButton) {
-      navigate('/detailPage');
+      navigate(`/detailPage/`);
     }
   };
   return <CancelBtn onClick={cancelLinkButton}>취소</CancelBtn>;

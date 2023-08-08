@@ -5,6 +5,7 @@ import firebaseApp, { db } from '../axios/firebase';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { useQuery } from 'react-query';
 import { getHealth } from '../axios/api';
+import { useParams } from 'react-router-dom';
 
 function DetailPage() {
   // useEffect(() => {
@@ -17,12 +18,25 @@ function DetailPage() {
   //   fetchData();
   // }, []);
 
+  const { id } = useParams();
+
+  // console.log('id=>', id);
+
   const { isLoading, data } = useQuery('info', getHealth);
-  // console.log('data=>', data);
+  console.log('data=>', data);
 
   if (isLoading) {
     return <div>로딩중 ...</div>;
   }
+
+  const productInfo = data.find((item) => item.id == id);
+  console.log('productInfo=>', productInfo);
+
+  // 지정된아이디값을 뿌려주기위해 만들었는데 id값이 읽혀오지않는다..
+  // 배열을 가져온거니깐
+  // 배열매소드를 가지고 데이터를 찾는다. find 사용
+  // const productInfo = data[id];
+  // console.log('productInfo=>', productInfo);
 
   return (
     <StContainer>
@@ -30,18 +44,18 @@ function DetailPage() {
         <StImgDiv>
           <img></img>
         </StImgDiv>
-        <StDescription>설명:</StDescription>
+        <StDescription>설명:{productInfo.body}</StDescription>
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
           <StContainerBtn>
-            <EditLinkButton />
+            <EditLinkButton id={id} />
             <DeleteButton />
           </StContainerBtn>
           <div>
-            <p>상품명: </p>
-            <p>가격:</p>
-            <div>판매자정보:</div>
+            <p>상품명: {productInfo.title} </p>
+            <p>가격: {productInfo.price}</p>
+            <div>판매자정보:{productInfo.SellerInformation}</div>
           </div>
         </StProductDetails>
       </StRightColumn>

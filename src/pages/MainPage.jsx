@@ -16,25 +16,25 @@ function MainPage() {
 
   const items = [
     {
-      id: nanoid(),
+      id: 1,
       title: 'item 1',
       price: 20000,
       category: '축구'
     },
     {
-      id: nanoid(),
+      id: 2,
       title: 'item 2',
       price: 20000,
       category: '농구'
     },
     {
-      id: nanoid(),
+      id: 3,
       title: 'item 3',
       price: 20000,
       category: '테니스'
     },
     {
-      id: nanoid(),
+      id: 4,
       title: 'item 4',
       price: 20000,
       category: '헬스'
