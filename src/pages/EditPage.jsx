@@ -95,6 +95,7 @@ const StDescription = styled.div`
   margin-top: 20px;
   font-weight: bold;
   padding: 20px;
+  width: 300px;
 `;
 
 const StProductDetails = styled.div`

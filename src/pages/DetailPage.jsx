@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { DeleteButton, EditLinkButton } from '../components/Buttons';
-import firebaseApp, { db } from '../axios/firebase';
-import { collection, getDocs, query } from 'firebase/firestore';
 import { useQuery } from 'react-query';
 import { getHealth } from '../axios/api';
 import { useParams } from 'react-router-dom';
@@ -20,7 +18,7 @@ function DetailPage() {
 
   const { id } = useParams();
 
-  // console.log('id=>', id);
+  console.log('id=>', id);
 
   const { isLoading, data } = useQuery('info', getHealth);
   console.log('data=>', data);
@@ -107,6 +105,7 @@ const StDescription = styled.div`
   margin-top: 20px;
   font-weight: bold;
   padding: 20px;
+  width: 300px;
 `;
 
 const StProductDetails = styled.div`
