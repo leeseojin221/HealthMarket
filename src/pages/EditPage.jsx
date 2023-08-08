@@ -38,7 +38,7 @@ function DetailPage() {
         <StProductDetails>
           <StContainerBtn>
             <EditButton />
-            <CancelButton />
+            <CancelButton id={id} />
           </StContainerBtn>
           <div>
             <p>상품명:{productInfo.title}</p>

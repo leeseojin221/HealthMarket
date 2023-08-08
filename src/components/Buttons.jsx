@@ -33,11 +33,11 @@ export const EditLinkButton = ({ id }) => {
   return <EditBtn onClick={editLinkButton}>수정</EditBtn>;
 };
 
-export const CancelButton = () => {
+export const CancelButton = ({ id }) => {
   const navigate = useNavigate();
   const cancelLinkButton = () => {
     if (cancelLinkButton) {
-      navigate(`/detailPage/`);
+      navigate(`/detailPage/${id}`);
     }
   };
   return <CancelBtn onClick={cancelLinkButton}>취소</CancelBtn>;
