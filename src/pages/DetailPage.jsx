@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { DeleteButton, EditLinkButton } from '../components/Buttons';
+import firebaseApp, { db } from '../axios/firebase';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { useQuery } from 'react-query';
+import { getHealth } from '../axios/api';
 
 function DetailPage() {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const querySnapshot = await getDocs(collection(db, 'info'));
+  //     querySnapshot.forEach((doc) => {
+  //       console.log(`${doc.id} => ${doc.data()}`);
+  //     });
+  //   };
+  //   fetchData();
+  // }, []);
+
+  const { isLoading, data } = useQuery('info', getHealth);
+  // console.log('data=>', data);
+
+  if (isLoading) {
+    return <div>로딩중 ...</div>;
+  }
+
   return (
     <StContainer>
       <StLeftColumn>
         <StImgDiv>
           <img></img>
         </StImgDiv>
-        <StDescription>설명</StDescription>
+        <StDescription>설명:</StDescription>
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
@@ -18,9 +39,9 @@ function DetailPage() {
             <DeleteButton />
           </StContainerBtn>
           <div>
-            <p>상품명</p>
-            <p>가격</p>
-            <sellerDiv>판매자정보</sellerDiv>
+            <p>상품명: </p>
+            <p>가격:</p>
+            <div>판매자정보:</div>
           </div>
         </StProductDetails>
       </StRightColumn>

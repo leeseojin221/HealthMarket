@@ -18,7 +18,7 @@ function DetailPage() {
           {image ? <img src={image} alt="이미지" /> : <p>이미지를 선택하세요</p>}
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </StImgDiv>
-        <StDescription>설명</StDescription>
+        <StDescription>설명:</StDescription>
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
@@ -27,9 +27,9 @@ function DetailPage() {
             <CancelButton />
           </StContainerBtn>
           <div>
-            <p>상품명</p>
-            <p>가격</p>
-            <sellerDiv>판매자정보</sellerDiv>
+            <p>상품명:</p>
+            <p>가격:</p>
+            <div>판매자정보:</div>
           </div>
         </StProductDetails>
       </StRightColumn>
