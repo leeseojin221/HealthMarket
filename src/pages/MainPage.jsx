@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import SelectBox from '../form/selectBox';
-import health from '../assets/healthmarket_logo.png';
+import { BiSearch } from 'react-icons/bi';
+import { useNavigate } from 'react-router';
+import { nanoid } from '@reduxjs/toolkit';
 
 function MainPage() {
   const options = [
@@ -14,42 +16,59 @@ function MainPage() {
 
   const items = [
     {
+      id: nanoid(),
       title: 'item 1',
       price: 20000,
       category: '축구'
     },
     {
+      id: nanoid(),
       title: 'item 2',
       price: 20000,
       category: '농구'
     },
     {
+      id: nanoid(),
       title: 'item 3',
       price: 20000,
       category: '테니스'
     },
     {
+      id: nanoid(),
       title: 'item 4',
       price: 20000,
       category: '헬스'
     }
   ];
 
+  const navigate = useNavigate();
+  const [searchItem, setSearchItem] = useState('');
+
+  const filteredItems = items.filter((item) => item.title.toLowerCase().includes(searchItem.toLowerCase()));
+
+  const onChange = (e) => {
+    setSearchItem(e.target.value);
+  };
+
   return (
     <>
       <Stcontainer1>
         <SelectBox options={options} defaultValue=""></SelectBox>
         <Stcontainer2>
-          <StserchInput placeholder="검색해주세요" />
-          <span>
-            <i></i>
-          </span>
+          <StserchInput placeholder="검색해주세요" value={searchItem} onChange={onChange} />
+          <StSearchButton>
+            <BiSearch />
+          </StSearchButton>
         </Stcontainer2>
       </Stcontainer1>
-
       <StContainer>
-        {items.map((item, index) => (
-          <StCard key={index}>
+        {filteredItems.map((item) => (
+          <StCard
+            key={item.id}
+            onClick={() => {
+              navigate('detailPage/' + item?.id);
+            }}
+          >
             <StImg src="health" />
             <Stp>{item.title}</Stp>
             <Stp>{item.price}원</Stp>
@@ -75,7 +94,13 @@ const Stcontainer2 = styled.div`
 const StserchInput = styled.input`
   width: 100px;
   height: 20px;
-  border: none;
+  border-color: #63717f;
+  float: left;
+  color: #63717f;
+  padding-right: 10px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 `;
 
 const StContainer = styled.div`
@@ -99,4 +124,10 @@ const Stp = styled.p`
   display: flex;
   justify-content: center;
   font-size: 13px;
+`;
+
+const StSearchButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 `;
