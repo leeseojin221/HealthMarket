@@ -66,7 +66,7 @@ function MainPage() {
           <StCard
             key={item.id}
             onClick={() => {
-              navigate('detailPage/' + item?.id);
+              navigate(`detailPage/${item.id}`);
             }}
           >
             <StImg src="health" />
