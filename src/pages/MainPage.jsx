@@ -4,6 +4,7 @@ import SelectBox from '../form/selectBox';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { nanoid } from '@reduxjs/toolkit';
+import health from '../assets/healthmarket_logo.png';
 
 function MainPage() {
   const options = [
@@ -43,17 +44,25 @@ function MainPage() {
 
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
-
-  const filteredItems = items.filter((item) => item.title.toLowerCase().includes(searchItem.toLowerCase()));
+  const [selectedOption, setSelectedOption] = useState('초기값');
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
   };
 
+  const onOptionChange = (option) => {
+    setSelectedOption(option);
+  };
+
+  const filteredItems = items
+    .filter((item) => selectedOption === '초기값' || item.category === selectedOption)
+    .filter((item) => item.title.toLowerCase().includes(searchItem.toLowerCase()));
+
+  console.log(filteredItems);
   return (
     <>
       <Stcontainer1>
-        <SelectBox options={options} defaultValue=""></SelectBox>
+        <SelectBox options={options} value={selectedOption} onChange={onOptionChange} />
         <Stcontainer2>
           <StserchInput placeholder="검색해주세요" value={searchItem} onChange={onChange} />
           <StSearchButton>
@@ -62,19 +71,23 @@ function MainPage() {
         </Stcontainer2>
       </Stcontainer1>
       <StContainer>
-        {filteredItems.map((item) => (
-          <StCard
-            key={item.id}
-            onClick={() => {
-              navigate(`detailPage/${item.id}`);
-            }}
-          >
-            <StImg src="health" />
-            <Stp>{item.title}</Stp>
-            <Stp>{item.price}원</Stp>
-            <Stp>{item.category}</Stp>
-          </StCard>
-        ))}
+        {filteredItems.length > 0 ? (
+          filteredItems.map((item) => (
+            <StCard
+              key={item.id}
+              onClick={() => {
+                navigate(`detailPage/${item.id}`);
+              }}
+            >
+              <StImg src={health} />
+              <Stp>{item.title}</Stp>
+              <Stp>{item.price}원</Stp>
+              <Stp>{item.category}</Stp>
+            </StCard>
+          ))
+        ) : (
+          <p>No items found.</p>
+        )}
       </StContainer>
     </>
   );
@@ -118,6 +131,9 @@ const StCard = styled.div`
 const StImg = styled.img`
   display: flex;
   justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 60%;
 `;
 
 const Stp = styled.p`
