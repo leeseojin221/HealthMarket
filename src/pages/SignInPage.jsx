@@ -6,6 +6,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../axios/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 function SignInPage() {
@@ -40,6 +41,37 @@ function SignInPage() {
       setPassword(value);
     }
   };
+  const Signin = async (e) => {
+    e.preventDefault();
+
+    if (!email) {
+      alert('이메일을 입력해주세요');
+    } else if (!password) {
+      alert('비밀번호를 입력해주세요');
+    }
+
+    //try catch를 사용하여 오류 메세지 안내하기
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log(userCredential);
+      navigate('/');
+    } catch (error) {
+      console.error(error.code);
+      if (error.code === 'auth/user-not-found') {
+        alert('가입된 정보가 확인되지 않습니다.');
+      } else if (error.code === 'auth/invalid-email') {
+        alert('올바른 이메일 형식이 아닙니다.');
+      } else if (error.code === 'auth/wrong-password') {
+        alert('비밀번호를 확인 해주세요 ');
+      } else {
+        alert('로그인에 실패했습니다.');
+      }
+    }
+    // 오류 안내 후 입력값 초기화
+    setEmail('');
+    setPassword('');
+  };
+
   return (
     <>
       <div></div>
@@ -61,7 +93,7 @@ function SignInPage() {
                 onChange={onChange}
               />
               <div>
-                <StSignupBtn>로그인</StSignupBtn>
+                <StSignupBtn onClick={Signin}>로그인</StSignupBtn>
                 <StSigninBtn
                   onClick={() => {
                     navigate('/signUpPage');
@@ -78,8 +110,6 @@ function SignInPage() {
             <StSigninBtnSns onClick={handleGoogleLogin}>
               로그인 <img src={google_logo} />
             </StSigninBtnSns>
-
-            <div>{googleUserData ? '회원정보 : ' + googleUserData.displayName : ''}</div>
           </div>
         </StSignInputDiv>
       </StSignup>
@@ -97,7 +127,8 @@ const StSignup = styled.div`
   height: 500px;
   text-align: center;
   color: #1a4475;
-  background-color: #e9e6d8;
+  // background-color: #e9e6d8;
+  background-color: white;
   margin: auto;
 `;
 
@@ -147,7 +178,7 @@ const StSigninBtn = styled.button`
   border: none;
   padding: 12px;
   border-radius: 6px;
-  background-color: white;
+  background-color: #e9e6d8;
   color: #1a4475;
   cursor: pointer;
   margin-top: 9px;
