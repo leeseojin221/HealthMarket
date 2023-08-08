@@ -48,14 +48,17 @@ export const EditButton = () => {
 };
 
 const DeleteBtn = styled.button`
-  background-color: red;
+  background-color: white;
+  cursor: pointer;
 `;
 
 const EditBtn = styled.button`
-  background-color: blue;
+  background-color: white;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 const CancelBtn = styled.button`
-  background-color: green;
+  background-color: white;
+  cursor: pointer;
 `;

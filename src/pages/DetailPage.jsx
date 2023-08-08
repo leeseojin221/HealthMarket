@@ -13,12 +13,14 @@ function DetailPage() {
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
+          <StContainerBtn>
+            <EditLinkButton />
+            <DeleteButton />
+          </StContainerBtn>
           <div>
             <p>상품명</p>
             <p>가격</p>
-            <p>판매자정보</p>
-            <EditLinkButton />
-            <DeleteButton />
+            <sellerDiv>판매자정보</sellerDiv>
           </div>
         </StProductDetails>
       </StRightColumn>
@@ -76,6 +78,25 @@ const StProductDetails = styled.div`
   display: grid;
   /* grid-template-columns: 1fr 1fr; */
   column-gap: 20px;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   padding: 20px;
+
+  /* .sellerDiv {
+    border-top: 100px solid transparent;
+    padding-top: 20px;
+    border-bottom: 1px solid black;
+  }
+
+  .div.buttonsContainer {
+    margin-top: 100px;
+  } */
+`;
+
+// const sellerDiv = styled.div`
+//   height: 80px;
+// `;
+
+const StContainerBtn = styled.div`
+  margin-bottom: 50px;
+  /* margin-left: 30%; */
 `;
