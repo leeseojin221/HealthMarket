@@ -41,8 +41,8 @@ const StFooterP = styled.div`
 `;
 
 const StLayout = styled.div`
-  color: #e9e6d8;
-  background-color: white;
+  /* color: #e9e6d8; */
+  /* background-color: white; */
   display: flex;
   flex-direction: column;
   align-items: center;
