@@ -5,6 +5,7 @@ import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
 import { getItems } from '../axios/api';
+import health from '../assets/healthmarket_logo.png';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -65,7 +66,7 @@ function MainPage() {
                       navigate(`detailPage/${item.id}`);
                     }}
                   >
-                    <StImg src="health" />
+                    <StImg src={health} />
                     <Stp>{item.title}</Stp>
                     <Stp>{item.price}원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
@@ -85,6 +86,8 @@ export default MainPage;
 
 const Stcontainer1 = styled.div`
   display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
 `;
 
 const Stcontainer2 = styled.div`
@@ -93,7 +96,7 @@ const Stcontainer2 = styled.div`
 `;
 
 const StserchInput = styled.input`
-  width: 100px;
+  width: 90%;
   height: 20px;
   border-color: #63717f;
   float: left;
@@ -113,12 +116,16 @@ const StContainer = styled.div`
 const StCard = styled.div`
   width: 200px;
   height: 240px;
+  border: solid 1px black;
   background-color: #068fff;
 `;
 
 const StImg = styled.img`
-  display: flex;
-  justify-content: center;
+  width: 60%;
+  height: 40%;
+  margin: 10px 0px 0px 35px;
+  padding: 5px 5px 5px 5px;
+  border: solid 1px white;
 `;
 
 const Stp = styled.p`
