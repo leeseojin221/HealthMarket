@@ -119,7 +119,7 @@ const StSignup = styled.div`
   height: 500px;
   text-align: center;
   color: #1a4475;
-  background-color: #e9e6d8;
+  background-color: white;
   margin: auto;
 `;
 
@@ -169,7 +169,7 @@ const StSigninBtn = styled.button`
   border: none;
   padding: 12px;
   border-radius: 6px;
-  background-color: white;
+  background-color: #e9e6d8;
   color: #1a4475;
   cursor: pointer;
   margin-top: 9px;
