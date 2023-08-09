@@ -117,6 +117,7 @@ const StCard = styled.div`
   width: 200px;
   height: 240px;
   border: solid 1px black;
+  border-radius: 10px;
   background-color: #068fff;
 `;
 
