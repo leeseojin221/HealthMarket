@@ -15,6 +15,7 @@ function DetailPage() {
 
   const queryClient = useQueryClient();
   const productInfo = data?.find((item) => item.id == id);
+  console.log('productInfo=>', productInfo);
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
@@ -56,7 +57,7 @@ function DetailPage() {
       <>
         <StLeftColumn>
           <StImgDiv>
-            <img></img>
+            <img src={productInfo.img} alt="제품"></img>
           </StImgDiv>
           <StDescription>설명:{productInfo.body}</StDescription>
         </StLeftColumn>
@@ -88,7 +89,7 @@ const StContainer = styled.div`
 `;
 
 const StLeftColumn = styled.div`
-  width: 40%;
+  width: 100%;
 `;
 
 const StRightColumn = styled.div`

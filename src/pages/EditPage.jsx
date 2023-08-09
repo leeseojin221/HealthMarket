@@ -7,8 +7,6 @@ import { useQuery } from 'react-query';
 import { getHealth } from '../axios/api';
 
 function DetailPage() {
-  const [image, setImage] = useState(null);
-
   const { id } = useParams();
   // console.log('id=>', id);
 
@@ -16,6 +14,7 @@ function DetailPage() {
   const productInfo = data?.find((item) => item.id == id);
 
   // 추가
+  const [image, setImage] = useState(productInfo?.img);
   const [editedTitle, setEditedTitle] = useState(productInfo?.title);
   const [editedPrice, setEditedPrice] = useState(productInfo?.price);
   const [editedSellerInfo, setEditedSellerInfo] = useState(productInfo?.SellerInformation);
@@ -127,10 +126,6 @@ const StImgDiv = styled.div`
   input {
     margin-top: 10px;
   }
-`;
-
-const StLabel = styled.label`
-  /* align-items: center; */
 `;
 
 const StDescription = styled.textarea`
