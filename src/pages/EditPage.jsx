@@ -10,15 +10,20 @@ function DetailPage() {
   const [image, setImage] = useState(null);
 
   const { id } = useParams();
-  console.log('id=>', id);
+  // console.log('id=>', id);
 
   const { isLoading, data } = useQuery('info', getHealth);
+  const productInfo = data?.find((item) => item.id == id);
+
+  // 추가
+  const [editedTitle, setEditedTitle] = useState(productInfo?.title);
+  const [editedPrice, setEditedPrice] = useState(productInfo?.price);
+  const [editedSellerInfo, setEditedSellerInfo] = useState(productInfo?.SellerInformation);
+  const [editedDescription, setEditedDescription] = useState(productInfo?.body);
 
   if (isLoading) {
     return <div>로딩중 ...</div>;
   }
-
-  const productInfo = data.find((item) => item.id == id);
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
@@ -32,7 +37,13 @@ function DetailPage() {
           {image ? <img src={image} alt="이미지" /> : <p>이미지를 선택하세요</p>}
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </StImgDiv>
-        <StDescription>설명:{productInfo.body}</StDescription>
+        <StDescriptionDiv>설명</StDescriptionDiv>
+        <StDescription
+          value={editedDescription}
+          onChange={(e) => {
+            setEditedDescription(e.target.value);
+          }}
+        />
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
@@ -41,9 +52,36 @@ function DetailPage() {
             <CancelButton id={id} />
           </StContainerBtn>
           <div>
-            <p>상품명:{productInfo.title}</p>
-            <p>가격:{productInfo.price}</p>
-            <div>판매자정보:{productInfo.SellerInformation}</div>
+            <div>
+              상품명{' '}
+              <input
+                type="text"
+                value={editedTitle}
+                onChange={(e) => {
+                  setEditedTitle(e.target.value);
+                }}
+              />
+            </div>
+            <div>
+              가 격{' '}
+              <input
+                type="text"
+                value={editedPrice}
+                onChange={(e) => {
+                  setEditedPrice(e.target.value);
+                }}
+              />
+            </div>
+            <div>
+              판매자정보{' '}
+              <input
+                type="text"
+                value={editedSellerInfo}
+                onChange={(e) => {
+                  setEditedSellerInfo(e.target.value);
+                }}
+              />
+            </div>
           </div>
         </StProductDetails>
       </StRightColumn>
@@ -59,7 +97,7 @@ const StContainer = styled.div`
 `;
 
 const StLeftColumn = styled.div`
-  width: 40%;
+  width: 100%;
 `;
 
 const StRightColumn = styled.div`
@@ -91,11 +129,18 @@ const StImgDiv = styled.div`
   }
 `;
 
-const StDescription = styled.div`
-  margin-top: 20px;
+const StLabel = styled.label`
+  /* align-items: center; */
+`;
+
+const StDescription = styled.textarea`
+  /* margin-top: 10px; */
+  margin-left: 20px;
   font-weight: bold;
   padding: 20px;
-  width: 300px;
+  width: 500px;
+
+  align-items: center;
 `;
 
 const StProductDetails = styled.div`
@@ -108,4 +153,8 @@ const StProductDetails = styled.div`
 
 const StContainerBtn = styled.div`
   margin-bottom: 50px;
+`;
+
+const StDescriptionDiv = styled.div`
+  padding: 20px;
 `;

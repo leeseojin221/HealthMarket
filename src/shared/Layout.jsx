@@ -51,6 +51,7 @@ const StLayout = styled.div`
   align-items: center;
   min-height: 90vh;
   padding: 40px;
+  /* width: 1000px; */
   /* font-family: 'Hahmlet', serif; */
 `;
 

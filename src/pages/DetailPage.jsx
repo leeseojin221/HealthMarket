@@ -14,6 +14,7 @@ function DetailPage() {
   // console.log('data=>', data);
 
   const queryClient = useQueryClient();
+  const productInfo = data?.find((item) => item.id == id);
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
@@ -29,7 +30,6 @@ function DetailPage() {
     return <div>로딩중 ...</div>;
   }
 
-  const productInfo = data.find((item) => item.id == id);
   // console.log('productInfo=>', productInfo);
 
   // if (!productInfo) {
