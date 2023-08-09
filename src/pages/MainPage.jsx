@@ -5,29 +5,52 @@ import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
 import { getItems } from '../axios/api';
+import health from '../assets/healthmarket_logo.png';
 
 function MainPage() {
   const options = [
     { value: '초기값', name: '선택해주세요' },
-    { value: '축구', name: '축구' },
-    { value: '농구', name: '농구' },
-    { value: '테니스', name: '테니스' },
-    { value: '헬스', name: '헬스' }
+    { value: '1', name: '축구' },
+    { value: '2', name: '농구' },
+    { value: '3', name: '테니스' },
+    { value: '4', name: '헬스' }
   ];
   const { data, isLoading } = useQuery('info', getItems);
-  console.log('data=>', data);
-
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [filteredData, setFilteredData] = useState(data);
 
   const onChange = (e) => {
-    setSearchItem(e.target.value);
+    const inputValue = e.target.value;
+    setSearchItem(inputValue);
+
+    const filtered = data.filter(
+      (item) =>
+        item.title.toLowerCase().includes(inputValue.toLowerCase()) &&
+        (selectedCategory === '' || item.category === selectedCategory)
+    );
+    setFilteredData(filtered);
+  };
+
+  const onCategoryChange = (selectedValue) => {
+    setSelectedCategory(selectedValue);
+    const filtered = data.filter(
+      (item) =>
+        item.title.toLowerCase().includes(searchItem.toLowerCase()) &&
+        (selectedValue === '' || item.category === selectedValue)
+    );
+    setFilteredData(filtered);
   };
 
   return (
     <>
       <Stcontainer1>
-        <SelectBox options={options} defaultValue=""></SelectBox>
+        <SelectBox
+          options={options}
+          defaultValue=""
+          onChange={(selectedValue) => onCategoryChange(selectedValue)}
+        ></SelectBox>
         <Stcontainer2>
           <StserchInput placeholder="검색해주세요" value={searchItem} onChange={onChange} />
           <StSearchButton>
@@ -37,16 +60,16 @@ function MainPage() {
       </Stcontainer1>
       <StContainer>
         {isLoading ? (
-          <div>Loading...</div>
+          <p>Loading...</p>
         ) : (
-          data.map((item) => (
+          filteredData.map((item) => (
             <StCard
               key={item.id}
               onClick={() => {
                 navigate(`detailPage/${item.id}`);
               }}
             >
-              <StImg src="health" />
+              <StImg src={health} />
               <Stp>{item.title}</Stp>
               <Stp>{item.price}원</Stp>
               <Stp>{item.category}</Stp>
@@ -62,6 +85,7 @@ export default MainPage;
 
 const Stcontainer1 = styled.div`
   display: flex;
+  gap: 24px;
 `;
 
 const Stcontainer2 = styled.div`
@@ -84,6 +108,7 @@ const StserchInput = styled.input`
 const StContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 24px;
 `;
 
@@ -91,11 +116,13 @@ const StCard = styled.div`
   width: 200px;
   height: 240px;
   background-color: #068fff;
+  cursor: pointer;
 `;
 
 const StImg = styled.img`
-  display: flex;
-  justify-content: center;
+  width: 60%;
+  height: 50%;
+  padding: 10px 20px 10px 35px;
 `;
 
 const Stp = styled.p`
