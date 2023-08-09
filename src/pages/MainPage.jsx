@@ -7,27 +7,37 @@ import { useQuery } from 'react-query';
 import { getItems } from '../axios/api';
 
 function MainPage() {
-  const options = [
-    { value: '초기값', name: '선택해주세요' },
-    { value: '축구', name: '축구' },
-    { value: '농구', name: '농구' },
-    { value: '테니스', name: '테니스' },
-    { value: '헬스', name: '헬스' }
-  ];
   const { data, isLoading } = useQuery('info', getItems);
-  console.log('data=>', data);
+
+  const options = [
+    { value: '0', name: '모든 상품' },
+    { value: '1', name: '1' },
+    { value: '2', name: '2' },
+    { value: '3', name: '3' },
+    { value: '4', name: '4' }
+  ];
 
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
   };
 
+  const onSelectChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
   return (
     <>
       <Stcontainer1>
-        <SelectBox options={options} defaultValue=""></SelectBox>
+        <SelectBox
+          options={options}
+          defaultValue={options[0].value}
+          value={selectedCategory}
+          onChange={onSelectChange}
+        />
         <Stcontainer2>
           <StserchInput placeholder="검색해주세요" value={searchItem} onChange={onChange} />
           <StSearchButton>
@@ -39,19 +49,32 @@ function MainPage() {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          data.map((item) => (
-            <StCard
-              key={item.id}
-              onClick={() => {
-                navigate(`detailPage/${item.id}`);
-              }}
-            >
-              <StImg src="health" />
-              <Stp>{item.title}</Stp>
-              <Stp>{item.price}원</Stp>
-              <Stp>{item.category}</Stp>
-            </StCard>
-          ))
+          data
+            .filter((item) => selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '')
+            .filter(
+              (item) =>
+                (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') &&
+                item.title.toLowerCase().includes(searchItem.toLowerCase())
+            )
+            .map((item) => {
+              if (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') {
+                return (
+                  <StCard
+                    key={item.id}
+                    onClick={() => {
+                      navigate(`detailPage/${item.id}`);
+                    }}
+                  >
+                    <StImg src="health" />
+                    <Stp>{item.title}</Stp>
+                    <Stp>{item.price}원</Stp>
+                    <Stp>카테고리: {item.category}</Stp>
+                  </StCard>
+                );
+              } else {
+                return null;
+              }
+            })
         )}
       </StContainer>
     </>
