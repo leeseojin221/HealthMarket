@@ -17,7 +17,9 @@ function DetailPage() {
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
+      console.log('invalidateQueries');
       queryClient.invalidateQueries('info');
+
       // alert('삭제되었습니다.');
       // navigate('/myPage');
     }
@@ -38,7 +40,8 @@ function DetailPage() {
     const isDeletable = window.confirm('정말 삭제하시겠습니까?');
     if (isDeletable) {
       try {
-        await deleteMutation.mutateAsync(id);
+        await deleteMutation.mutate(id);
+        console.log('await 끝');
         // alert('삭제되었습니다.');
         navigate('/myPage');
       } catch (error) {
@@ -49,29 +52,30 @@ function DetailPage() {
 
   return (
     <StContainer>
-      {productInfo && (
-        <>
-          <StLeftColumn>
-            <StImgDiv>
-              <img></img>
-            </StImgDiv>
-            <StDescription>설명:{productInfo.body}</StDescription>
-          </StLeftColumn>
-          <StRightColumn>
-            <StProductDetails>
-              <StContainerBtn>
-                <EditLinkButton id={id} />
-                <DeleteButton handleDelete={handleDelete} />
-              </StContainerBtn>
-              <div>
-                <p>상품명: {productInfo.title} </p>
-                <p>가격: {productInfo.price}</p>
-                <div>판매자정보:{productInfo.SellerInformation}</div>
-              </div>
-            </StProductDetails>
-          </StRightColumn>
-        </>
-      )}
+      {/* {productInfo && ( */}
+      <>
+        <StLeftColumn>
+          <StImgDiv>
+            <img></img>
+          </StImgDiv>
+          <StDescription>설명:{productInfo.body}</StDescription>
+        </StLeftColumn>
+        <StRightColumn>
+          <StProductDetails>
+            <StContainerBtn>
+              <EditLinkButton id={id} />
+              <DeleteButton handleDelete={handleDelete} />
+            </StContainerBtn>
+            <div>
+              <p>상품명: {productInfo.title} </p>
+              <p>가격: {productInfo.price}</p>
+              <div>판매자정보:{productInfo.SellerInformation}</div>
+            </div>
+          </StProductDetails>
+        </StRightColumn>
+      </>
+      {/* )
+      } */}
     </StContainer>
   );
 }
