@@ -4,7 +4,7 @@ import healthmarket_logo from '../assets/healthmarket_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../axios/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-
+import { SignupButton, SigninButton } from '../components/Buttons';
 function SignUpPage() {
   const navigate = useNavigate();
 
@@ -92,14 +92,14 @@ function SignUpPage() {
                 />
               </div>
               <div>
-                <StSignupBtn onClick={Signup}>회원가입</StSignupBtn>
-                <StSigninBtn
+                <SignupButton onClick={Signup}>회원가입</SignupButton>
+                <SigninButton
                   onClick={() => {
                     navigate('/signinPage');
                   }}
                 >
                   로그인하러가기
-                </StSigninBtn>
+                </SigninButton>
               </div>
             </div>
           </StSignForm>
@@ -152,25 +152,4 @@ const StSignInput = styled.input`
   boxsizing: border-box;
   margin-bottom: 10px;
   margin-top: 5px;
-`;
-
-//btn
-const StSignupBtn = styled.button`
-  width: 80%;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: #1a4475;
-  color: white;
-  cursor: pointer;
-`;
-const StSigninBtn = styled.button`
-  width: 80%;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: #e9e6d8;
-  color: #1a4475;
-  cursor: pointer;
-  margin-top: 9px;
 `;

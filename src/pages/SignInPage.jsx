@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../axios/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-
+import { SignupButton, SigninButton, SigninWithGoogleButton } from '../components/Buttons';
 function SignInPage() {
   const navigate = useNavigate();
 
@@ -18,12 +18,10 @@ function SignInPage() {
   const [googleUserData, setGoogleUserData] = useState(null);
 
   function handleGoogleLogin() {
-    const provider = new GoogleAuthProvider(); // provider 구글 설정
-    signInWithPopup(auth, provider) // 팝업창 띄워서 로그인
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
       .then((data) => {
-        setGoogleUserData(data.user); // user data 설정
-        console.log(data);
-        // console에 UserCredentialImpl 출력
+        setGoogleUserData(data.user);
       })
       .catch((err) => {
         console.log(err);
@@ -93,23 +91,21 @@ function SignInPage() {
                 onChange={onChange}
               />
               <div>
-                <StSignupBtn onClick={Signin}>로그인</StSignupBtn>
-                <StSigninBtn
+                <SigninButton onClick={Signin}>로그인</SigninButton>
+                <SignupButton
                   onClick={() => {
                     navigate('/signUpPage');
                   }}
                 >
                   회원가입하러가기
-                </StSigninBtn>
+                </SignupButton>
               </div>
-
-              {/* <StSigninBtnSns>깃헙로그인</StSigninBtnSns> */}
             </div>
           </StSignForm>
           <div>
-            <StSigninBtnSns onClick={handleGoogleLogin}>
+            <SigninWithGoogleButton onClick={handleGoogleLogin}>
               <img src={google_logo} /> 구글로 로그인하기
-            </StSigninBtnSns>
+            </SigninWithGoogleButton>
           </div>
         </StSignInputDiv>
       </StSignup>
@@ -161,37 +157,4 @@ const StSignInput = styled.input`
   boxsizing: border-box;
   margin-bottom: 10px;
   margin-top: 5px;
-`;
-
-//btn
-const StSignupBtn = styled.button`
-  width: 80%;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: #1a4475;
-  color: white;
-  cursor: pointer;
-`;
-const StSigninBtn = styled.button`
-  width: 80%;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: #e9e6d8;
-  color: #1a4475;
-  cursor: pointer;
-  margin-top: 9px;
-`;
-const StSigninBtnSns = styled.button`
-  flex: 1;
-  width: 80%;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  border: none;
-  color: #1a4475;
-  cursor: pointer;
-  margin-top: 9px;
-  margin-right: 5px;
 `;
