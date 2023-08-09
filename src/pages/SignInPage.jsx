@@ -108,7 +108,7 @@ function SignInPage() {
           </StSignForm>
           <div>
             <StSigninBtnSns onClick={handleGoogleLogin}>
-              로그인 <img src={google_logo} />
+              <img src={google_logo} /> 구글로 로그인하기
             </StSigninBtnSns>
           </div>
         </StSignInputDiv>
@@ -185,10 +185,11 @@ const StSigninBtn = styled.button`
 `;
 const StSigninBtnSns = styled.button`
   flex: 1;
+  width: 80%;
   border: none;
   padding: 12px;
   border-radius: 6px;
-  border: 2px solid #1a4475;
+  border: none;
   color: #1a4475;
   cursor: pointer;
   margin-top: 9px;
