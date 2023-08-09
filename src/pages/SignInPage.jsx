@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import healthmarket_logo from '../assets/healthmarket_logo.png';
-import googlelogo from '../assets/google_logo.png';
+import google_logo from '../assets/google_logo.png';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -76,7 +76,7 @@ function SignInPage() {
           </StSignForm>
           <div>
             <StSigninBtnSns onClick={handleGoogleLogin}>
-              로그인 <img src={googlelogo} />
+              로그인 <img src={google_logo} />
             </StSigninBtnSns>
 
             <div>{googleUserData ? '회원정보 : ' + googleUserData.displayName : ''}</div>
@@ -127,7 +127,7 @@ const StSignInput = styled.input`
   border-radius: 8px;
   border: 1px solid lightgrey;
   padding: 8px;
-  box-sizing: border-box;
+  boxsizing: border-box;
   margin-bottom: 10px;
   margin-top: 5px;
 `;
