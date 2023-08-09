@@ -8,17 +8,10 @@ function Buttons({ children, ...props }) {
 
 export default Buttons;
 
-export const DeleteButton = () => {
-  const navigate = useNavigate();
-  const deleteButton = () => {
-    const isDeletable = window.confirm('정말 삭제하시겠습니까?');
-    if (isDeletable) {
-      // deleteItem(id);
-      alert('삭제되었습니다.');
-      navigate('/myPage');
-    }
-  };
-  return <DeleteBtn onClick={deleteButton}>삭제</DeleteBtn>;
+export const DeleteButton = ({ handleDelete }) => {
+  // const navigate = useNavigate();
+  // const deleteButton = () => {};
+  return <DeleteBtn onClick={handleDelete}>삭제</DeleteBtn>;
 };
 
 export const EditLinkButton = ({ id }) => {

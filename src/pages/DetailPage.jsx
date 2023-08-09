@@ -1,62 +1,77 @@
 import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { DeleteButton, EditLinkButton } from '../components/Buttons';
-import { useQuery } from 'react-query';
-import { getHealth } from '../axios/api';
-import { useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { deleteHealth, getHealth } from '../axios/api';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function DetailPage() {
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const querySnapshot = await getDocs(collection(db, 'info'));
-  //     querySnapshot.forEach((doc) => {
-  //       console.log(`${doc.id} => ${doc.data()}`);
-  //     });
-  //   };
-  //   fetchData();
-  // }, []);
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
-  console.log('id=>', id);
-
   const { isLoading, data } = useQuery('info', getHealth);
-  console.log('data=>', data);
+  // console.log('data=>', data);
+
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation(deleteHealth, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('info');
+      // alert('삭제되었습니다.');
+      // navigate('/myPage');
+    }
+  });
 
   if (isLoading) {
     return <div>로딩중 ...</div>;
   }
 
   const productInfo = data.find((item) => item.id == id);
-  console.log('productInfo=>', productInfo);
-
-  // 지정된아이디값을 뿌려주기위해 만들었는데 id값이 읽혀오지않는다..
-  // 배열을 가져온거니깐
-  // 배열매소드를 가지고 데이터를 찾는다. find 사용
-  // const productInfo = data[id];
   // console.log('productInfo=>', productInfo);
+
+  // if (!productInfo) {
+  //   return <div>상품 정보를 찾을 수 없습니다.</div>;
+  // }
+
+  const handleDelete = async () => {
+    const isDeletable = window.confirm('정말 삭제하시겠습니까?');
+    if (isDeletable) {
+      try {
+        await deleteMutation.mutateAsync(id);
+        // alert('삭제되었습니다.');
+        navigate('/myPage');
+      } catch (error) {
+        console.log('오류가 발생했습니다', error);
+      }
+    }
+  };
 
   return (
     <StContainer>
-      <StLeftColumn>
-        <StImgDiv>
-          <img></img>
-        </StImgDiv>
-        <StDescription>설명:{productInfo.body}</StDescription>
-      </StLeftColumn>
-      <StRightColumn>
-        <StProductDetails>
-          <StContainerBtn>
-            <EditLinkButton id={id} />
-            <DeleteButton />
-          </StContainerBtn>
-          <div>
-            <p>상품명: {productInfo.title} </p>
-            <p>가격: {productInfo.price}</p>
-            <div>판매자정보:{productInfo.SellerInformation}</div>
-          </div>
-        </StProductDetails>
-      </StRightColumn>
+      {productInfo && (
+        <>
+          <StLeftColumn>
+            <StImgDiv>
+              <img></img>
+            </StImgDiv>
+            <StDescription>설명:{productInfo.body}</StDescription>
+          </StLeftColumn>
+          <StRightColumn>
+            <StProductDetails>
+              <StContainerBtn>
+                <EditLinkButton id={id} />
+                <DeleteButton handleDelete={handleDelete} />
+              </StContainerBtn>
+              <div>
+                <p>상품명: {productInfo.title} </p>
+                <p>가격: {productInfo.price}</p>
+                <div>판매자정보:{productInfo.SellerInformation}</div>
+              </div>
+            </StProductDetails>
+          </StRightColumn>
+        </>
+      )}
     </StContainer>
   );
 }

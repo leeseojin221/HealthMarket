@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query } from "firebase/firestore";
 import { db } from "./firebase";
 
 const getHealth = async () => {
@@ -21,6 +21,15 @@ const getHealth = async () => {
 
 };
 
+const deleteHealth = async (itemId) => {
+    try {
+        const healthRef = doc(db, 'info', itemId)
+        await deleteDoc(healthRef)
+    } catch (error) {
+        throw new Error('Error :' + error.message)
+    }
+}
+
 const getItems = async () => {
     // 변경사항 storys infos
     const q = query(collection(db, "info"))
@@ -39,5 +48,6 @@ const getItems = async () => {
 }
 
 
-export { getItems, getHealth }
+
+export { getItems, getHealth, deleteHealth }
 
