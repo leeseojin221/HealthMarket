@@ -60,6 +60,19 @@ const StLogo = styled.img`
   cursor: pointer;
 `;
 
+const StUserInfo = styled.div`
+  width: 150px;
+  height: auto;
+  display: inline-block;
+  margin-right: 20px;
+`;
+
+const StLogout = styled.div`
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 20px;
+`;
+
 function Header() {
   const navigate = useNavigate();
 
@@ -79,7 +92,6 @@ function Header() {
       setCurrentUser(user?.email);
     });
   }, []);
-
   return (
     <>
       {currentUser ? (
@@ -87,8 +99,8 @@ function Header() {
           <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
           <StAuthLink>
             <div>
-              <div>{currentUser}</div>
-              <button onClick={Logout}>로그아웃</button>
+              <StUserInfo>{currentUser}</StUserInfo>
+              <StLogout onClick={Logout}>로그아웃</StLogout>
             </div>
           </StAuthLink>
         </StHeader>
