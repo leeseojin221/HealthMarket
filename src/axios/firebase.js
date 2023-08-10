@@ -16,18 +16,17 @@ const firebaseConfig = {
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-}
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
+};
 // // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig)
+const firebaseApp = initializeApp(firebaseConfig);
 // // Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(firebaseApp)
-export const auth = getAuth(firebaseApp)
-export const storage = getStorage(firebaseApp)
-
+export const db = getFirestore(firebaseApp);
+export const auth = getAuth(firebaseApp);
+export const storage = getStorage(firebaseApp);
 
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 export const provider = new GoogleAuthProvider();
 
-export default firebaseApp
+export default firebaseApp;

@@ -4,7 +4,9 @@ import SelectBox from '../form/selectBox';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
-import { getItems } from '../axios/api';
+import { getItems, addHealth } from '../axios/api';
+import health from '../assets/healthmarket_logo.png';
+import { Location } from 'react-router-dom';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -29,6 +31,46 @@ function MainPage() {
     setSelectedCategory(e.target.value);
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [priec, setPriec] = useState('');
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handlePriceChange = (e) => {
+    setPriec(e.target.value);
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    try {
+      await addHealth(title, priec, content, selectedCategory);
+      closeModal();
+    } catch (error) {
+      console.error('Error adding health: ', error);
+    }
+    window.location.reload('/');
+  };
+
   return (
     <>
       <Stcontainer1>
@@ -45,6 +87,18 @@ function MainPage() {
           </StSearchButton>
         </Stcontainer2>
       </Stcontainer1>
+      <button onClick={openModal}>글쓰기</button>
+      {isModalOpen && (
+        <StModal>
+          <h2>글 작성</h2>
+          <StModalTitleInput type="text" placeholder="제목" value={title} onChange={handleTitleChange} />
+          <StModalPriceInput type="text" placeholder="가격" value={priec} onChange={handlePriceChange} />
+          <StModalTextarea placeholder="내용" value={content} onChange={handleContentChange} />
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+          <button onClick={handleUpload}>작성</button>
+          <button onClick={closeModal}>닫기</button>
+        </StModal>
+      )}
       <StContainer>
         {isLoading ? (
           <div>Loading...</div>
@@ -65,7 +119,7 @@ function MainPage() {
                       navigate(`detailPage/${item.id}`);
                     }}
                   >
-                    <StImg src="health" />
+                    <StImg src={health} />
                     <Stp>{item.title}</Stp>
                     <Stp>{item.price}원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
@@ -119,6 +173,9 @@ const StCard = styled.div`
 const StImg = styled.img`
   display: flex;
   justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 60%;
 `;
 
 const Stp = styled.p`
@@ -131,4 +188,37 @@ const StSearchButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
+`;
+
+const StModal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-style: solid;
+  padding: 50px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+`;
+
+const StModalTitleInput = styled.input`
+  border-style: solid;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 15px;
+`;
+
+const StModalPriceInput = styled.input`
+  border-style: solid;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 15px;
+`;
+
+const StModalTextarea = styled.textarea`
+  border-style: solid;
+  margin-bottom: 20px;
+  font-size: 15px;
 `;
