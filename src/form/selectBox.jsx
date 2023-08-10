@@ -1,10 +1,11 @@
 import React from 'react';
+import { nanoid } from '@reduxjs/toolkit';
 
 function selectBox(props) {
   return (
-    <select>
+    <select value={props.value} onChange={props.onChange}>
       {props.options.map((option) => (
-        <option value={option.value} defaultValue={props.defaultValue === option.value}>
+        <option key={nanoid()} value={option.value} defaultValue={props.defaultValue === option.value}>
           {option.name}
         </option>
       ))}
