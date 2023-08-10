@@ -68,9 +68,15 @@ function DetailPage() {
               <DeleteButton handleDelete={handleDelete} />
             </StContainerBtn>
             <div>
-              <p>상품명: {productInfo.title} </p>
-              <p>가격: {productInfo.price}</p>
-              <div>판매자정보:{productInfo.SellerInformation}</div>
+              <div>
+                <p>상품명: {productInfo.title} </p>
+              </div>
+              <div>
+                <p>가격: {productInfo.price} 원</p>
+              </div>
+              <div>
+                <div>판매자정보:{productInfo.SellerInformation}</div>
+              </div>
             </div>
           </StProductDetails>
         </StRightColumn>
@@ -93,7 +99,7 @@ const StLeftColumn = styled.div`
 `;
 
 const StRightColumn = styled.div`
-  width: 300px;
+  width: 500px;
 `;
 
 const StImgDiv = styled.div`

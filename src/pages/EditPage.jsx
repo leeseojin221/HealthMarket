@@ -2,9 +2,9 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 import { CancelButton, EditButton } from '../components/Buttons';
-import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { getHealth } from '../axios/api';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { editHealth, getHealth } from '../axios/api';
 
 function DetailPage() {
   const { id } = useParams();
@@ -13,8 +13,14 @@ function DetailPage() {
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
 
+  const queryClient = useQueryClient();
+
+  const editProductMutation = useMutation((updatedData) => editHealth(id, updatedData));
+
+  const navigate = useNavigate();
+
   // 추가
-  const [image, setImage] = useState(productInfo?.img);
+  const [editImage, setEditImage] = useState(productInfo?.img);
   const [editedTitle, setEditedTitle] = useState(productInfo?.title);
   const [editedPrice, setEditedPrice] = useState(productInfo?.price);
   const [editedSellerInfo, setEditedSellerInfo] = useState(productInfo?.SellerInformation);
@@ -26,14 +32,33 @@ function DetailPage() {
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
-    setImage(URL.createObjectURL(selectedImage));
+    setEditImage(URL.createObjectURL(selectedImage));
+  };
+
+  // 추가
+  const editHandler = async () => {
+    const updatedData = {
+      title: editedTitle,
+      price: editedPrice,
+      SellerInformation: editedSellerInfo,
+      body: editedDescription,
+      img: editImage
+    };
+
+    try {
+      await editProductMutation.mutate(updatedData);
+      queryClient.invalidateQueries('info');
+      navigate('/');
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
   };
 
   return (
     <StContainer>
       <StLeftColumn>
         <StImgDiv>
-          {image ? <img src={image} alt="이미지" /> : <p>이미지를 선택하세요</p>}
+          {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </StImgDiv>
         <StDescriptionDiv>설명</StDescriptionDiv>
@@ -47,7 +72,7 @@ function DetailPage() {
       <StRightColumn>
         <StProductDetails>
           <StContainerBtn>
-            <EditButton />
+            <EditButton editHandler={editHandler} />
             <CancelButton id={id} />
           </StContainerBtn>
           <div>
