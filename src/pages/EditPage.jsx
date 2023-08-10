@@ -6,16 +6,22 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
 
-function DetailPage() {
+function EditPage() {
   const { id } = useParams();
   // console.log('id=>', id);
 
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
+  // console.log('productInfo=>', productInfo.title);
 
   const queryClient = useQueryClient();
 
-  const editProductMutation = useMutation((updatedData) => editHealth(id, updatedData));
+  const editProductMutation = useMutation((updatedData) => editHealth(id, updatedData), {
+    onSuccess: (response) => {
+      console.log('mutation API', response);
+      queryClient.invalidateQueries('info');
+    }
+  });
 
   const navigate = useNavigate();
 
@@ -46,9 +52,14 @@ function DetailPage() {
     };
 
     try {
+      // console.log('이전mutate');
       await editProductMutation.mutate(updatedData);
+      // console.log('이후mutate');
+      // 추가부분
+
       queryClient.invalidateQueries('info');
-      navigate('/');
+      alert('수정이완료되었습니다.');
+      navigate('/myPage');
     } catch (error) {
       console.error('Error updating product:', error);
     }
@@ -113,7 +124,7 @@ function DetailPage() {
   );
 }
 
-export default DetailPage;
+export default EditPage;
 
 const StContainer = styled.div`
   display: flex;
