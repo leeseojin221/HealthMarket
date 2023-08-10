@@ -73,6 +73,12 @@ const StLogout = styled.div`
   margin-right: 20px;
 `;
 
+const StMyPageBtn = styled.div`
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 20px;
+`;
+
 function Header() {
   const navigate = useNavigate();
 
@@ -92,6 +98,7 @@ function Header() {
       setCurrentUser(user?.email);
     });
   }, []);
+
   return (
     <>
       {currentUser ? (
@@ -100,6 +107,7 @@ function Header() {
           <StAuthLink>
             <div>
               <StUserInfo>{currentUser}</StUserInfo>
+              <StMyPageBtn onClick={() => navigate(`/myPage`)}>내정보</StMyPageBtn>
               <StLogout onClick={Logout}>로그아웃</StLogout>
             </div>
           </StAuthLink>

@@ -44,6 +44,7 @@ function MainPage() {
           <StSearchButton>
             <BiSearch />
           </StSearchButton>
+          <button>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
       <StContainer>
