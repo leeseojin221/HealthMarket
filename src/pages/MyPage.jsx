@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { EditLinkButton, DeleteButton } from '../components/Buttons';
 import Modal from '../form/WriteModal';
 import styled from 'styled-components';
+import { getItems } from '../axios/api';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
