@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 import { CancelButton, EditButton } from '../components/Buttons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
+import { storage } from './../axios/firebase';
 
 function EditPage() {
   const { id } = useParams();
@@ -13,7 +14,9 @@ function EditPage() {
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
   // console.log('productInfo=>', productInfo.title);
-
+  // console.log('id=>', id);
+  // console.log('data=>', data);
+  // console.log('productInfo=>', productInfo);
   const queryClient = useQueryClient();
 
   const editProductMutation = useMutation((updatedData) => editHealth(id, updatedData), {
@@ -26,11 +29,23 @@ function EditPage() {
   const navigate = useNavigate();
 
   // 추가
-  const [editImage, setEditImage] = useState(productInfo?.img);
-  const [editedTitle, setEditedTitle] = useState(productInfo?.title);
-  const [editedPrice, setEditedPrice] = useState(productInfo?.price);
-  const [editedSellerInfo, setEditedSellerInfo] = useState(productInfo?.SellerInformation);
-  const [editedDescription, setEditedDescription] = useState(productInfo?.body);
+  const [editImage, setEditImage] = useState('');
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedPrice, setEditedPrice] = useState('');
+  const [editedSellerInfo, setEditedSellerInfo] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
+
+  // console.log('editedTitle=>', editedTitle);
+  useEffect(() => {
+    if (!productInfo) {
+      return;
+    }
+    setEditImage(productInfo.img);
+    setEditedTitle(productInfo.title);
+    setEditedPrice(productInfo.price);
+    setEditedSellerInfo(productInfo.SellerInformation);
+    setEditedDescription(productInfo.body);
+  }, [productInfo]);
 
   if (isLoading) {
     return <div>로딩중 ...</div>;
