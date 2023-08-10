@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { getItems } from '../axios/api';
 import { auth } from '../axios/firebase';
 import { useQuery } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -13,9 +14,17 @@ import { useQuery } from 'react-query';
 // 글목록 : 작성한 글 목록 불러오기.
 
 function MyPage() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: userItemsData, isLoading: userItemsLoading } = useQuery('info', getItems);
   const userItems = userItemsData || [];
+
+  const user = auth.currentUser; // 로그인된 사용자 정보 가져오기
+  const loggedInUserEmail = user ? user.email : null; // 로그인된 사용자의 이메일
+  const filteredUserEmail = userItems.filter((item) => item.id === loggedInUserEmail);
+
+  console.log(loggedInUserEmail);
+  console.log(filteredUserEmail);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -54,9 +63,9 @@ function MyPage() {
         )}
         <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
         <StUserListText isModalOpen={isModalOpen}>
-          {userItems.map((item) => (
+          {filteredUserEmail.map((item) => (
             <div key={item.id}>
-              <span>{item.title}</span>
+              <Link to={`/detail/${item.id}`}>{item.title}</Link>
               <EditLinkButton />
               <DeleteButton />
             </div>
