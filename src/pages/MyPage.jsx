@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EditLinkButton, DeleteButton } from '../components/Buttons';
 import Modal from '../form/WriteModal';
 import styled from 'styled-components';
 import { getItems } from '../axios/api';
+import { auth } from '../axios/firebase';
+import { useQuery } from 'react-query';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -12,6 +14,8 @@ import { getItems } from '../axios/api';
 
 function MyPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: userItemsData, isLoading: userItemsLoading } = useQuery('info', getItems);
+  const userItems = userItemsData || [];
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -50,9 +54,13 @@ function MyPage() {
         )}
         <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
         <StUserListText isModalOpen={isModalOpen}>
-          <span>작성글~~~</span>
-          <EditLinkButton />
-          <DeleteButton />
+          {userItems.map((item) => (
+            <div key={item.id}>
+              <span>{item.title}</span>
+              <EditLinkButton />
+              <DeleteButton />
+            </div>
+          ))}
         </StUserListText>
       </StMyContainer>
     </>
@@ -75,6 +83,7 @@ const StUserList = styled.div`
 `;
 const StUserListText = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+  blackground-color: #000;
 `;
 
 const StUserWrap = styled.div`
