@@ -5,7 +5,6 @@ import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
 import { getItems } from '../axios/api';
-import health from '../assets/healthmarket_logo.png';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -40,10 +39,10 @@ function MainPage() {
           onChange={onSelectChange}
         />
         <Stcontainer2>
-          <StserchInput placeholder="검색해주세요" value={searchItem} onChange={onChange} />
-          <StSearchButton>
-            <BiSearch />
-          </StSearchButton>
+          <StserchInput>
+            <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
+            <SearchIcon />
+          </StserchInput>
           <button>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
@@ -67,7 +66,7 @@ function MainPage() {
                       navigate(`detailPage/${item.id}`);
                     }}
                   >
-                    <StImg src={health} />
+                    <StImg src={item.img} />
                     <Stp>{item.title}</Stp>
                     <Stp>{item.price}원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
@@ -87,7 +86,7 @@ export default MainPage;
 
 const Stcontainer1 = styled.div`
   display: flex;
-  gap: 24px;
+  gap: 12px;
   margin-bottom: 20px;
 `;
 
@@ -96,13 +95,15 @@ const Stcontainer2 = styled.div`
   position: relative;
 `;
 
-const StserchInput = styled.input`
+const StserchInput = styled.div`
+  display: flex;
+  align-items: center;
   width: 90%;
   height: 20px;
-  border-color: #63717f;
+  margin-right: 10px;
+  border: solid 1px #63717f;
   float: left;
   color: #63717f;
-  padding-right: 10px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -136,8 +137,14 @@ const Stp = styled.p`
   font-size: 13px;
 `;
 
-const StSearchButton = styled.button`
-  background-color: transparent;
+const SearchIcon = styled(BiSearch)`
+  color: #63717f;
+`;
+
+const InputField = styled.input`
+  flex: 1;
   border: none;
-  cursor: pointer;
+  outline: none;
+  color: #63717f;
+  padding-right: 10px;
 `;

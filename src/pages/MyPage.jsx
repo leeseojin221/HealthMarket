@@ -3,6 +3,7 @@ import { EditLinkButton, DeleteButton } from '../components/Buttons';
 import Modal from '../form/WriteModal';
 import styled from 'styled-components';
 import { getItems } from '../axios/api';
+import ListMypage from '../components/ListMypage';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -50,9 +51,14 @@ function MyPage() {
         )}
         <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
         <StUserListText isModalOpen={isModalOpen}>
-          <span>작성글~~~</span>
-          <EditLinkButton />
-          <DeleteButton />
+          <StList>
+            <StListTitle>글목록</StListTitle>
+            <StFlex>
+              <StListTitleBox>TITLE</StListTitleBox>
+              <StListBodyBox>PRICE</StListBodyBox>
+            </StFlex>
+            <ListMypage></ListMypage>
+          </StList>
         </StUserListText>
       </StMyContainer>
     </>
@@ -84,4 +90,40 @@ const StUserWrap = styled.div`
 const StMyContainer = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+export const StFlex = styled.div`
+  transform: translate(80px, 0px);
+  display: flex;
+  margin-bottom: 30px;
+`;
+
+const StListTitle = styled.div`
+  transform: translate(85px, 0px);
+  margin: 50px auto 50px auto;
+  font-size: 25px;
+  font-weight: bolder;
+  text-decoration-line: none;
+  color: black;
+`;
+
+export const StListTitleBox = styled.div`
+  width: 250px;
+  padding: 4px;
+  margin-right: 30px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+`;
+export const StListBodyBox = styled.div`
+  width: 600px;
+  padding: 4px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+`;
+
+const StList = styled.div`
+  text-decoration: none;
+  color: white;
 `;
