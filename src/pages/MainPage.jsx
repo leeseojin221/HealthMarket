@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
 import { getItems, addHealth } from '../axios/api';
 import health from '../assets/healthmarket_logo.png';
-import { Location } from 'react-router-dom';
+import WriteModal from '../form/WriteModal';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -32,10 +32,6 @@ function MainPage() {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [priec, setPriec] = useState('');
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -43,32 +39,6 @@ function MainPage() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
-
-  const handlePriceChange = (e) => {
-    setPriec(e.target.value);
-  };
-
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
-  const handleUpload = async () => {
-    try {
-      await addHealth(title, priec, content, selectedCategory);
-      closeModal();
-    } catch (error) {
-      console.error('Error adding health: ', error);
-    }
-    window.location.reload('/');
   };
 
   return (
@@ -88,17 +58,7 @@ function MainPage() {
         </Stcontainer2>
       </Stcontainer1>
       <button onClick={openModal}>글쓰기</button>
-      {isModalOpen && (
-        <StModal>
-          <h2>글 작성</h2>
-          <StModalTitleInput type="text" placeholder="제목" value={title} onChange={handleTitleChange} />
-          <StModalPriceInput type="text" placeholder="가격" value={priec} onChange={handlePriceChange} />
-          <StModalTextarea placeholder="내용" value={content} onChange={handleContentChange} />
-          <input type="file" accept="image/*" onChange={handleFileChange} />
-          <button onClick={handleUpload}>작성</button>
-          <button onClick={closeModal}>닫기</button>
-        </StModal>
-      )}
+      <WriteModal isOpen={isModalOpen} onClose={closeModal} />
       <StContainer>
         {isLoading ? (
           <div>Loading...</div>
@@ -188,37 +148,4 @@ const StSearchButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
-`;
-
-const StModal = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border-style: solid;
-  padding: 50px;
-  border-radius: 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-`;
-
-const StModalTitleInput = styled.input`
-  border-style: solid;
-  padding: 10px;
-  margin-bottom: 20px;
-  font-size: 15px;
-`;
-
-const StModalPriceInput = styled.input`
-  border-style: solid;
-  padding: 10px;
-  margin-bottom: 20px;
-  font-size: 15px;
-`;
-
-const StModalTextarea = styled.textarea`
-  border-style: solid;
-  margin-bottom: 20px;
-  font-size: 15px;
 `;
