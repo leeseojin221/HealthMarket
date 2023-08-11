@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EditLinkButton, DeleteButton } from '../components/Buttons';
 import Modal from '../form/WriteModal';
 import styled from 'styled-components';
 import { getItems } from '../axios/api';
+import { auth, db } from '../axios/firebase';
+import { useQuery } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -11,7 +15,17 @@ import { getItems } from '../axios/api';
 // 글목록 : 작성한 글 목록 불러오기.
 
 function MyPage() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: userItemsData, isLoading: userItemsLoading } = useQuery('info', getItems);
+  const userItems = userItemsData || [];
+
+  const user = auth.currentUser; // 로그인된 사용자 정보 가져오기
+  const loggedInUserEmail = user ? user.email : null; // 로그인된 사용자의 이메일
+  const filteredUserEmail = userItems.filter((item) => item.id === loggedInUserEmail);
+
+  console.log(loggedInUserEmail);
+  console.log(filteredUserEmail);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -21,8 +35,13 @@ function MyPage() {
     setIsModalOpen(false);
   };
 
-  const handleWrite = () => {
-    // 작성 버튼을 누를 때 실행될 로직 작성 필요.
+  const handleWrite = async () => {
+    await setDoc(doc(db, 'info', 'LA'), {
+      category: '카테고리',
+      id: '이메일',
+      price: '가격',
+      title: '닉네임'
+    });
     closeModal();
   };
 
@@ -50,9 +69,13 @@ function MyPage() {
         )}
         <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
         <StUserListText isModalOpen={isModalOpen}>
-          <span>작성글~~~</span>
-          <EditLinkButton />
-          <DeleteButton />
+          {filteredUserEmail.map((item) => (
+            <div key={item.id}>
+              <Link to={`/detail/${item.id}`}>{item.title}</Link>
+              <EditLinkButton />
+              <DeleteButton />
+            </div>
+          ))}
         </StUserListText>
       </StMyContainer>
     </>
@@ -75,6 +98,7 @@ const StUserList = styled.div`
 `;
 const StUserListText = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+  blackground-color: #000;
 `;
 
 const StUserWrap = styled.div`
