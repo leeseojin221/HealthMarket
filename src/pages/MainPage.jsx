@@ -93,7 +93,7 @@ function MainPage() {
                   >
                     <StImg src={item.img} />
                     <Stp>{item.title}</Stp>
-                    <Stp>{parseInt(item.price).toLocaleString()}원</Stp>
+                    <Stp>{parseInt(item.price).toLocaleString()} 원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
                   </StCard>
                 );
