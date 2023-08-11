@@ -110,17 +110,20 @@ const StserchInput = styled.div`
 `;
 
 const StContainer = styled.div`
+  width: 1000px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 24px;
 `;
 
 const StCard = styled.div`
-  width: 200px;
+  width: calc(22% - 24px);
   height: 240px;
   border: solid 1px black;
   border-radius: 10px;
   background-color: #068fff;
+  margin-bottom: 24px;
 `;
 
 const StImg = styled.img`
