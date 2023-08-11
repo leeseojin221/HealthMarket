@@ -115,7 +115,7 @@ const StContainer = styled.div`
   width: 1000px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
 `;
 
