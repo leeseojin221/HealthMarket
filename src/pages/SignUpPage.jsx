@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import healthmarket_logo from '../assets/healthmarket_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../axios/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { SignupButton, SigninButton } from '../components/Buttons';
+
+import { debounce, throttle } from 'lodash';
+
 function SignUpPage() {
   const navigate = useNavigate();
 
@@ -12,7 +15,8 @@ function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  //
+  const [validEmail, setValidEmail] = useState(true);
   const onChange = (event) => {
     const {
       target: { name, value }
@@ -28,17 +32,32 @@ function SignUpPage() {
     }
   };
 
+  const validateEmail = (email) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const debounceValidateEmail = debounce((email) => {
+    const result = validateEmail(email);
+    setValidEmail(result);
+  }, 500);
+
+  useEffect(() => {
+    if (email) {
+      debounceValidateEmail(email);
+    }
+  }, [email]);
+
   const Signup = async (e) => {
     e.preventDefault();
-    if (!email) {
-      alert('이메일을 입력해주세요');
+    if (!email || !validEmail) {
+      alert('이메일을 올바르게 입력해주세요');
     } else if (!password || !confirmPassword) {
       alert('비밀번호를 입력해주세요');
     } else if (password !== confirmPassword) {
       alert('비밀번호가 일치하지 않습니다');
-    }
-
-    if (password === confirmPassword) {
+    } else {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         alert('회원가입에 성공했습니다.');
@@ -46,9 +65,9 @@ function SignUpPage() {
         setPassword('');
         setConfirmPassword('');
         navigate('/');
-        console.log(userCredential); //user정보 확인하기
+        console.log(userCredential);
       } catch (error) {
-        console.error(error.code); //에러메세지 확인하기
+        console.error(error.code);
         if (error.code === 'auth/email-already-in-use') {
           alert('이미 사용된 이메일입니다.');
         } else if (error.code === 'auth/weak-password') {
@@ -73,6 +92,7 @@ function SignUpPage() {
           <StSignForm>
             <div>
               <StSignInput placeholder="이메일" type="email" name="email" value={email} onChange={onChange} />
+              {!validEmail && email.length > 0 && <div>유효한 이메일이 아닙니다.</div>}
             </div>
             <div>
               <StSignInput
@@ -82,25 +102,25 @@ function SignUpPage() {
                 value={password}
                 onChange={onChange}
               />
-              <div>
-                <StSignInput
-                  placeholder="비밀번호확인"
-                  name="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={onChange}
-                />
-              </div>
-              <div>
-                <SignupButton onClick={Signup}>회원가입</SignupButton>
-                <SigninButton
-                  onClick={() => {
-                    navigate('/signinPage');
-                  }}
-                >
-                  로그인하러가기
-                </SigninButton>
-              </div>
+            </div>
+            <div>
+              <StSignInput
+                placeholder="비밀번호확인"
+                type="password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={onChange}
+              />
+            </div>
+            <div>
+              <SignupButton onClick={Signup}>회원가입</SignupButton>
+              <SigninButton
+                onClick={() => {
+                  navigate('/signinPage');
+                }}
+              >
+                로그인하러가기
+              </SigninButton>
             </div>
           </StSignForm>
         </StSignInputDiv>
