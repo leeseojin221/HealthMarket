@@ -74,6 +74,12 @@ const StLogout = styled.div`
   margin-right: 20px;
 `;
 
+const StMyPageBtn = styled.div`
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 20px;
+`;
+
 function Header() {
   const navigate = useNavigate();
 
@@ -93,6 +99,7 @@ function Header() {
       setCurrentUser(user?.email);
     });
   }, []);
+
   return (
     <>
       {currentUser ? (

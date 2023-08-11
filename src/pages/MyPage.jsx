@@ -109,3 +109,39 @@ const StMyContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+export const StFlex = styled.div`
+  transform: translate(80px, 0px);
+  display: flex;
+  margin-bottom: 30px;
+`;
+
+const StListTitle = styled.div`
+  transform: translate(85px, 0px);
+  margin: 50px auto 50px auto;
+  font-size: 25px;
+  font-weight: bolder;
+  text-decoration-line: none;
+  color: black;
+`;
+
+export const StListTitleBox = styled.div`
+  width: 250px;
+  padding: 4px;
+  margin-right: 30px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+`;
+export const StListBodyBox = styled.div`
+  width: 600px;
+  padding: 4px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+`;
+
+const StList = styled.div`
+  text-decoration: none;
+  color: white;
+`;
