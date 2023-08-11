@@ -97,7 +97,7 @@ const StUserList = styled.div`
 `;
 const StUserListText = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
-  background-color: #000;
+  blackground-color: #000;
 `;
 
 const StUserWrap = styled.div`
