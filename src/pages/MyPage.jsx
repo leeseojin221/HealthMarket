@@ -12,6 +12,7 @@ import { doc, setDoc } from 'firebase/firestore';
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
 // 글쓰기 : 클릭 시 글 작성 모달 생성 (사진, 상품명, 가격, 닉네임, 설명)
 // ㄴ 작성글 ID : 타이틀값.
+// 글목록 : 작성한 글 목록 불러오기.
 
 function MyPage() {
   const navigate = useNavigate();
@@ -113,34 +114,4 @@ export const StFlex = styled.div`
   transform: translate(80px, 0px);
   display: flex;
   margin-bottom: 30px;
-`;
-
-const StListTitle = styled.div`
-  transform: translate(85px, 0px);
-  margin: 50px auto 50px auto;
-  font-size: 25px;
-  font-weight: bolder;
-  text-decoration-line: none;
-  color: black;
-`;
-
-export const StListTitleBox = styled.div`
-  width: 250px;
-  padding: 4px;
-  margin-right: 30px;
-  font-size: 20px;
-  font-weight: bolder;
-  color: black;
-`;
-export const StListBodyBox = styled.div`
-  width: 600px;
-  padding: 4px;
-  font-size: 20px;
-  font-weight: bolder;
-  color: black;
-`;
-
-const StList = styled.div`
-  text-decoration: none;
-  color: white;
 `;

@@ -67,9 +67,11 @@ function MainPage() {
                     }}
                   >
                     <StImg src={item.img} />
-                    <Stp>{item.title}</Stp>
-                    <Stp>{item.price}원</Stp>
-                    <Stp>카테고리: {item.category}</Stp>
+                    <StTitlediv>
+                      <Stp>{item.title}</Stp>
+                      <Stp>{item.price}원</Stp>
+                      <Stp>카테고리: {item.category}</Stp>
+                    </StTitlediv>
                   </StCard>
                 );
               } else {
@@ -114,30 +116,33 @@ const StContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 24px;
+  gap: 10px;
 `;
 
 const StCard = styled.div`
-  width: calc(22% - 24px);
+  flex: column;
+  width: calc(22% - 10px);
   height: 240px;
   border: solid 1px black;
-  border-radius: 10px;
   background-color: #068fff;
-  margin-bottom: 24px;
+  margin-bottom: 0px;
 `;
 
 const StImg = styled.img`
-  width: 60%;
-  height: 40%;
-  margin: 10px 0px 0px 35px;
+  width: 90%;
+  height: 65%;
+  margin: 5px 0px 0px 5px;
   padding: 5px 5px 5px 5px;
   border: solid 1px white;
 `;
 
+const StTitlediv = styled.div`
+  margin-left: 5px;
+`;
 const Stp = styled.p`
-  display: flex;
-  justify-content: center;
-  font-size: 13px;
+  justify-content: flex-start;
+  margin: 0px;
+  font-size: 14px;
 `;
 
 const SearchIcon = styled(BiSearch)`
