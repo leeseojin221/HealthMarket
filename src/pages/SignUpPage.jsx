@@ -5,8 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../axios/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { SignupButton, SigninButton } from '../components/Buttons';
-
-import { debounce, throttle } from 'lodash';
+import { debounce } from 'lodash';
+import {
+  alreadyInUseEmailError,
+  validEmailError,
+  weakPWError,
+  emptyPWError,
+  confirmPWError,
+  signupSuccess,
+  failedError
+} from '../components/Alert';
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -15,8 +23,12 @@ function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  //
+
+  //debounce
   const [validEmail, setValidEmail] = useState(true);
+  const [validPassword, setValidpassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
   const onChange = (event) => {
     const {
       target: { name, value }
@@ -49,33 +61,55 @@ function SignUpPage() {
     }
   }, [email]);
 
+  const debounceValidatePassword = debounce((password) => {
+    if (password.length > 0 && password.length < 6) {
+      setValidpassword('비밀번호는 6자 이상이어야 합니다.');
+    } else {
+      setValidpassword('');
+    }
+  }, 1000);
+
+  useEffect(() => {
+    debounceValidatePassword(password);
+  }, [password]);
+
+  const debounceValidateConfirmPassword = debounce((password, confirmPassword) => {
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다');
+    } else {
+      setConfirmPasswordError('');
+    }
+  }, 1000);
+
+  useEffect(() => {
+    debounceValidateConfirmPassword(password, confirmPassword);
+  }, [password, confirmPassword]);
+
   const Signup = async (e) => {
     e.preventDefault();
     if (!email || !validEmail) {
-      alert('이메일을 올바르게 입력해주세요');
+      validEmailError();
     } else if (!password || !confirmPassword) {
-      alert('비밀번호를 입력해주세요');
+      emptyPWError();
     } else if (password !== confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다');
+      confirmPWError();
     } else {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        alert('회원가입에 성공했습니다.');
+        signupSuccess();
         setEmail('');
         setPassword('');
         setConfirmPassword('');
         navigate('/');
-        console.log(userCredential);
       } catch (error) {
-        console.error(error.code);
         if (error.code === 'auth/email-already-in-use') {
-          alert('이미 사용된 이메일입니다.');
+          alreadyInUseEmailError();
         } else if (error.code === 'auth/weak-password') {
-          alert('비밀번호가 6자리 이하입니다.');
+          weakPWError();
         } else if (error.code === 'auth/invalid-email') {
-          alert('이메일 형식을 확인 해주세요.');
+          validEmailError();
         } else {
-          alert('회원가입에 실패 했습니다.');
+          failedError();
         }
       }
     }
@@ -102,6 +136,7 @@ function SignUpPage() {
                 value={password}
                 onChange={onChange}
               />
+              {password.length > 0 && password.length < 6 && <div>비밀번호는 6자 이상이어야 합니다.</div>}
             </div>
             <div>
               <StSignInput
@@ -111,6 +146,7 @@ function SignUpPage() {
                 value={confirmPassword}
                 onChange={onChange}
               />
+              {confirmPasswordError && <div>{confirmPasswordError}</div>}
             </div>
             <div>
               <SignupButton onClick={Signup}>회원가입</SignupButton>

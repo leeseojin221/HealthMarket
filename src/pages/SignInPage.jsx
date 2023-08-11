@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import healthmarket_logo from '../assets/healthmarket_logo.png';
 import google_logo from '../assets/google_logo.png';
@@ -9,6 +9,16 @@ import { auth } from '../axios/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { SignupButton, SigninButton, SigninWithGoogleButton } from '../components/Buttons';
+import { debounce } from 'lodash';
+import {
+  emptyEmailError,
+  emptyPWError,
+  userNotFound,
+  worngPassword,
+  invalidEmail,
+  failedError
+} from '../components/Alert';
+
 function SignInPage() {
   const navigate = useNavigate();
 
@@ -16,6 +26,26 @@ function SignInPage() {
   const [password, setPassword] = useState('');
 
   const [googleUserData, setGoogleUserData] = useState(null);
+
+  //debounce
+  const [validEmail, setValidEmail] = useState(true);
+
+  const validateEmail = (email) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const debounceValidateEmail = debounce((email) => {
+    const result = validateEmail(email);
+    setValidEmail(result);
+  }, 500);
+
+  useEffect(() => {
+    if (email) {
+      debounceValidateEmail(email);
+    }
+  }, [email]);
 
   function handleGoogleLogin() {
     const provider = new GoogleAuthProvider();
@@ -43,26 +73,24 @@ function SignInPage() {
     e.preventDefault();
 
     if (!email) {
-      alert('이메일을 입력해주세요');
+      emptyEmailError();
     } else if (!password) {
-      alert('비밀번호를 입력해주세요');
+      emptyPWError();
     }
 
     //try catch를 사용하여 오류 메세지 안내하기
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log(userCredential);
       navigate('/');
     } catch (error) {
-      console.error(error.code);
       if (error.code === 'auth/user-not-found') {
-        alert('가입된 정보가 확인되지 않습니다.');
+        userNotFound();
       } else if (error.code === 'auth/invalid-email') {
-        alert('올바른 이메일 형식이 아닙니다.');
+        invalidEmail();
       } else if (error.code === 'auth/wrong-password') {
-        alert('비밀번호를 확인 해주세요 ');
+        worngPassword();
       } else {
-        alert('로그인에 실패했습니다.');
+        failedError();
       }
     }
     // 오류 안내 후 입력값 초기화
@@ -81,6 +109,7 @@ function SignInPage() {
           <StSignForm>
             <div>
               <StSignInput placeholder="이메일" type="email" name="email" value={email} onChange={onChange} />
+              {!validEmail && email.length > 0 && <div>이메일 형식을 확인 해주세요 </div>}
             </div>
             <div>
               <StSignInput

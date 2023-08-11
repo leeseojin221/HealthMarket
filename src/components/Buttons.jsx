@@ -82,7 +82,7 @@ const SigninBtn = styled.button`
   padding: 12px;
   border-radius: 6px;
   background-color: #1a4475;
-  color: white;
+  color: #e9e6d8;
   cursor: pointer;
   margin-top: 9px;
 `;
