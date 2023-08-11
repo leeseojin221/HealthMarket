@@ -14,6 +14,8 @@ function DetailPage() {
   // console.log('data=>', data);
 
   const queryClient = useQueryClient();
+  const productInfo = data?.find((item) => item.id == id);
+  console.log('productInfo=>', productInfo);
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
@@ -29,7 +31,6 @@ function DetailPage() {
     return <div>로딩중 ...</div>;
   }
 
-  const productInfo = data.find((item) => item.id == id);
   // console.log('productInfo=>', productInfo);
 
   // if (!productInfo) {
@@ -56,7 +57,7 @@ function DetailPage() {
       <>
         <StLeftColumn>
           <StImgDiv>
-            <img></img>
+            <img src={productInfo.img} alt="제품"></img>
           </StImgDiv>
           <StDescription>설명:{productInfo.body}</StDescription>
         </StLeftColumn>
@@ -67,9 +68,15 @@ function DetailPage() {
               <DeleteButton handleDelete={handleDelete} />
             </StContainerBtn>
             <div>
-              <p>상품명: {productInfo.title} </p>
-              <p>가격: {productInfo.price}</p>
-              <div>판매자정보:{productInfo.SellerInformation}</div>
+              <div>
+                <p>상품명: {productInfo.title} </p>
+              </div>
+              <div>
+                <p>가격: {productInfo.price} 원</p>
+              </div>
+              <div>
+                <div>판매자정보:{productInfo.SellerInformation}</div>
+              </div>
             </div>
           </StProductDetails>
         </StRightColumn>
@@ -88,11 +95,11 @@ const StContainer = styled.div`
 `;
 
 const StLeftColumn = styled.div`
-  width: 40%;
+  width: 100%;
 `;
 
 const StRightColumn = styled.div`
-  width: 300px;
+  width: 500px;
 `;
 
 const StImgDiv = styled.div`
