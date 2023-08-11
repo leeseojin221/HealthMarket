@@ -4,7 +4,10 @@ import SelectBox from '../form/selectBox';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
-import { getItems } from '../axios/api';
+import { getItems, addHealth } from '../axios/api';
+import health from '../assets/healthmarket_logo.png';
+import WriteModal from '../form/WriteModal';
+import { auth } from '../axios/firebase';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -20,6 +23,7 @@ function MainPage() {
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
@@ -27,6 +31,26 @@ function MainPage() {
 
   const onSelectChange = (e) => {
     setSelectedCategory(e.target.value);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleWriteButtonClick = () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      openModal();
+    } else {
+      alert('로그인이 필요합니다.');
+    }
   };
 
   return (
@@ -43,9 +67,10 @@ function MainPage() {
             <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
             <SearchIcon />
           </StserchInput>
-          <button>글쓰기</button>
+          <button onClick={handleWriteButtonClick}>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
+      <WriteModal isOpen={isModalOpen} onClose={closeModal} />
       <StContainer>
         {isLoading ? (
           <div>Loading...</div>
@@ -68,7 +93,7 @@ function MainPage() {
                   >
                     <StImg src={item.img} />
                     <Stp>{item.title}</Stp>
-                    <Stp>{item.price}원</Stp>
+                    <Stp>{parseInt(item.price).toLocaleString()} 원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
                   </StCard>
                 );
