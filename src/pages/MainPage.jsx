@@ -7,51 +7,75 @@ import { useQuery } from 'react-query';
 import { getItems } from '../axios/api';
 
 function MainPage() {
-  const options = [
-    { value: '초기값', name: '선택해주세요' },
-    { value: '축구', name: '축구' },
-    { value: '농구', name: '농구' },
-    { value: '테니스', name: '테니스' },
-    { value: '헬스', name: '헬스' }
-  ];
   const { data, isLoading } = useQuery('info', getItems);
-  console.log('data=>', data);
+
+  const options = [
+    { value: '0', name: '모든 상품' },
+    { value: '1', name: '1' },
+    { value: '2', name: '2' },
+    { value: '3', name: '3' },
+    { value: '4', name: '4' }
+  ];
 
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
   };
 
+  const onSelectChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
   return (
     <>
       <Stcontainer1>
-        <SelectBox options={options} defaultValue=""></SelectBox>
+        <SelectBox
+          options={options}
+          defaultValue={options[0].value}
+          value={selectedCategory}
+          onChange={onSelectChange}
+        />
         <Stcontainer2>
-          <StserchInput placeholder="검색해주세요" value={searchItem} onChange={onChange} />
-          <StSearchButton>
-            <BiSearch />
-          </StSearchButton>
+          <StserchInput>
+            <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
+            <SearchIcon />
+          </StserchInput>
+          <button>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
       <StContainer>
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          data.map((item) => (
-            <StCard
-              key={item.id}
-              onClick={() => {
-                navigate(`detailPage/${item.id}`);
-              }}
-            >
-              <StImg src="health" />
-              <Stp>{item.title}</Stp>
-              <Stp>{item.price}원</Stp>
-              <Stp>{item.category}</Stp>
-            </StCard>
-          ))
+          data
+            .filter((item) => selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '')
+            .filter(
+              (item) =>
+                (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') &&
+                item.title.toLowerCase().includes(searchItem.toLowerCase())
+            )
+            .map((item) => {
+              if (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') {
+                return (
+                  <StCard
+                    key={item.id}
+                    onClick={() => {
+                      navigate(`detailPage/${item.id}`);
+                    }}
+                  >
+                    <StImg src={item.img} />
+                    <Stp>{item.title}</Stp>
+                    <Stp>{item.price}원</Stp>
+                    <Stp>카테고리: {item.category}</Stp>
+                  </StCard>
+                );
+              } else {
+                return null;
+              }
+            })
         )}
       </StContainer>
     </>
@@ -62,6 +86,8 @@ export default MainPage;
 
 const Stcontainer1 = styled.div`
   display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
 `;
 
 const Stcontainer2 = styled.div`
@@ -69,33 +95,43 @@ const Stcontainer2 = styled.div`
   position: relative;
 `;
 
-const StserchInput = styled.input`
-  width: 100px;
+const StserchInput = styled.div`
+  display: flex;
+  align-items: center;
+  width: 90%;
   height: 20px;
-  border-color: #63717f;
+  margin-right: 10px;
+  border: solid 1px #63717f;
   float: left;
   color: #63717f;
-  padding-right: 10px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 `;
 
 const StContainer = styled.div`
+  width: 1000px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 24px;
 `;
 
 const StCard = styled.div`
-  width: 200px;
+  width: calc(22% - 24px);
   height: 240px;
+  border: solid 1px black;
+  border-radius: 10px;
   background-color: #068fff;
+  margin-bottom: 24px;
 `;
 
 const StImg = styled.img`
-  display: flex;
-  justify-content: center;
+  width: 60%;
+  height: 40%;
+  margin: 10px 0px 0px 35px;
+  padding: 5px 5px 5px 5px;
+  border: solid 1px white;
 `;
 
 const Stp = styled.p`
@@ -104,8 +140,14 @@ const Stp = styled.p`
   font-size: 13px;
 `;
 
-const StSearchButton = styled.button`
-  background-color: transparent;
+const SearchIcon = styled(BiSearch)`
+  color: #63717f;
+`;
+
+const InputField = styled.input`
+  flex: 1;
   border: none;
-  cursor: pointer;
+  outline: none;
+  color: #63717f;
+  padding-right: 10px;
 `;

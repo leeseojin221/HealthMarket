@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDocs, query } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 const getHealth = async () => {
@@ -30,6 +30,15 @@ const deleteHealth = async (itemId) => {
     }
 }
 
+const editHealth = async (itemId, updateData) => {
+    try {
+        const healthRef = doc(db, 'info', itemId)
+        await updateDoc(healthRef, updateData)
+    } catch (error) {
+        throw new Error('Error :' + error.message)
+    }
+}
+
 const getItems = async () => {
     // 변경사항 storys infos
     const q = query(collection(db, "info"))
@@ -49,5 +58,5 @@ const getItems = async () => {
 
 
 
-export { getItems, getHealth, deleteHealth }
+export { getItems, getHealth, deleteHealth, editHealth }
 

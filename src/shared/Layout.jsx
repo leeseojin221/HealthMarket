@@ -51,6 +51,7 @@ const StLayout = styled.div`
   align-items: center;
   min-height: 90vh;
   padding: 40px;
+  /* width: 1000px; */
   /* font-family: 'Hahmlet', serif; */
 `;
 
@@ -68,6 +69,12 @@ const StUserInfo = styled.div`
 `;
 
 const StLogout = styled.div`
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 20px;
+`;
+
+const StMyPageBtn = styled.div`
   display: inline-block;
   cursor: pointer;
   margin-right: 20px;
@@ -92,6 +99,7 @@ function Header() {
       setCurrentUser(user?.email);
     });
   }, []);
+
   return (
     <>
       {currentUser ? (
@@ -99,7 +107,7 @@ function Header() {
           <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
           <StAuthLink>
             <div>
-              <StUserInfo>{currentUser}</StUserInfo>
+              <StUserInfo onClick={() => navigate('/myPage')}>{currentUser}</StUserInfo>
               <StLogout onClick={Logout}>로그아웃</StLogout>
             </div>
           </StAuthLink>
