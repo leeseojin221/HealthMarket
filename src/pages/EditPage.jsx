@@ -83,7 +83,7 @@ function EditPage() {
       // 추가부분
 
       queryClient.invalidateQueries('info');
-      alert('수정이완료되었습니다.');
+      alert('수정이 완료 되었습니다.');
       navigate('/myPage');
     } catch (error) {
       console.error('Error updating product:', error);
@@ -119,7 +119,7 @@ function EditPage() {
         >
           {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
         </div> */}
-        <StDescriptionDiv>설명</StDescriptionDiv>
+        <StDescriptionDiv></StDescriptionDiv>
         <StDescription
           value={editedDescription}
           onChange={(e) => {
@@ -136,7 +136,7 @@ function EditPage() {
           <div>
             <div>
               상품명{' '}
-              <input
+              <StInputInput
                 type="text"
                 value={editedTitle}
                 onChange={(e) => {
@@ -146,7 +146,7 @@ function EditPage() {
             </div>
             <div>
               가 격{' '}
-              <input
+              <StInputInput
                 type="text"
                 value={editedPrice}
                 onChange={(e) => {
@@ -156,7 +156,7 @@ function EditPage() {
             </div>
             <div>
               판매자정보{' '}
-              <input
+              <StInputInput
                 type="text"
                 value={editedSellerInfo}
                 onChange={(e) => {
@@ -261,4 +261,20 @@ const StContainerBtn = styled.div`
 
 const StDescriptionDiv = styled.div`
   padding: 20px;
+`;
+
+const StProductDiv = styled.div`
+  background-color: 93CCEA;
+`;
+
+const StInputInput = styled.input`
+  margin-bottom: 20px;
+  margin-top: 10px;
+  width: 250px;
+  border-radius: 0, 0, 1px, 0;
+
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom: 10px;
 `;

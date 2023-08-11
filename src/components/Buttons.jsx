@@ -19,7 +19,7 @@ export const EditLinkButton = ({ id }) => {
   const navigate = useNavigate();
   const editLinkButton = () => {
     if (editLinkButton) {
-      alert('수정페이지로 이동합니다.');
+      alert('수정 페이지로 이동합니다.');
       navigate(`/editPage/${id}`);
     }
   };
@@ -37,21 +37,33 @@ export const CancelButton = ({ id }) => {
 };
 
 export const EditButton = ({ editHandler }) => {
-  return <EditBtn onClick={editHandler}>수정</EditBtn>;
+  return <EditBtn onClick={editHandler}>저장</EditBtn>;
 };
 
 const DeleteBtn = styled.button`
-  background-color: white;
+  background-color: #e9e6d8;
+  color: #ffa596;
+  border: none;
+  width: 80px;
+  height: 30px;
   cursor: pointer;
 `;
 
 const EditBtn = styled.button`
-  background-color: white;
+  background-color: #9ab6ff;
+  color: #e9e6d8;
+  border: none;
   margin-right: 10px;
+  width: 80px;
+  height: 30px;
   cursor: pointer;
 `;
 
 const CancelBtn = styled.button`
-  background-color: white;
+  background-color: #e9e6d8;
+  color: #ffa596;
+  border: none;
+  width: 80px;
+  height: 30px;
   cursor: pointer;
 `;
