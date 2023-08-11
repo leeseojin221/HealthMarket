@@ -89,14 +89,36 @@ function EditPage() {
       console.error('Error updating product:', error);
     }
   };
+  // 추가부분
+  // const handleDrop = (event) => {
+  //   event.preventDefault();
+  //   const selectedImage = event.dataTransfer.files[0];
+  //   handleImageChange(selectedImage);
+  // };
 
   return (
     <StContainer>
       <StLeftColumn>
         <StImgDiv>
           {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          {/* <input type="file" accept="image/*" onChange={handleImageChange} /> */}
+          <label htmlFor="imageInput" className="file-input-label">
+            파일 업로드
+          </label>
+          <input type="file" id="imageInput" accept="image/*" onChange={handleImageChange} className="file-input" />
         </StImgDiv>
+        {/* <div
+          onDrop={handleDrop}
+          onDragOver={(event) => event.preventDefault()}
+          style={{
+            border: '2px dashed #ccc',
+            padding: '20px',
+            textAlign: 'center',
+            cursor: 'pointer'
+          }}
+        >
+          {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
+        </div> */}
         <StDescriptionDiv>설명</StDescriptionDiv>
         <StDescription
           value={editedDescription}
@@ -165,6 +187,9 @@ const StRightColumn = styled.div`
 `;
 
 const StImgDiv = styled.div`
+  position: relative;
+  display: inline-block;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -177,16 +202,39 @@ const StImgDiv = styled.div`
   width: 300px;
   height: 550px;
 
+  overflow: hidden;
+
   img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
     margin-bottom: 10px;
   }
-
-  input {
-    margin-top: 10px;
+  .file-input-label {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: #f8f8f8; */
+    padding: 10px 20px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+    cursor: pointer;
   }
+
+  .file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* input {
+    margin-top: 10px;
+  } */
 `;
 
 const StDescription = styled.textarea`
