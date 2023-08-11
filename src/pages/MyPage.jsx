@@ -12,7 +12,6 @@ import { doc, setDoc } from 'firebase/firestore';
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
 // 글쓰기 : 클릭 시 글 작성 모달 생성 (사진, 상품명, 가격, 닉네임, 설명)
 // ㄴ 작성글 ID : 타이틀값.
-// 글목록 : 작성한 글 목록 불러오기.
 
 function MyPage() {
   const navigate = useNavigate();

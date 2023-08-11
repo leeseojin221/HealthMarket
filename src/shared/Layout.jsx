@@ -107,7 +107,7 @@ function Header() {
           <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
           <StAuthLink>
             <div>
-              <StUserInfo onClick={() => navigate('/myPage')}>{currentUser}</StUserInfo>
+              <StUserInfo onClick={() => navigate('/myPage')}>마이페이지</StUserInfo>
               <StLogout onClick={Logout}>로그아웃</StLogout>
             </div>
           </StAuthLink>
