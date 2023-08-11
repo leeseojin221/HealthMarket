@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
 import { storage } from './../axios/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 function EditPage() {
   const { id } = useParams();
@@ -51,9 +52,18 @@ function EditPage() {
     return <div>로딩중 ...</div>;
   }
 
-  const handleImageChange = (event) => {
+  const handleImageChange = async (event) => {
     const selectedImage = event.target.files[0];
-    setEditImage(URL.createObjectURL(selectedImage));
+    // setEditImage(URL.createObjectURL(selectedImage));
+    try {
+      const storageRef = ref(storage, `images/${selectedImage.name}`);
+      await uploadBytes(storageRef, selectedImage);
+
+      const imageURL = await getDownloadURL(storageRef);
+      setEditImage(imageURL);
+    } catch (error) {
+      console.error(`Error uploading image:`, error);
+    }
   };
 
   // 추가
