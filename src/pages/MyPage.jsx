@@ -6,7 +6,7 @@ import { getItems } from '../axios/api';
 import { auth, db } from '../axios/firebase';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -34,13 +34,15 @@ function MyPage() {
     setIsModalOpen(false);
   };
 
+  // category, body, price, title, nickname, img
+  let name = 'Tokyo';
+
   const handleWrite = async () => {
-    await setDoc(doc(db, 'info', 'LA'), {
-      category: '카테고리',
-      id: '이메일',
-      price: '가격',
-      title: '닉네임'
+    const docRef = await addDoc(collection(db, 'info'), {
+      name,
+      country: 'Japan'
     });
+    console.log('Document written with ID: ', docRef.id);
     closeModal();
   };
 
