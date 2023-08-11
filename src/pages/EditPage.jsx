@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 import { CancelButton, EditButton } from '../components/Buttons';
@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
 import { storage } from './../axios/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import WriteModal from '../form/WriteModal';
 
 function EditPage() {
   const { id } = useParams();
@@ -14,6 +15,9 @@ function EditPage() {
 
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
+
+  // 모달관련 추가
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // console.log('productInfo=>', productInfo.title);
   // console.log('id=>', id);
   // console.log('data=>', data);
@@ -27,12 +31,20 @@ function EditPage() {
     }
   });
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   // 추가
   const [editImage, setEditImage] = useState('');
   const [editedTitle, setEditedTitle] = useState('');
-  const [editedPrice, setEditedPrice] = useState('');
+  const [editedPrice, setEditedPrice] = useState(0);
   const [editedSellerInfo, setEditedSellerInfo] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
 
@@ -68,9 +80,14 @@ function EditPage() {
 
   // 추가
   const editHandler = async () => {
+    if (!editImage || !editedTitle || !editedPrice || !editedSellerInfo || !editedDescription) {
+      alert('모든 값을 입력해주세요.');
+      return;
+    }
+
     const updatedData = {
       title: editedTitle,
-      price: editedPrice,
+      price: Number(editedPrice),
       SellerInformation: editedSellerInfo,
       body: editedDescription,
       img: editImage
@@ -137,6 +154,7 @@ function EditPage() {
             <div>
               상품명{' '}
               <StInputInput
+                ref={inputRef}
                 type="text"
                 value={editedTitle}
                 onChange={(e) => {
