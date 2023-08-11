@@ -15,7 +15,7 @@ function WriteModal({ isOpen, onClose, onUpload, children }) {
   const [content, setContent] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [priec, setPriec] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(options[0].value);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -57,13 +57,14 @@ function WriteModal({ isOpen, onClose, onUpload, children }) {
       <StModalTitleInput type="text" placeholder="제목" value={title} onChange={handleTitleChange} />
       <StModalPriceInput type="text" placeholder="가격" value={priec} onChange={handlePriceChange} />
       <StModalTextarea placeholder="내용" value={content} onChange={handleContentChange} />
-      <StModalCategoryInput
-        type="text"
-        placeholder="카테고리"
-        value={selectedCategory}
-        onChange={handleCategoryChange}
-      />
       <input type="file" accept="image/*" onChange={handleFileChange} />
+      <StModalCategorySelect value={selectedCategory} onChange={handleCategoryChange}>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.name}
+          </option>
+        ))}
+      </StModalCategorySelect>
       <button onClick={handleUpload}>작성</button>
       <button onClick={onClose}>닫기</button>
     </StModal>
@@ -105,9 +106,9 @@ const StModalTextarea = styled.textarea`
   font-size: 15px;
 `;
 
-const StModalCategoryInput = styled.input`
+const StModalCategorySelect = styled.select`
   border-style: solid;
-  padding: 10px;
+  padding: 5px;
   margin-bottom: 20px;
   font-size: 15px;
 `;

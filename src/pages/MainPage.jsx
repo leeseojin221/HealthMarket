@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { getItems, addHealth } from '../axios/api';
 import health from '../assets/healthmarket_logo.png';
 import WriteModal from '../form/WriteModal';
+import { auth } from '../axios/firebase';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -22,6 +23,7 @@ function MainPage() {
   const navigate = useNavigate();
   const [searchItem, setSearchItem] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
@@ -41,6 +43,16 @@ function MainPage() {
     setIsModalOpen(false);
   };
 
+  const handleWriteButtonClick = () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      openModal();
+    } else {
+      alert('로그인이 필요합니다.');
+    }
+  };
+
   return (
     <>
       <Stcontainer1>
@@ -51,13 +63,13 @@ function MainPage() {
           onChange={onSelectChange}
         />
         <Stcontainer2>
-          <StserchInput placeholder="검색해주세요" value={searchItem} onChange={onChange} />
-          <StSearchButton>
-            <BiSearch />
-          </StSearchButton>
+          <StserchInput>
+            <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
+            <SearchIcon />
+          </StserchInput>
+          <button onClick={handleWriteButtonClick}>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
-      <button onClick={openModal}>글쓰기</button>
       <WriteModal isOpen={isModalOpen} onClose={closeModal} />
       <StContainer>
         {isLoading ? (
@@ -79,9 +91,9 @@ function MainPage() {
                       navigate(`detailPage/${item.id}`);
                     }}
                   >
-                    <StImg src={health} />
+                    <StImg src={item.img} />
                     <Stp>{item.title}</Stp>
-                    <Stp>{item.price}원</Stp>
+                    <Stp>{parseInt(item.price).toLocaleString()}원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
                   </StCard>
                 );
@@ -99,6 +111,8 @@ export default MainPage;
 
 const Stcontainer1 = styled.div`
   display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
 `;
 
 const Stcontainer2 = styled.div`
@@ -106,36 +120,43 @@ const Stcontainer2 = styled.div`
   position: relative;
 `;
 
-const StserchInput = styled.input`
-  width: 100px;
+const StserchInput = styled.div`
+  display: flex;
+  align-items: center;
+  width: 90%;
   height: 20px;
-  border-color: #63717f;
+  margin-right: 10px;
+  border: solid 1px #63717f;
   float: left;
   color: #63717f;
-  padding-right: 10px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 `;
 
 const StContainer = styled.div`
+  width: 1000px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 24px;
 `;
 
 const StCard = styled.div`
-  width: 200px;
+  width: calc(22% - 24px);
   height: 240px;
+  border: solid 1px black;
+  border-radius: 10px;
   background-color: #068fff;
+  margin-bottom: 24px;
 `;
 
 const StImg = styled.img`
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-  width: 100%;
-  height: 60%;
+  width: 60%;
+  height: 40%;
+  margin: 10px 0px 0px 35px;
+  padding: 5px 5px 5px 5px;
+  border: solid 1px white;
 `;
 
 const Stp = styled.p`
@@ -144,8 +165,14 @@ const Stp = styled.p`
   font-size: 13px;
 `;
 
-const StSearchButton = styled.button`
-  background-color: transparent;
+const SearchIcon = styled(BiSearch)`
+  color: #63717f;
+`;
+
+const InputField = styled.input`
+  flex: 1;
   border: none;
-  cursor: pointer;
+  outline: none;
+  color: #63717f;
+  padding-right: 10px;
 `;

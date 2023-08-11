@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDocs, query, addDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, addDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 const getHealth = async () => {
@@ -24,6 +24,15 @@ const deleteHealth = async (itemId) => {
   try {
     const healthRef = doc(db, 'info', itemId);
     await deleteDoc(healthRef);
+  } catch (error) {
+    throw new Error('Error :' + error.message);
+  }
+};
+
+const editHealth = async (itemId, updateData) => {
+  try {
+    const healthRef = doc(db, 'info', itemId);
+    await updateDoc(healthRef, updateData);
   } catch (error) {
     throw new Error('Error :' + error.message);
   }
@@ -61,4 +70,4 @@ const addHealth = async (title, price, content, category) => {
   }
 };
 
-export { getItems, getHealth, deleteHealth, addHealth };
+export { getItems, getHealth, deleteHealth, editHealth, addHealth };

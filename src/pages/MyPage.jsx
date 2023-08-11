@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EditLinkButton, DeleteButton } from '../components/Buttons';
 import Modal from '../form/WriteModal';
 import styled from 'styled-components';
 import { getItems } from '../axios/api';
+import { auth, db } from '../axios/firebase';
+import { useQuery } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
 // 글쓰기 : 클릭 시 글 작성 모달 생성 (사진, 상품명, 가격, 닉네임, 설명)
 // ㄴ 작성글 ID : 타이틀값.
-// 글목록 : 작성한 글 목록 불러오기.
 
 function MyPage() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: userItemsData, isLoading: userItemsLoading } = useQuery('info', getItems);
+  const userItems = userItemsData || [];
+
+  const user = auth.currentUser; // 로그인된 사용자 정보 가져오기
+  const loggedInUserEmail = user ? user.email : null; // 로그인된 사용자의 이메일
+  const filteredUserEmail = userItems.filter((item) => item.id === loggedInUserEmail);
+
+  console.log(loggedInUserEmail);
+  console.log(filteredUserEmail);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -21,8 +34,13 @@ function MyPage() {
     setIsModalOpen(false);
   };
 
-  const handleWrite = () => {
-    // 작성 버튼을 누를 때 실행될 로직 작성 필요.
+  const handleWrite = async () => {
+    await setDoc(doc(db, 'info', 'LA'), {
+      category: '카테고리',
+      id: '이메일',
+      price: '가격',
+      title: '닉네임'
+    });
     closeModal();
   };
 
@@ -50,9 +68,13 @@ function MyPage() {
         )}
         <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
         <StUserListText isModalOpen={isModalOpen}>
-          <span>작성글~~~</span>
-          <EditLinkButton />
-          <DeleteButton />
+          {filteredUserEmail.map((item) => (
+            <div key={item.id}>
+              <Link to={`/detail/${item.id}`}>{item.title}</Link>
+              <EditLinkButton />
+              <DeleteButton />
+            </div>
+          ))}
         </StUserListText>
       </StMyContainer>
     </>
@@ -75,6 +97,7 @@ const StUserList = styled.div`
 `;
 const StUserListText = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+  background-color: #000;
 `;
 
 const StUserWrap = styled.div`
@@ -84,4 +107,40 @@ const StUserWrap = styled.div`
 const StMyContainer = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+export const StFlex = styled.div`
+  transform: translate(80px, 0px);
+  display: flex;
+  margin-bottom: 30px;
+`;
+
+const StListTitle = styled.div`
+  transform: translate(85px, 0px);
+  margin: 50px auto 50px auto;
+  font-size: 25px;
+  font-weight: bolder;
+  text-decoration-line: none;
+  color: black;
+`;
+
+export const StListTitleBox = styled.div`
+  width: 250px;
+  padding: 4px;
+  margin-right: 30px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+`;
+export const StListBodyBox = styled.div`
+  width: 600px;
+  padding: 4px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+`;
+
+const StList = styled.div`
+  text-decoration: none;
+  color: white;
 `;
