@@ -3,9 +3,10 @@ import { EditLinkButton, DeleteButton } from '../components/Buttons';
 import Modal from '../form/WriteModal';
 import styled from 'styled-components';
 import { getItems } from '../axios/api';
-import { auth } from '../axios/firebase';
+import { auth, db } from '../axios/firebase';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -34,8 +35,13 @@ function MyPage() {
     setIsModalOpen(false);
   };
 
-  const handleWrite = () => {
-    // 작성 버튼을 누를 때 실행될 로직 작성 필요.
+  const handleWrite = async () => {
+    await setDoc(doc(db, 'info', 'LA'), {
+      category: '카테고리',
+      id: '이메일',
+      price: '가격',
+      title: '닉네임'
+    });
     closeModal();
   };
 
