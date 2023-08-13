@@ -9,8 +9,6 @@ function Buttons({ children, ...props }) {
 export default Buttons;
 
 export const DeleteButton = ({ handleDelete }) => {
-  // const navigate = useNavigate();
-  // const deleteButton = () => {};
   return <DeleteBtn onClick={handleDelete}>삭제</DeleteBtn>;
 };
 
@@ -86,8 +84,25 @@ const EditBtn = styled.button`
 `;
 
 const CancelBtn = styled.button`
-  background-color: white;
+  align-items: center;
+  /* margin: 5px; */
+  margin-right: 10px;
+  width: 100px;
+  height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
   cursor: pointer;
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
 `;
 
 export const SignupButton = ({ children, onClick }) => {
