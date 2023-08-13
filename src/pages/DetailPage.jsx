@@ -4,6 +4,7 @@ import { DeleteButton, EditLinkButton } from '../components/Buttons';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deleteHealth, getHealth } from '../axios/api';
 import { useNavigate, useParams } from 'react-router-dom';
+import { auth } from '../axios/firebase';
 
 function DetailPage() {
   const navigate = useNavigate();
@@ -14,6 +15,9 @@ function DetailPage() {
 
   const queryClient = useQueryClient();
   const productInfo = data?.find((item) => item.id == id);
+
+  const user = auth.currentUser;
+  const loggedInUserEmail = user ? user.email : null;
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
@@ -53,23 +57,27 @@ function DetailPage() {
           <StImgDiv>
             <img src={productInfo.img} alt="제품"></img>
           </StImgDiv>
-          <StDescription>설명:{productInfo.body}</StDescription>
+          <StDescription>{productInfo.body}</StDescription>
         </StLeftColumn>
         <StRightColumn>
           <StProductDetails>
             <StContainerBtn>
-              <EditLinkButton id={id} />
-              <DeleteButton handleDelete={handleDelete} />
+              {productInfo.user == loggedInUserEmail && (
+                <>
+                  <EditLinkButton id={id} loggedInUserEmail={loggedInUserEmail} productInfo={productInfo} />
+                  <DeleteButton handleDelete={handleDelete} />
+                </>
+              )}
             </StContainerBtn>
             <div>
               <div>
-                <p>상품명: {productInfo.title} </p>
+                <p>상품명 : {productInfo.title} </p>
               </div>
               <div>
-                <p>가격: {productInfo.price} 원</p>
+                <p>가격 : {Number(productInfo.price).toLocaleString()} 원</p>
               </div>
               <div>
-                <div>판매자정보:{productInfo.SellerInformation}</div>
+                <div>판매자정보 : {productInfo.SellerInformation}</div>
               </div>
             </div>
           </StProductDetails>
@@ -125,7 +133,7 @@ const StDescription = styled.div`
   margin-top: 20px;
   font-weight: bold;
   padding: 20px;
-  width: 300px;
+  width: 350px;
 `;
 
 const StProductDetails = styled.div`
