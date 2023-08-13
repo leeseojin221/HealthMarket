@@ -15,7 +15,6 @@ export const DeleteButton = ({ handleDelete }) => {
 };
 
 export const EditLinkButton = ({ id }) => {
-  // console.log('id=>', id);
   const navigate = useNavigate();
   const editLinkButton = () => {
     if (editLinkButton) {
@@ -37,7 +36,7 @@ export const CancelButton = ({ id }) => {
 };
 
 export const EditButton = ({ editHandler }) => {
-  return <EditBtn onClick={editHandler}>수정</EditBtn>;
+  return <EditBtn onClick={editHandler}>저장</EditBtn>;
 };
 
 const DeleteBtn = styled.button`

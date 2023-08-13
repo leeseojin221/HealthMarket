@@ -4,8 +4,7 @@ import SelectBox from '../form/selectBox';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
-import { getItems, addHealth } from '../axios/api';
-import health from '../assets/healthmarket_logo.png';
+import { getItems } from '../axios/api';
 import WriteModal from '../form/WriteModal';
 import { auth } from '../axios/firebase';
 
@@ -21,11 +20,10 @@ function MainPage() {
   ];
 
   const navigate = useNavigate();
-  // 추가부분
-  // const [isModalOpen, setIsModalOpen] = useState(fasle);
+
   const [searchItem, setSearchItem] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
@@ -37,20 +35,11 @@ function MainPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handleWriteButtonClick = () => {
     const user = auth.currentUser;
 
     if (user) {
       setIsModalOpen(true);
-      console.log('글쓰기!');
     } else {
       alert('로그인이 필요합니다.');
     }
@@ -73,7 +62,7 @@ function MainPage() {
           <button onClick={handleWriteButtonClick}>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
-      {isModalOpen && <WriteModal closeModal={openModal} />}
+      {isModalOpen && <WriteModal setIsModalOpen={setIsModalOpen} />}
       <StContainer>
         {isLoading ? (
           <div>Loading...</div>
@@ -101,7 +90,7 @@ function MainPage() {
                   >
                     <StImg src={item.img} />
                     <Stp>{item.title}</Stp>
-                    <Stp>{parseInt(item.price).toLocaleString()} 원</Stp>
+                    <Stp>{item.price}원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
                   </StCard>
                 );
