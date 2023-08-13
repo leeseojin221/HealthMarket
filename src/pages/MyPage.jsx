@@ -52,27 +52,37 @@ function MyPage() {
     <>
       <StMyContainer>
         <StUserWrap isModalOpen={isModalOpen}>
-          <StUserInfo>{loggedInUserEmail}</StUserInfo>
           <StUserImg>
             <StImg src={health} />
           </StUserImg>
         </StUserWrap>
-        <StWriteButton onClick={handleWriteButtonClick} isModalOpen={isModalOpen}>
-          글쓰기
-        </StWriteButton>
+        <StUserInfo>{loggedInUserEmail}</StUserInfo>
+        <StListWriteWrap>
+          <StUserList isModalOpen={isModalOpen}>내가 작성한 글</StUserList>
+          <StWriteButton onClick={handleWriteButtonClick} isModalOpen={isModalOpen}>
+            글쓰기
+          </StWriteButton>
+        </StListWriteWrap>
         {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} />}
-        <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
+
         <StUserListText isModalOpen={isModalOpen}>
           {filteredUserEmail.map((item) => (
-            <div key={item.id}>
-              <Link to={`/detailPage/${item.id}`}>{item.title}</Link>
-              <EditLinkButton id={item.id} />
-              <DeleteButton
-                handleDelete={() => {
-                  handleDelete(item.id);
-                }}
-              />
-            </div>
+            <StListWrap key={item.id}>
+              <Link
+                to={`/detailPage/${item.id}`}
+                style={{ textDecoration: 'none', color: '#000', fontSize: '15px', marginTop: '8px' }}
+              >
+                {item.title}
+              </Link>
+              <StButtons>
+                <EditLinkButton id={item.id} />
+                <DeleteButton
+                  handleDelete={() => {
+                    handleDelete(item.id);
+                  }}
+                />
+              </StButtons>
+            </StListWrap>
           ))}
         </StUserListText>
       </StMyContainer>
@@ -83,18 +93,21 @@ function MyPage() {
 export default MyPage;
 
 const StUserInfo = styled.div`
-  width: 90%;
-  height: 60%;
-  border: solid 1px black;
+  width: 230px;
+  height: 24px;
+  position: relative;
+  background-color: rgb(233, 233, 233);
+  text-align: center;
+  margin-bottom: 100px;
 `;
 const StUserImg = styled.div`
-  padding-right: 0px;
-  margin-right: 0px;
+  width: 230px;
+  height: 230px;
 `;
 
 const StImg = styled.img`
-  width: 90%;
-  height: 60%;
+  width: 100%;
+  height: 100%;
   border: solid 1px black;
   border-radius: 100%;
 `;
@@ -103,24 +116,40 @@ const StWriteButton = styled.button`
 `;
 const StUserList = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+  font-size: 30px;
 `;
 const StUserListText = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+  margin-top: -15px;
+  width: 100%;
 `;
 
 const StUserWrap = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'flex')};
-  width: 650px;
-  height: 250px;
-  gap: 40px;
-  padding-right: 0px;
-  margin-right: 0px;
 `;
 const StMyContainer = styled.div`
   display: flex;
-  align-items: center;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
+`;
+
+const StListWrap = styled.div`
+  width: 100%;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #000;
+  border-radius: 5px;
+`;
+
+const StButtons = styled.div`
+  margin: 3px 0px 3px 0px;
+`;
+
+const StListWriteWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const StMyPagebox = styled.div`

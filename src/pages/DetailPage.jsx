@@ -169,8 +169,9 @@ const StProductDetails = styled.div`
 // `;
 
 const StContainerBtn = styled.div`
-  margin-bottom: 50px;
-  /* margin-left: 30%; */
+  margin-bottom: 61px;
+  width: 260px;
+  display: flex;
 `;
 
 const StInfoTitle = styled.div`

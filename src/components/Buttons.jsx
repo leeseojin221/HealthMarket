@@ -154,7 +154,7 @@ const EditBtn = styled.button`
   cursor: pointer; */
   align-items: center;
   /* margin: 5px; */
-  margin-left: 100px;
+  // margin-left: 100px;
   margin-right: 10px;
   width: 100px;
   height: 30px;
