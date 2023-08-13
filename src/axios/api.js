@@ -8,14 +8,11 @@ const getHealth = async () => {
   const initialInfos = [];
 
   querySnapshot.forEach((doc) => {
-    // console.log('doc=>', doc)
     const data = {
       id: doc.id,
       ...doc.data()
     };
-    // console.log('data=>', data);
     initialInfos.push(data);
-    // console.log('initialInfos=>', initialInfos)
   });
   return initialInfos;
 };
@@ -55,4 +52,8 @@ const getItems = async () => {
   return Items;
 };
 
-export { getItems, getHealth, deleteHealth, editHealth };
+const addHealth = async (addData) => {
+  await addDoc(collection(db, 'info'), addData);
+};
+
+export { getItems, getHealth, deleteHealth, editHealth, addHealth };
