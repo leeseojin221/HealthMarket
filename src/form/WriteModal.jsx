@@ -5,6 +5,7 @@ import { storage } from '../axios/firebase';
 import { auth } from '../axios/firebase';
 import { useMutation, useQueryClient } from 'react-query';
 import { addHealth } from '../axios/api';
+import { ClossButton, WriteButton } from '../components/Buttons';
 
 function WriteModal({ setIsModalOpen }) {
   const user = auth.currentUser; // 로그인된 사용자 정보 가져오기
@@ -56,6 +57,8 @@ function WriteModal({ setIsModalOpen }) {
     addMutation.mutate(addData);
   };
 
+  const [selectedFileName, setSelectedFileName] = useState('선택한 파일 없음');
+
   const handleImageUpload = async (e) => {
     const selectedImage = e.target.files[0];
     try {
@@ -63,36 +66,39 @@ function WriteModal({ setIsModalOpen }) {
       await uploadBytes(storageRef, selectedImage);
       const imageURL = await getDownloadURL(storageRef);
       setImg(imageURL);
+      setSelectedFileName(selectedImage.name);
     } catch (error) {
       console.error(`Error uploading image:`, error);
     }
+  };
+
+  const ClossModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
     <StModal>
       <StModalContainer>
         <div>
-          <button
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-          >
-            닫기
-          </button>
+          <ClossButton ClossModal={ClossModal} />
         </div>
-        <input type="file" onChange={handleImageUpload} />
-        <input type="text" placeholder="상품명" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <input type="text" placeholder="가격" value={price} onChange={(e) => setPrice(e.target.value)} />
-        <input type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-        <input type="text" placeholder="설명" value={body} onChange={(e) => setBody(e.target.value)} />
-        <select value={selectedCategory} onChange={handleCategoryChange}>
+        <StFileInput>
+          <label htmlFor="fileInput">파일 선택</label>
+          <span>{selectedFileName}</span>
+          <input type="file" id="fileInput" onChange={handleImageUpload} />
+        </StFileInput>
+        <StTextInput type="text" placeholder="상품명" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <StTextInput type="text" placeholder="가격" value={price} onChange={(e) => setPrice(e.target.value)} />
+        <StTextInput type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+        <StDescriptionInput type="text" placeholder="설명" value={body} onChange={(e) => setBody(e.target.value)} />
+        <StSelect value={selectedCategory} onChange={handleCategoryChange}>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.name}
             </option>
           ))}
-        </select>
-        <button onClick={handleWrite}>작성하기</button>
+        </StSelect>
+        <WriteButton handleWrite={handleWrite} />
       </StModalContainer>
     </StModal>
   );
@@ -109,7 +115,7 @@ const StModal = styled.div`
   background-color: white;
   border: solid 1px black;
   padding: 20px;
-  border-radius: 0px;
+  border-radius: 10px;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 `;
@@ -142,9 +148,95 @@ const StModalCategorySelect = styled.select`
 `;
 
 const StModalContainer = styled.div`
- display: flex;
- flex-direction: column;
- width:  100%;
- height: 100%;
- gap: 10px;
-`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+`;
+
+// const StInputBox = styled.input`
+//   align-items: center;
+//   /* margin: 5px; */
+//   margin-right: 10px;
+//   width: 100px;
+//   height: 30px;
+//   border-radius: 7px;
+//   /* padding: 10px 15px; */
+//   background-color: #dddff0;
+//   color: #1a4475;
+//   border: none;
+//   border-radius: 12px;
+//   font-weight: 700;
+//   text-align: center;
+//   cursor: pointer;
+
+//   &:hover {
+//     background-color: #1a4475;
+//     color: #dddff0;
+//     transition: all 0.3s;
+//   }
+// `;
+
+const StTextInput = styled.input`
+  width: 250px;
+  height: 30px;
+  justify-content: center;
+  border: 0;
+  border-radius: 10px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+`;
+
+const StDescriptionInput = styled.input`
+  font-weight: bold;
+  padding-left: 10px;
+  width: 250px;
+  height: 100px;
+  /* align-items: center; */
+  background-color: rgb(233, 233, 233);
+  border: 0;
+  border-radius: 10px;
+  outline: none;
+`;
+
+const StSelect = styled.select`
+  border-radius: 0;
+  background: none transparent;
+  font-size: inherit;
+  color: inherit;
+  box-sizing: content-box;
+  margin: 0;
+  width: 120px;
+  border-radius: 0.5rem;
+  padding: 10px;
+  box-shadow: none;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border: 2px solid #ddd;
+  line-height: 1.06;
+`;
+
+const StFileInput = styled.div`
+  label {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #dddff0;
+    color: #1a4475;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 700;
+  }
+
+  label:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+`;

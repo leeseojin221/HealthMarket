@@ -37,6 +37,92 @@ export const EditButton = ({ editHandler }) => {
   return <EditBtn onClick={editHandler}>저장</EditBtn>;
 };
 
+export const CreateButton = ({ handleWriteButtonClick }) => {
+  return <CreateBtn onClick={handleWriteButtonClick}>글쓰기</CreateBtn>;
+};
+
+export const ClossButton = ({ ClossModal }) => {
+  return <ClossBtn onClick={ClossModal}>닫기</ClossBtn>;
+};
+
+export const WriteButton = ({ handleWrite }) => {
+  return <WriteBtn onClick={handleWrite}>작성하기</WriteBtn>;
+};
+
+const CreateBtn = styled.button`
+  /* background-color: white;
+cursor: pointer; */
+  align-items: center;
+  /* margin: 5px; */
+  margin-right: 10px;
+  width: 100px;
+  height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
+`;
+
+const ClossBtn = styled.button`
+  /* background-color: white;
+cursor: pointer; */
+  align-items: center;
+  /* margin: 5px; */
+  margin-right: 10px;
+  width: 50px;
+  height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
+`;
+
+const WriteBtn = styled.button`
+  justify-content: center;
+  align-items: center;
+  /* margin: 5px; */
+  margin-right: 10px;
+  width: 250px;
+  height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
+`;
+
 const DeleteBtn = styled.button`
   /* background-color: white;
   cursor: pointer; */
