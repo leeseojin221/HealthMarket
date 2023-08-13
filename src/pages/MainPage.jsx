@@ -99,7 +99,7 @@ const StserchInput = styled.div`
   display: flex;
   align-items: center;
   width: 90%;
-  height: 20px;
+  height: 30px;
   margin-right: 10px;
   border: solid 1px #63717f;
   float: left;
@@ -120,9 +120,8 @@ const StContainer = styled.div`
 const StCard = styled.div`
   width: calc(22% - 24px);
   height: 240px;
-  border: solid 1px black;
   border-radius: 10px;
-  background-color: #068fff;
+  background-color: #ececf1;
   margin-bottom: 24px;
 `;
 

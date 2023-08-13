@@ -46,37 +46,39 @@ function MyPage() {
 
   return (
     <>
-      <StMyContainer>
-        <StUserWrap>
-          <StUserInfo isModalOpen={isModalOpen}>회원정보</StUserInfo>
-          <StUserImg isModalOpen={isModalOpen}>회원사진</StUserImg>
-        </StUserWrap>
-        <StWriteButton onClick={openModal} isModalOpen={isModalOpen}>
-          글쓰기
-        </StWriteButton>
-        {isModalOpen && (
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <div className="modal-content">
-              <input type="file" />
-              <input type="text" placeholder="상품명" />
-              <input type="text" placeholder="가격" />
-              <input type="text" placeholder="닉네임" />
-              <textarea placeholder="설명" />
-              <button onClick={handleWrite}>작성하기</button>
-            </div>
-          </Modal>
-        )}
-        <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
-        <StUserListText isModalOpen={isModalOpen}>
-          {filteredUserEmail.map((item) => (
-            <div key={item.id}>
-              <Link to={`/detail/${item.id}`}>{item.title}</Link>
-              <EditLinkButton />
-              <DeleteButton />
-            </div>
-          ))}
-        </StUserListText>
-      </StMyContainer>
+      <StMyPagebox>
+        <StMyContainer>
+          <StUserWrap>
+            <StUserInfo isModalOpen={isModalOpen}>회원정보</StUserInfo>
+            <StUserImg isModalOpen={isModalOpen}>회원사진</StUserImg>
+          </StUserWrap>
+          <StWriteButton onClick={openModal} isModalOpen={isModalOpen}>
+            글쓰기
+          </StWriteButton>
+          {isModalOpen && (
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+              <div className="modal-content">
+                <input type="file" />
+                <input type="text" placeholder="상품명" />
+                <input type="text" placeholder="가격" />
+                <input type="text" placeholder="닉네임" />
+                <textarea placeholder="설명" />
+                <button onClick={handleWrite}>작성하기</button>
+              </div>
+            </Modal>
+          )}
+          <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
+          <StUserListText isModalOpen={isModalOpen}>
+            {filteredUserEmail.map((item) => (
+              <div key={item.id}>
+                <Link to={`/detail/${item.id}`}>{item.title}</Link>
+                <EditLinkButton />
+                <DeleteButton />
+              </div>
+            ))}
+          </StUserListText>
+        </StMyContainer>
+      </StMyPagebox>
     </>
   );
 }
@@ -143,4 +145,12 @@ export const StListBodyBox = styled.div`
 const StList = styled.div`
   text-decoration: none;
   color: white;
+`;
+
+export const StMyPagebox = styled.div`
+  background-color: #ececf1;
+  width: 1000px;
+  height: 700px;
+  padding: 20px;
+  border-radius: 20px;
 `;
