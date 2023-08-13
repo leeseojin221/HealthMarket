@@ -6,7 +6,7 @@ import { getItems, deleteHealth } from '../axios/api';
 import { auth } from '../axios/firebase';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import health from '../assets/healthmarket_logo.png';
+import health from '../assets/healthmarket_logo.png'
 
 function MyPage() {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ function MyPage() {
     <>
       <StMyContainer>
         <StUserWrap isModalOpen={isModalOpen}>
-          <StUserInfo >회원정보</StUserInfo>
+          <StUserInfo>회원정보</StUserInfo>
           <StUserImg ><StImg src={health}/></StUserImg>
         </StUserWrap>
         <StWriteButton onClick={handleWriteButtonClick} isModalOpen={isModalOpen}>
