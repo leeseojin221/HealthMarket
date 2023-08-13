@@ -9,8 +9,6 @@ function Buttons({ children, ...props }) {
 export default Buttons;
 
 export const DeleteButton = ({ handleDelete }) => {
-  // const navigate = useNavigate();
-  // const deleteButton = () => {};
   return <DeleteBtn onClick={handleDelete}>삭제</DeleteBtn>;
 };
 
@@ -86,8 +84,6 @@ const EditBtn = styled.button`
 `;
 
 const CancelBtn = styled.button`
-  /* background-color: white;
-  cursor: pointer; */
   align-items: center;
   /* margin: 5px; */
   margin-right: 10px;
@@ -102,15 +98,12 @@ const CancelBtn = styled.button`
   font-weight: 700;
   text-align: center;
   cursor: pointer;
-
   &:hover {
     background-color: #1a4475;
     color: #dddff0;
     transition: all 0.3s;
   }
 `;
-
-// 남색 #1a4475 , 아이보리 #e9e6d8
 
 export const SignupButton = ({ children, onClick }) => {
   return <SignupBtn onClick={onClick}>{children}</SignupBtn>;
