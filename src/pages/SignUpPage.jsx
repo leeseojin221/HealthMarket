@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import healthmarket_logo from '../assets/healthmarket_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../axios/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { SignupButton, SigninButton } from '../components/Buttons';
+import { debounce } from 'lodash';
+import {
+  alreadyInUseEmailError,
+  validEmailError,
+  weakPWError,
+  emptyPWError,
+  confirmPWError,
+  signupSuccess,
+  failedError
+} from '../components/Alert';
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -12,6 +23,11 @@ function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  //debounce
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPassword, setValidpassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
   const onChange = (event) => {
     const {
@@ -28,35 +44,72 @@ function SignUpPage() {
     }
   };
 
+  const validateEmail = (email) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const debounceValidateEmail = debounce((email) => {
+    const result = validateEmail(email);
+    setValidEmail(result);
+  }, 500);
+
+  useEffect(() => {
+    if (email) {
+      debounceValidateEmail(email);
+    }
+  }, [email]);
+
+  const debounceValidatePassword = debounce((password) => {
+    if (password.length > 0 && password.length < 6) {
+      setValidpassword('비밀번호는 6자 이상이어야 합니다.');
+    } else {
+      setValidpassword('');
+    }
+  }, 1000);
+
+  useEffect(() => {
+    debounceValidatePassword(password);
+  }, [password]);
+
+  const debounceValidateConfirmPassword = debounce((password, confirmPassword) => {
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다');
+    } else {
+      setConfirmPasswordError('');
+    }
+  }, 1000);
+
+  useEffect(() => {
+    debounceValidateConfirmPassword(password, confirmPassword);
+  }, [password, confirmPassword]);
+
   const Signup = async (e) => {
     e.preventDefault();
-    if (!email) {
-      alert('이메일을 입력해주세요');
+    if (!email || !validEmail) {
+      validEmailError();
     } else if (!password || !confirmPassword) {
-      alert('비밀번호를 입력해주세요');
+      emptyPWError();
     } else if (password !== confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다');
-    }
-
-    if (password === confirmPassword) {
+      confirmPWError();
+    } else {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        alert('회원가입에 성공했습니다.');
+        signupSuccess();
         setEmail('');
         setPassword('');
         setConfirmPassword('');
         navigate('/');
-        console.log(userCredential); //user정보 확인하기
       } catch (error) {
-        console.error(error.code); //에러메세지 확인하기
         if (error.code === 'auth/email-already-in-use') {
-          alert('이미 사용된 이메일입니다.');
+          alreadyInUseEmailError();
         } else if (error.code === 'auth/weak-password') {
-          alert('비밀번호가 6자리 이하입니다.');
+          weakPWError();
         } else if (error.code === 'auth/invalid-email') {
-          alert('이메일 형식을 확인 해주세요.');
+          validEmailError();
         } else {
-          alert('회원가입에 실패 했습니다.');
+          failedError();
         }
       }
     }
@@ -73,6 +126,7 @@ function SignUpPage() {
           <StSignForm>
             <div>
               <StSignInput placeholder="이메일" type="email" name="email" value={email} onChange={onChange} />
+              {!validEmail && email.length > 0 && <div>유효한 이메일이 아닙니다.</div>}
             </div>
             <div>
               <StSignInput
@@ -82,25 +136,27 @@ function SignUpPage() {
                 value={password}
                 onChange={onChange}
               />
-              <div>
-                <StSignInput
-                  placeholder="비밀번호확인"
-                  name="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={onChange}
-                />
-              </div>
-              <div>
-                <StSignupBtn onClick={Signup}>회원가입</StSignupBtn>
-                <StSigninBtn
-                  onClick={() => {
-                    navigate('/signinPage');
-                  }}
-                >
-                  로그인하러가기
-                </StSigninBtn>
-              </div>
+              {password.length > 0 && password.length < 6 && <div>비밀번호는 6자 이상이어야 합니다.</div>}
+            </div>
+            <div>
+              <StSignInput
+                placeholder="비밀번호확인"
+                type="password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={onChange}
+              />
+              {confirmPasswordError && <div>{confirmPasswordError}</div>}
+            </div>
+            <div>
+              <SignupButton onClick={Signup}>회원가입</SignupButton>
+              <SigninButton
+                onClick={() => {
+                  navigate('/signinPage');
+                }}
+              >
+                로그인하러가기
+              </SigninButton>
             </div>
           </StSignForm>
         </StSignInputDiv>
@@ -152,25 +208,4 @@ const StSignInput = styled.input`
   boxsizing: border-box;
   margin-bottom: 10px;
   margin-top: 5px;
-`;
-
-//btn
-const StSignupBtn = styled.button`
-  width: 80%;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: #1a4475;
-  color: white;
-  cursor: pointer;
-`;
-const StSigninBtn = styled.button`
-  width: 80%;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: #e9e6d8;
-  color: #1a4475;
-  cursor: pointer;
-  margin-top: 9px;
 `;
