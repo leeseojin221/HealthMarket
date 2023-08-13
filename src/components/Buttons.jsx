@@ -90,8 +90,6 @@ const CancelBtn = styled.button`
   cursor: pointer;
 `;
 
-// 남색 #1a4475 , 아이보리 #e9e6d8
-
 export const SignupButton = ({ children, onClick }) => {
   return <SignupBtn onClick={onClick}>{children}</SignupBtn>;
 };
