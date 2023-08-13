@@ -227,7 +227,6 @@ const StImgDiv = styled.div`
     opacity: 0;
     cursor: pointer;
   }
-
   img {
     max-width: 100%;
     max-height: 100%;
