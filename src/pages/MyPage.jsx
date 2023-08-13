@@ -102,8 +102,8 @@ const StUserListText = styled.div`
 `;
 
 const StUserWrap = styled.div`
-  display: flex;
   align-items: center;
+  border:solid 1px black;
 `;
 const StMyContainer = styled.div`
   width: 100%;

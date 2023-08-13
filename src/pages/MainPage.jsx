@@ -41,7 +41,9 @@ function MainPage() {
         <Stcontainer2>
           <StserchInput>
             <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
-            <SearchIcon />
+            <button onClick={() => navigate(`/`)}>
+              <SearchIcon />
+            </button>
           </StserchInput>
           <button>글쓰기</button>
         </Stcontainer2>
@@ -51,32 +53,24 @@ function MainPage() {
           <div>Loading...</div>
         ) : (
           data
-            .filter((item) => selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '')
-            .filter(
-              (item) =>
-                (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') &&
-                item.title.toLowerCase().includes(searchItem.toLowerCase())
-            )
+            .filter((item) => item.title.toLowerCase().includes(searchItem.toLowerCase()))
+            .filter((item) => selectedCategory === '0' || item.category === selectedCategory)
             .map((item) => {
-              if (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') {
-                return (
-                  <StCard
-                    key={item.id}
-                    onClick={() => {
-                      navigate(`detailPage/${item.id}`);
-                    }}
-                  >
-                    <StImg src={item.img} />
-                    <StTitlediv>
-                      <Stp>{item.title}</Stp>
-                      <Stp>{item.price}원</Stp>
-                      <Stp>카테고리: {item.category}</Stp>
-                    </StTitlediv>
-                  </StCard>
-                );
-              } else {
-                return null;
-              }
+              return (
+                <StCard
+                  key={item.id}
+                  onClick={() => {
+                    navigate(`detailPage/${item.id}`);
+                  }}
+                >
+                  <StImg src={item.img} />
+                  <StTitlediv>
+                    <Stp>{item.title}</Stp>
+                    <Stp>{item.price}원</Stp>
+                    <Stp>카테고리: {item.category}</Stp>
+                  </StTitlediv>
+                </StCard>
+              );
             })
         )}
       </StContainer>
@@ -112,11 +106,14 @@ const StserchInput = styled.div`
 `;
 
 const StContainer = styled.div`
+  max-height: 80vh;
   width: 1000px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const StCard = styled.div`
