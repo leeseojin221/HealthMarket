@@ -121,3 +121,11 @@ const StMyContainer = styled.div`
   flex-direction: column;
   gap: 24px;
 `;
+
+export const StMyPagebox = styled.div`
+  background-color: #ececf1;
+  width: 1000px;
+  height: 700px;
+  padding: 20px;
+  border-radius: 20px;
+`;

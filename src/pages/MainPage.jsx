@@ -41,7 +41,7 @@ function MainPage() {
         <Stcontainer2>
           <StserchInput>
             <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
-              <SearchIcon />
+            <SearchIcon />
           </StserchInput>
           <button>글쓰기</button>
         </Stcontainer2>
@@ -57,21 +57,21 @@ function MainPage() {
               return (
                 <>
                   <StCard
-                  key={item.id}
-                  onClick={() => {
-                    navigate(`detailPage/${item.id}`);
-                  }}
-                >
-                  <StImg src={item.img} />
-                  <StTitlediv>
-                    <Stp>{item.title}</Stp>
-                    <Stp>{item.price}원</Stp>
-                    <Stp>카테고리: {item.category}</Stp>
-                  </StTitlediv>
+                    key={item.id}
+                    onClick={() => {
+                      navigate(`detailPage/${item.id}`);
+                    }}
+                  >
+                    <StImg src={item.img} />
+                    <StTitlediv>
+                      <Stp>{item.title}</Stp>
+                      <Stp>{item.price}원</Stp>
+                      <Stp>카테고리: {item.category}</Stp>
+                    </StTitlediv>
                   </StCard>
-                  </>
-                );              
-        })
+                </>
+              );
+            })
         )}
       </StContainer>
     </>
@@ -95,7 +95,7 @@ const StserchInput = styled.div`
   display: flex;
   align-items: center;
   width: 90%;
-  height: 20px;
+  height: 30px;
   margin-right: 10px;
   border: solid 1px #63717f;
   float: left;

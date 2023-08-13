@@ -199,14 +199,14 @@ const StImgDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* padding: 20px; */
+  padding: 20px;
   margin: 20px;
   border-radius: 5px;
-  /* justify-content: center; */
+  justify-content: center;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   width: 500px;
   height: 500px;
-  
+
   .file-input-label {
     position: absolute;
     top: 90%;
@@ -228,8 +228,8 @@ const StImgDiv = styled.div`
     cursor: pointer;
   }
   img {
-    /* max-width: 100%;
-    max-height: 100%; */
+    max-width: 100%;
+    max-height: 100%;
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -289,4 +289,3 @@ const StInfoInput = styled.input`
   padding-left: 10px;
   background-color: rgb(233, 233, 233);
 `;
-
