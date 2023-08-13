@@ -21,6 +21,8 @@ function MainPage() {
   ];
 
   const navigate = useNavigate();
+  // 추가부분
+  // const [isModalOpen, setIsModalOpen] = useState(fasle);
   const [searchItem, setSearchItem] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,7 +49,8 @@ function MainPage() {
     const user = auth.currentUser;
 
     if (user) {
-      openModal();
+      setIsModalOpen(true);
+      console.log('글쓰기!');
     } else {
       alert('로그인이 필요합니다.');
     }
@@ -70,7 +73,7 @@ function MainPage() {
           <button onClick={handleWriteButtonClick}>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
-      <WriteModal isOpen={isModalOpen} onClose={closeModal} />
+      {isModalOpen && <WriteModal closeModal={openModal} />}
       <StContainer>
         {isLoading ? (
           <div>Loading...</div>
