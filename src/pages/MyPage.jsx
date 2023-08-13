@@ -7,6 +7,8 @@ import { auth, db } from '../axios/firebase';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { storage } from '../axios/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -34,6 +36,21 @@ function MyPage() {
     setIsModalOpen(false);
   };
 
+  const [img, setImg] = useState('');
+
+  const options = [
+    { value: '0', name: '선택해주세요' },
+    { value: '1', name: '1' },
+    { value: '2', name: '2' },
+    { value: '3', name: '3' },
+    { value: '4', name: '4' }
+  ];
+  console.log('옵션', options);
+  const [selectedCategory, setSelectedCategory] = useState(options[0].value);
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
   const [productTitle, setProductTitle] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [nickname, setNickname] = useState('');
@@ -45,11 +62,26 @@ function MyPage() {
       price: productPrice,
       nickname: nickname,
       body: body,
-      id: loggedInUserEmail
+      id: loggedInUserEmail,
+      category: selectedCategory,
+      img: img
     });
 
     console.log('Document written with ID: ', docRef.id);
     closeModal();
+  };
+
+  const handleImageUpload = async (e) => {
+    console.log('사진 올리기 ');
+    const selectedImage = e.target.files[0];
+    try {
+      const storageRef = ref(storage, `images/${selectedImage.name}`);
+      await uploadBytes(storageRef, selectedImage);
+      const imageURL = await getDownloadURL(storageRef);
+      setImg(imageURL);
+    } catch (error) {
+      console.error(`Error uploading image:`, error);
+    }
   };
 
   return (
@@ -65,7 +97,7 @@ function MyPage() {
         {isModalOpen && (
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <div className="modal-content">
-              <input type="file" />
+              <input type="file" onChange={handleImageUpload} />
               <input
                 type="text"
                 placeholder="상품명"
@@ -80,9 +112,15 @@ function MyPage() {
               />
               <input type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
               <input type="text" placeholder="설명" value={body} onChange={(e) => setBody(e.target.value)} />
+              <select value={selectedCategory} onChange={handleCategoryChange}>
+                {options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
               <button onClick={handleWrite}>작성하기</button>
             </div>
-            {/* title, price, category, body, img, nickname, id */}
           </Modal>
         )}
         <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
