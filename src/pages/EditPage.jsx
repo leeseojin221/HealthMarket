@@ -12,11 +12,11 @@ import WriteModal from '../form/WriteModal';
 function EditPage() {
   const { id } = useParams();
 
+  // console.log('id=>', id);
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
 
   const queryClient = useQueryClient();
-
   const editProductMutation = useMutation((updatedData) => editHealth(id, updatedData), {
     onSuccess: (response) => {
       queryClient.invalidateQueries('info');
@@ -32,7 +32,6 @@ function EditPage() {
   }, []);
 
   const navigate = useNavigate();
-
   // 추가
   const [editImage, setEditImage] = useState('');
   const [editedTitle, setEditedTitle] = useState('');
@@ -50,25 +49,21 @@ function EditPage() {
     setEditedSellerInfo(productInfo.SellerInformation);
     setEditedDescription(productInfo.body);
   }, [productInfo]);
-
   if (isLoading) {
     return <div>로딩중 ...</div>;
   }
-
   const handleImageChange = async (event) => {
     const selectedImage = event.target.files[0];
     // setEditImage(URL.createObjectURL(selectedImage));
     try {
       const storageRef = ref(storage, `images/${selectedImage.name}`);
       await uploadBytes(storageRef, selectedImage);
-
       const imageURL = await getDownloadURL(storageRef);
       setEditImage(imageURL);
     } catch (error) {
       console.error(`Error uploading image:`, error);
     }
   };
-
   // 추가
   const editHandler = async () => {
     if (!editImage || !editedTitle || !editedPrice || !editedSellerInfo || !editedDescription) {
@@ -83,11 +78,9 @@ function EditPage() {
       body: editedDescription,
       img: editImage
     };
-
     try {
       await editProductMutation.mutate(updatedData);
       // 추가부분
-
       queryClient.invalidateQueries('info');
       alert('수정이 완료 되었습니다.');
       navigate('/myPage');
@@ -125,13 +118,6 @@ function EditPage() {
         >
           {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
         </div> */}
-        <StDescriptionDiv></StDescriptionDiv>
-        <StDescription
-          value={editedDescription}
-          onChange={(e) => {
-            setEditedDescription(e.target.value);
-          }}
-        />
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
@@ -139,11 +125,10 @@ function EditPage() {
             <EditButton editHandler={editHandler} />
             <CancelButton id={id} />
           </StContainerBtn>
-          <div>
+          <StInfoTextWrapDiv>
             <div>
-              상품명{' '}
-              <StInputInput
-                ref={inputRef}
+              <StInfoText>상품명 </StInfoText>
+              <StInfoInput
                 type="text"
                 value={editedTitle}
                 onChange={(e) => {
@@ -152,8 +137,8 @@ function EditPage() {
               />
             </div>
             <div>
-              가 격{' '}
-              <StInputInput
+              <StInfoText>가 격 </StInfoText>
+              <StInfoInput
                 type="text"
                 value={editedPrice}
                 onChange={(e) => {
@@ -162,16 +147,25 @@ function EditPage() {
               />
             </div>
             <div>
-              판매자정보{' '}
-              <StInputInput
+              <StInfoText>판매자정보 </StInfoText>
+              <StInfoInput
                 type="text"
                 value={editedSellerInfo}
                 onChange={(e) => {
                   setEditedSellerInfo(e.target.value);
                 }}
               />
+              <div>
+                <StInfoText>설명</StInfoText>
+                <StDescription
+                  value={editedDescription}
+                  onChange={(e) => {
+                    setEditedDescription(e.target.value);
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          </StInfoTextWrapDiv>
         </StProductDetails>
       </StRightColumn>
     </StContainer>
@@ -183,14 +177,19 @@ export default EditPage;
 const StContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 20px;
 `;
 
 const StLeftColumn = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StRightColumn = styled.div`
-  width: 300px;
+  width: 500px;
+  padding-left: 20px;
 `;
 
 const StImgDiv = styled.div`
@@ -200,43 +199,21 @@ const StImgDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid black;
-  padding: 20px;
+  /* padding: 20px; */
   margin: 20px;
   border-radius: 5px;
-  justify-content: center;
+  /* justify-content: center; */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  height: 550px;
-
-  overflow: hidden;
+  width: 500px;
+  height: 500px;
 
   img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    margin-bottom: 10px;
-  }
-  .file-input-label {
-    position: absolute;
-    top: 90%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /* background-color: #f8f8f8; */
-    padding: 10px 20px;
-    /* border: 1px solid #ccc;
-    border-radius: 5px; */
-    cursor: pointer;
-  }
-
-  .file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
+    /* max-width: 100%;
+    max-height: 100%; */
     width: 100%;
     height: 100%;
-    opacity: 0;
-    cursor: pointer;
+    object-fit: contain;
+    margin-bottom: 10px;
   }
 
   /* input {
@@ -246,42 +223,49 @@ const StImgDiv = styled.div`
 
 const StDescription = styled.textarea`
   /* margin-top: 10px; */
-  margin-left: 20px;
+  /* margin-left: 20px; */
   font-weight: bold;
   padding: 20px;
   width: 500px;
-
+  height: 100px;
   align-items: center;
+  background-color: rgb(233, 233, 233);
+  border: 0;
+  border-radius: 10px;
+  outline: none;
 `;
-
 const StProductDetails = styled.div`
-  display: grid;
+  /* display: grid; */
   /* grid-template-columns: 1fr 1fr; */
-  column-gap: 20px;
+  /* column-gap: 20px; */
   /* margin-top: 20px; */
   padding: 20px;
 `;
-
 const StContainerBtn = styled.div`
   margin-bottom: 50px;
+  width: 800px;
 `;
-
 const StDescriptionDiv = styled.div`
   padding: 20px;
 `;
-
-const StProductDiv = styled.div`
-  background-color: 93CCEA;
+const StInfoTextWrapDiv = styled.div`
+  width: 300px;
+  height: 500px;
+  /* margin-left: -150px; */
 `;
-
-const StInputInput = styled.input`
-  margin-bottom: 20px;
-  margin-top: 10px;
+const StInfoText = styled.div`
+  width: 100px;
+  height: 30px;
+  margin-top: 20px;
+  margin-left: 5px;
+`;
+const StInfoInput = styled.input`
   width: 250px;
-  border-radius: 0, 0, 1px, 0;
-
-  border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 5px;
-  margin-bottom: 10px;
+  height: 30px;
+  text-align: center;
+  border: 0;
+  border-radius: 10px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
 `;
