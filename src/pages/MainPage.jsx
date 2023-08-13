@@ -65,9 +65,18 @@ function MainPage() {
                   <StTitlediv>
                     <Stp>{item.title}</Stp>
                     <Stp>{item.price}원</Stp>
+<<<<<<< HEAD
                   </StTitlediv>
                 </StCard>
               );
+=======
+                    <Stp>카테고리: {item.category}</Stp>
+                  </StCard>
+                );
+              } else {
+                return null;
+              }
+>>>>>>> 76db6b39c581bb1bce2dfeb8caece4577bf8b359
             })
         )}
       </StContainer>

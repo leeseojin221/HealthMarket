@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 import { CancelButton, EditButton } from '../components/Buttons';
@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
 import { storage } from './../axios/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import WriteModal from '../form/WriteModal';
 
 function EditPage() {
   const { id } = useParams();
@@ -22,12 +23,20 @@ function EditPage() {
     }
   });
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   // 추가
   const [editImage, setEditImage] = useState('');
   const [editedTitle, setEditedTitle] = useState('');
-  const [editedPrice, setEditedPrice] = useState('');
+  const [editedPrice, setEditedPrice] = useState(0);
   const [editedSellerInfo, setEditedSellerInfo] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
 
@@ -62,9 +71,14 @@ function EditPage() {
 
   // 추가
   const editHandler = async () => {
+    if (!editImage || !editedTitle || !editedPrice || !editedSellerInfo || !editedDescription) {
+      alert('모든 값을 입력해주세요.');
+      return;
+    }
+
     const updatedData = {
       title: editedTitle,
-      price: editedPrice,
+      price: Number(editedPrice),
       SellerInformation: editedSellerInfo,
       body: editedDescription,
       img: editImage
@@ -75,21 +89,43 @@ function EditPage() {
       // 추가부분
 
       queryClient.invalidateQueries('info');
-      alert('수정이완료되었습니다.');
+      alert('수정이 완료 되었습니다.');
       navigate('/myPage');
     } catch (error) {
       console.error('Error updating product:', error);
     }
   };
+  // 추가부분
+  // const handleDrop = (event) => {
+  //   event.preventDefault();
+  //   const selectedImage = event.dataTransfer.files[0];
+  //   handleImageChange(selectedImage);
+  // };
 
   return (
     <StContainer>
       <StLeftColumn>
         <StImgDiv>
           {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          {/* <input type="file" accept="image/*" onChange={handleImageChange} /> */}
+          <label htmlFor="imageInput" className="file-input-label">
+            파일 업로드
+          </label>
+          <input type="file" id="imageInput" accept="image/*" onChange={handleImageChange} className="file-input" />
         </StImgDiv>
-        <StDescriptionDiv>설명</StDescriptionDiv>
+        {/* <div
+          onDrop={handleDrop}
+          onDragOver={(event) => event.preventDefault()}
+          style={{
+            border: '2px dashed #ccc',
+            padding: '20px',
+            textAlign: 'center',
+            cursor: 'pointer'
+          }}
+        >
+          {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
+        </div> */}
+        <StDescriptionDiv></StDescriptionDiv>
         <StDescription
           value={editedDescription}
           onChange={(e) => {
@@ -106,7 +142,8 @@ function EditPage() {
           <div>
             <div>
               상품명{' '}
-              <input
+              <StInputInput
+                ref={inputRef}
                 type="text"
                 value={editedTitle}
                 onChange={(e) => {
@@ -116,7 +153,7 @@ function EditPage() {
             </div>
             <div>
               가 격{' '}
-              <input
+              <StInputInput
                 type="text"
                 value={editedPrice}
                 onChange={(e) => {
@@ -126,7 +163,7 @@ function EditPage() {
             </div>
             <div>
               판매자정보{' '}
-              <input
+              <StInputInput
                 type="text"
                 value={editedSellerInfo}
                 onChange={(e) => {
@@ -157,6 +194,9 @@ const StRightColumn = styled.div`
 `;
 
 const StImgDiv = styled.div`
+  position: relative;
+  display: inline-block;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,16 +209,39 @@ const StImgDiv = styled.div`
   width: 300px;
   height: 550px;
 
+  overflow: hidden;
+
   img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
     margin-bottom: 10px;
   }
-
-  input {
-    margin-top: 10px;
+  .file-input-label {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: #f8f8f8; */
+    padding: 10px 20px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+    cursor: pointer;
   }
+
+  .file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* input {
+    margin-top: 10px;
+  } */
 `;
 
 const StDescription = styled.textarea`
@@ -205,4 +268,20 @@ const StContainerBtn = styled.div`
 
 const StDescriptionDiv = styled.div`
   padding: 20px;
+`;
+
+const StProductDiv = styled.div`
+  background-color: 93CCEA;
+`;
+
+const StInputInput = styled.input`
+  margin-bottom: 20px;
+  margin-top: 10px;
+  width: 250px;
+  border-radius: 0, 0, 1px, 0;
+
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom: 10px;
 `;
