@@ -17,14 +17,17 @@ function MyPage() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: userItemsData, isLoading: userItemsLoading } = useQuery('info', getItems);
+  console.log('data=>', userItemsData);
   const userItems = userItemsData || [];
+  // console.log('userItems=>', userItems);
 
   const user = auth.currentUser; // 로그인된 사용자 정보 가져오기
   const loggedInUserEmail = user ? user.email : null; // 로그인된 사용자의 이메일
   const filteredUserEmail = userItems.filter((item) => item.id === loggedInUserEmail);
+  // console.log('filteredUserEmail=>', filteredUserEmail);
 
-  console.log(loggedInUserEmail);
-  console.log(filteredUserEmail);
+  // console.log(loggedInUserEmail);
+  // console.log('filteredUserEmail=>', filteredUserEmail);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -71,6 +74,7 @@ function MyPage() {
           {filteredUserEmail.map((item) => (
             <div key={item.id}>
               <Link to={`/detail/${item.id}`}>{item.title}</Link>
+              {/* <Link to={`/detail/${encodeURIComponent(item.firebaseId)}`}>{item.title}</Link> */}
               <EditLinkButton />
               <DeleteButton />
             </div>

@@ -14,10 +14,11 @@ function EditPage() {
   // console.log('id=>', id);
 
   const { isLoading, data } = useQuery('info', getHealth);
+  console.log('data=>', data);
   const productInfo = data?.find((item) => item.id == id);
 
   // 모달관련 추가
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   // console.log('productInfo=>', productInfo.title);
   // console.log('id=>', id);
   // console.log('data=>', data);

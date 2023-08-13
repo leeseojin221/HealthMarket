@@ -64,6 +64,7 @@ function MainPage() {
                     key={item.id}
                     onClick={() => {
                       navigate(`detailPage/${item.id}`);
+                      console.log('item.id=>', item.id);
                     }}
                   >
                     <StImg src={item.img} />

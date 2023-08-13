@@ -9,8 +9,28 @@ function Buttons({ children, ...props }) {
 export default Buttons;
 
 export const DeleteButton = ({ handleDelete }) => {
-  // const navigate = useNavigate();
-  // const deleteButton = () => {};
+  // const deleteMutation = useMutation(deleteHealth, {
+  //   onSuccess: () => {
+  //     console.log('invalidateQueries');
+  //     queryClient.invalidateQueries('info');
+  //   }
+  // });
+
+  // if (isLoading) {
+  //   return <div>로딩중 ...</div>;
+  // }
+  // const handleDelete = async () => {
+  //   const isDeletable = window.confirm('정말 삭제하시겠습니까?');
+  //   if (isDeletable) {
+  //     try {
+  //       await deleteMutation.mutate(id);
+  //       console.log('await 끝');
+  //       navigate('/myPage');
+  //     } catch (error) {
+  //       console.log('오류가 발생했습니다', error);
+  //     }
+  //   }
+  // };
   return <DeleteBtn onClick={handleDelete}>삭제</DeleteBtn>;
 };
 

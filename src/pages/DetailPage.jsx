@@ -11,7 +11,7 @@ function DetailPage() {
   const { id } = useParams();
 
   const { isLoading, data } = useQuery('info', getHealth);
-  // console.log('data=>', data);
+  console.log('data=>', data);
 
   const queryClient = useQueryClient();
   const productInfo = data?.find((item) => item.id == id);

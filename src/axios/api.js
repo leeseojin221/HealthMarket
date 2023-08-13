@@ -11,9 +11,11 @@ const getHealth = async () => {
         // console.log('doc=>', doc)
         const data = {
             id: doc.id,
+            // 추가
+            // authorEmail: doc.data().authorEmail,
             ...doc.data()
         };
-        // console.log('data=>', data);
+        console.log('dataData=>', data);
         initialInfos.push(data);
         // console.log('initialInfos=>', initialInfos)
     });
@@ -51,6 +53,7 @@ const getItems = async () => {
             id: doc.id,
             ...doc.data(),
         }
+        // console.log('data=>', data)
         Items.push(data)
     })
     return Items
