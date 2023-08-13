@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 import { DeleteButton, EditLinkButton } from '../components/Buttons';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -22,9 +22,6 @@ function DetailPage() {
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
       queryClient.invalidateQueries('info');
-
-      // alert('삭제되었습니다.');
-      // navigate('/myPage');
     }
   });
 
@@ -32,16 +29,11 @@ function DetailPage() {
     return <div>로딩중 ...</div>;
   }
 
-  // if (!productInfo) {
-  //   return <div>상품 정보를 찾을 수 없습니다.</div>;
-  // }
-
   const handleDelete = async () => {
     const isDeletable = window.confirm('정말 삭제하시겠습니까?');
     if (isDeletable) {
       try {
         await deleteMutation.mutate(id);
-        // alert('삭제되었습니다.');
         navigate('/myPage');
       } catch (error) {
         alert('오류가 발생했습니다', error);
@@ -51,7 +43,6 @@ function DetailPage() {
 
   return (
     <StContainer>
-      {/* {productInfo && ( */}
       <>
         <StLeftColumn>
           <StImgDiv>
@@ -79,7 +70,7 @@ function DetailPage() {
               </div>
               <div>
                 <StInfoTitle>판매자정보</StInfoTitle>
-                <StInfoText>{productInfo.SellerInformation}</StInfoText>
+                <StInfoText>{productInfo.user}</StInfoText>
               </div>
               <div>
                 <StInfoTitle>설명</StInfoTitle>
@@ -89,8 +80,6 @@ function DetailPage() {
           </StProductDetails>
         </StRightColumn>
       </>
-      {/* )
-      } */}
     </StContainer>
   );
 }

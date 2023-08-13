@@ -65,8 +65,15 @@ export const failedError = () => {
   });
 };
 
-//로그인알럿
+export const confirmNicknameError = () => {
+  Swal.fire({
+    icon: 'error',
+    title: ' 회원가입 실패 ',
+    text: '닉네임을 입력해주세요.'
+  });
+};
 
+//로그인알럿
 export const userNotFound = () => {
   Swal.fire({
     icon: 'error',

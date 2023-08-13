@@ -6,11 +6,11 @@ import { getItems, deleteHealth } from '../axios/api';
 import { auth } from '../axios/firebase';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import health from '../assets/healthmarket_logo.png'
+import health from '../assets/healthmarket_logo.png';
 
 function MyPage() {
   const navigate = useNavigate();
-  const { data: userItemsData, isLoading: userItemsLoading } = useQuery('info', getItems);
+  const { data: userItemsData } = useQuery('info', getItems);
   const userItems = userItemsData || [];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = auth.currentUser;
@@ -52,8 +52,10 @@ function MyPage() {
     <>
       <StMyContainer>
         <StUserWrap isModalOpen={isModalOpen}>
-          <StUserInfo>회원정보</StUserInfo>
-          <StUserImg ><StImg src={health}/></StUserImg>
+          <StUserInfo>{loggedInUserEmail}</StUserInfo>
+          <StUserImg>
+            <StImg src={health} />
+          </StUserImg>
         </StUserWrap>
         <StWriteButton onClick={handleWriteButtonClick} isModalOpen={isModalOpen}>
           글쓰기
@@ -81,13 +83,13 @@ function MyPage() {
 export default MyPage;
 
 const StUserInfo = styled.div`
-width: 90%;
-height: 60%;
-border: solid 1px black;
+  width: 90%;
+  height: 60%;
+  border: solid 1px black;
 `;
 const StUserImg = styled.div`
-padding-right: 0px;
-margin-right:  0px;
+  padding-right: 0px;
+  margin-right: 0px;
 `;
 
 const StImg = styled.img`
@@ -95,10 +97,9 @@ const StImg = styled.img`
   height: 60%;
   border: solid 1px black;
   border-radius: 100%;
-`
+`;
 const StWriteButton = styled.button`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
-  
 `;
 const StUserList = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};

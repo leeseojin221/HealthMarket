@@ -6,6 +6,86 @@ import { useEffect } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../axios/firebase';
 
+function Header() {
+  const navigate = useNavigate();
+
+  //로그아웃
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const Logout = async () => {
+    const confirmLogout = window.confirm('로그아웃하시겠습니까?');
+    if (confirmLogout) {
+      await signOut(auth);
+      navigate('/');
+      setCurrentUser(null); // 이용자 정보 초기화 하기
+    }
+  };
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setCurrentUser(user?.email);
+    });
+  }, []);
+
+  return (
+    <>
+      {currentUser ? (
+        <StHeader>
+          <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
+          <StAuthLink>
+            <div>
+              <StUserInfo onClick={() => navigate('/myPage')}>마이페이지</StUserInfo>
+              <StLogout onClick={Logout}>로그아웃</StLogout>
+            </div>
+          </StAuthLink>
+        </StHeader>
+      ) : (
+        <StHeader>
+          <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
+          <StAuthLink>
+            <StAuth
+              onClick={() => {
+                navigate('/signinPage');
+              }}
+            >
+              로그인
+            </StAuth>
+            <StAuth
+              onClick={() => {
+                navigate('/signupPage');
+              }}
+            >
+              회원가입
+            </StAuth>
+          </StAuthLink>
+        </StHeader>
+      )}
+    </>
+  );
+}
+
+function Footer() {
+  return (
+    <StFooter>
+      <span>
+        <StFooterP>Copyright © 9인9직. 2023 All Rights Reserved.</StFooterP>
+      </span>
+    </StFooter>
+  );
+}
+
+function Layout({ children }) {
+  return (
+    <div>
+      <Header />
+      <StLayout>{children}</StLayout>
+      <Footer />
+    </div>
+  );
+}
+
+export default Layout;
+
 const StHeader = styled.div`
   width: 100%;
   background: #1a4475;
@@ -79,82 +159,3 @@ const StMyPageBtn = styled.div`
   cursor: pointer;
   margin-right: 20px;
 `;
-
-function Header() {
-  const navigate = useNavigate();
-
-  //로그아웃
-  const [currentUser, setCurrentUser] = useState(null);
-
-  const Logout = async () => {
-    const confirmLogout = window.confirm('로그아웃하시겠습니까?');
-    if (confirmLogout) {
-      await signOut(auth);
-      setCurrentUser(null); // 이용자 정보 초기화 하기
-    }
-  };
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setCurrentUser(user?.email);
-    });
-  }, []);
-
-  return (
-    <>
-      {currentUser ? (
-        <StHeader>
-          <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
-          <StAuthLink>
-            <div>
-              <StUserInfo onClick={() => navigate('/myPage')}>마이페이지</StUserInfo>
-              <StLogout onClick={Logout}>로그아웃</StLogout>
-            </div>
-          </StAuthLink>
-        </StHeader>
-      ) : (
-        <StHeader>
-          <StLogo src={healthmarket_logo} onClick={() => navigate('/')} />
-          <StAuthLink>
-            <StAuth
-              onClick={() => {
-                navigate('/signinPage');
-              }}
-            >
-              로그인
-            </StAuth>
-            <StAuth
-              onClick={() => {
-                navigate('/signupPage');
-              }}
-            >
-              회원가입
-            </StAuth>
-          </StAuthLink>
-        </StHeader>
-      )}
-    </>
-  );
-}
-
-function Footer() {
-  return (
-    <StFooter>
-      <span>
-        <StFooterP>Copyright © 9인9직. 2023 All Rights Reserved.</StFooterP>
-      </span>
-    </StFooter>
-  );
-}
-
-function Layout({ children }) {
-  return (
-    <div>
-      <Header />
-      <StLayout>{children}</StLayout>
-      <Footer />
-    </div>
-  );
-}
-
-export default Layout;

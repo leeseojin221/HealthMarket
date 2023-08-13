@@ -22,8 +22,7 @@ function MainPage() {
   const navigate = useNavigate();
 
   const [searchItem, setSearchItem] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(options[0].value);
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
@@ -71,13 +70,12 @@ function MainPage() {
             .filter((item) => selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '')
             .filter((item) => {
               if (item.category) {
-                // category 속성이 있는지 확인
                 return (
                   (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') &&
                   item.title.toLowerCase().includes(searchItem.toLowerCase())
                 );
               }
-              return false; // category 속성이 없으면 필터링에서 제외
+              return false;
             })
             .map((item) => {
               if (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') {
@@ -91,7 +89,6 @@ function MainPage() {
                     <StImg src={item.img} />
                     <Stp>{item.title}</Stp>
                     <Stp>{item.price}원</Stp>
-                    <Stp>카테고리: {item.category}</Stp>
                   </StCard>
                 );
               } else {
