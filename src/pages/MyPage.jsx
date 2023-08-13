@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { getItems } from '../axios/api';
 import { auth, db } from '../axios/firebase';
 import { useQuery } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import { storage } from '../axios/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -26,7 +26,7 @@ function MyPage() {
   const filteredUserEmail = userItems.filter((item) => item.user === loggedInUserEmail);
 
   console.log('loggedInUserEmail=>', loggedInUserEmail);
-  console.log(filteredUserEmail);
+  console.log('filteredUserEmail=>', filteredUserEmail);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -45,7 +45,7 @@ function MyPage() {
     { value: '3', name: '3' },
     { value: '4', name: '4' }
   ];
-  console.log('옵션', options);
+  // console.log('옵션', options);
   const [selectedCategory, setSelectedCategory] = useState(options[0].value);
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -66,6 +66,7 @@ function MyPage() {
       category: selectedCategory,
       img: img
     });
+    // console.log('docRef=>', docRef);
 
     // console.log('Document written with ID: ', docRef.id);
     closeModal();
