@@ -7,12 +7,10 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
 import { storage } from './../axios/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import WriteModal from '../form/WriteModal';
 
 function EditPage() {
   const { id } = useParams();
 
-  // console.log('id=>', id);
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
 
@@ -32,7 +30,6 @@ function EditPage() {
   }, []);
 
   const navigate = useNavigate();
-  // 추가
   const [editImage, setEditImage] = useState('');
   const [editedTitle, setEditedTitle] = useState('');
   const [editedPrice, setEditedPrice] = useState(0);
@@ -46,15 +43,15 @@ function EditPage() {
     setEditImage(productInfo.img);
     setEditedTitle(productInfo.title);
     setEditedPrice(productInfo.price);
-    setEditedSellerInfo(productInfo.SellerInformation);
+    setEditedSellerInfo(productInfo.user);
     setEditedDescription(productInfo.body);
   }, [productInfo]);
   if (isLoading) {
     return <div>로딩중 ...</div>;
   }
+
   const handleImageChange = async (event) => {
     const selectedImage = event.target.files[0];
-    // setEditImage(URL.createObjectURL(selectedImage));
     try {
       const storageRef = ref(storage, `images/${selectedImage.name}`);
       await uploadBytes(storageRef, selectedImage);
@@ -64,7 +61,7 @@ function EditPage() {
       console.error(`Error uploading image:`, error);
     }
   };
-  // 추가
+
   const editHandler = async () => {
     if (!editImage || !editedTitle || !editedPrice || !editedSellerInfo || !editedDescription) {
       alert('모든 값을 입력해주세요.');
@@ -80,7 +77,6 @@ function EditPage() {
     };
     try {
       await editProductMutation.mutate(updatedData);
-      // 추가부분
       queryClient.invalidateQueries('info');
       alert('수정이 완료 되었습니다.');
       navigate('/myPage');
@@ -88,36 +84,17 @@ function EditPage() {
       console.error('Error updating product:', error);
     }
   };
-  // 추가부분
-  // const handleDrop = (event) => {
-  //   event.preventDefault();
-  //   const selectedImage = event.dataTransfer.files[0];
-  //   handleImageChange(selectedImage);
-  // };
 
   return (
     <StContainer>
       <StLeftColumn>
         <StImgDiv>
           {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
-          {/* <input type="file" accept="image/*" onChange={handleImageChange} /> */}
           <label htmlFor="imageInput" className="file-input-label">
             파일 업로드
           </label>
           <input type="file" id="imageInput" accept="image/*" onChange={handleImageChange} className="file-input" />
         </StImgDiv>
-        {/* <div
-          onDrop={handleDrop}
-          onDragOver={(event) => event.preventDefault()}
-          style={{
-            border: '2px dashed #ccc',
-            padding: '20px',
-            textAlign: 'center',
-            cursor: 'pointer'
-          }}
-        >
-          {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
-        </div> */}
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
@@ -147,14 +124,8 @@ function EditPage() {
               />
             </div>
             <div>
-              <StInfoText>판매자정보 </StInfoText>
-              <StInfoInput
-                type="text"
-                value={editedSellerInfo}
-                onChange={(e) => {
-                  setEditedSellerInfo(e.target.value);
-                }}
-              />
+              <StInfoText>판매자 정보</StInfoText>
+              <SellerLabel>{editedSellerInfo}</SellerLabel>
               <div>
                 <StInfoText>설명</StInfoText>
                 <StDescription
@@ -280,6 +251,16 @@ const StInfoText = styled.div`
   margin-left: 5px;
 `;
 const StInfoInput = styled.input`
+  width: 250px;
+  height: 30px;
+  text-align: center;
+  border: 0;
+  border-radius: 10px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+`;
+const SellerLabel = styled.p`
   width: 250px;
   height: 30px;
   text-align: center;

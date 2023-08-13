@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import healthmarket_logo from '../assets/healthmarket_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../axios/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { SignupButton, SigninButton } from '../components/Buttons';
 import { debounce } from 'lodash';
 import {
@@ -13,21 +13,24 @@ import {
   emptyPWError,
   confirmPWError,
   signupSuccess,
-  failedError
+  failedError,
+  confirmNicknameError
 } from '../components/Alert';
 
-function SignUpPage() {
+function SignUpPage({ updateProfile }) {
   const navigate = useNavigate();
 
   // 회원가입시 필요한 정보
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  // const [nickname, setNickname] = useState('');
 
   //debounce
   const [validEmail, setValidEmail] = useState(true);
   const [validPassword, setValidpassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  // const [validNickname, setValidNickname] = useState('');
 
   const onChange = (event) => {
     const {
@@ -49,7 +52,10 @@ function SignUpPage() {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   };
-
+  // const Nickname = (nickname) => {
+  //   const re = ^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$      ;
+  //   return re.test(String(email).toLowerCase());
+  // };
   const debounceValidateEmail = debounce((email) => {
     const result = validateEmail(email);
     setValidEmail(result);
@@ -73,6 +79,10 @@ function SignUpPage() {
     debounceValidatePassword(password);
   }, [password]);
 
+  useEffect(() => {
+    debounceValidateConfirmPassword(password, confirmPassword);
+  }, [password, confirmPassword]);
+
   const debounceValidateConfirmPassword = debounce((password, confirmPassword) => {
     if (password !== confirmPassword) {
       setConfirmPasswordError('비밀번호가 일치하지 않습니다');
@@ -81,9 +91,17 @@ function SignUpPage() {
     }
   }, 1000);
 
-  useEffect(() => {
-    debounceValidateConfirmPassword(password, confirmPassword);
-  }, [password, confirmPassword]);
+  // useEffect(() => {
+  //   debounceValidateNickname(nickname);
+  // }, [nickname]);
+
+  // const debounceValidateNickname = debounce((nickname) => {
+  //   if (nickname === '') {
+  //     setValidNickname('닉네임을 입력해주세요');
+  //   } else {
+  //     setValidNickname('');
+  //   }
+  // }, 1000);
 
   const Signup = async (e) => {
     e.preventDefault();
@@ -96,10 +114,16 @@ function SignUpPage() {
     } else {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        // await updateProfile(userCredential.user, {
+        //   displayName: nickname
+        // });
+
         signupSuccess();
         setEmail('');
         setPassword('');
         setConfirmPassword('');
+        // setNickname('');
         navigate('/');
       } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
@@ -114,7 +138,9 @@ function SignUpPage() {
       }
     }
   };
-
+  // const handleNicknameChange = (e) => {
+  //   setNickname(e.target.value);
+  // };
   return (
     <>
       <div></div>
@@ -148,6 +174,16 @@ function SignUpPage() {
               />
               {confirmPasswordError && <div>{confirmPasswordError}</div>}
             </div>
+            {/* <div>
+              <StSignInput
+                placeholder="닉네임"
+                type="text"
+                name="nickname"
+                value={nickname}
+                onChange={handleNicknameChange}
+                required
+              />
+            </div> */}
             <div>
               <SignupButton onClick={Signup}>회원가입</SignupButton>
               <SigninButton
