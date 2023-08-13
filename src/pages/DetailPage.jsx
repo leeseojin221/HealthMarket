@@ -12,18 +12,15 @@ function DetailPage() {
   const { id } = useParams();
 
   const { isLoading, data } = useQuery('info', getHealth);
-  // console.log('data=>', data);
 
   const queryClient = useQueryClient();
   const productInfo = data?.find((item) => item.id == id);
-  console.log('productInfo=>', productInfo);
 
   const user = auth.currentUser;
   const loggedInUserEmail = user ? user.email : null;
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
-      console.log('invalidateQueries');
       queryClient.invalidateQueries('info');
 
       // alert('삭제되었습니다.');
@@ -35,8 +32,6 @@ function DetailPage() {
     return <div>로딩중 ...</div>;
   }
 
-  // console.log('productInfo=>', productInfo);
-
   // if (!productInfo) {
   //   return <div>상품 정보를 찾을 수 없습니다.</div>;
   // }
@@ -45,16 +40,11 @@ function DetailPage() {
     const isDeletable = window.confirm('정말 삭제하시겠습니까?');
     if (isDeletable) {
       try {
-        if (productInfo.user == loggedInUserEmail) {
-          await deleteMutation.mutate(id);
-          console.log('await 끝');
-          // alert('삭제되었습니다.');
-          navigate('/myPage');
-        } else {
-          alert('작성자만 삭제할 수 있습니다.');
-        }
+        await deleteMutation.mutate(id);
+        // alert('삭제되었습니다.');
+        navigate('/myPage');
       } catch (error) {
-        console.log('오류가 발생했습니다', error);
+        alert('오류가 발생했습니다', error);
       }
     }
   };

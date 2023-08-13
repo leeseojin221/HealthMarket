@@ -14,17 +14,12 @@ export const DeleteButton = ({ handleDelete }) => {
   return <DeleteBtn onClick={handleDelete}>삭제</DeleteBtn>;
 };
 
-export const EditLinkButton = ({ id, productInfo, loggedInUserEmail }) => {
-  // console.log('id=>', id);
+export const EditLinkButton = ({ id }) => {
   const navigate = useNavigate();
   const editLinkButton = () => {
     if (editLinkButton) {
-      if (productInfo.user == loggedInUserEmail) {
-        alert('수정 페이지로 이동합니다.');
-        navigate(`/editPage/${id}`);
-      } else {
-        alert('작성자만 수정할 수 있습니다.');
-      }
+      alert('수정페이지로 이동합니다.');
+      navigate(`/editPage/${id}`);
     }
   };
   return <EditBtn onClick={editLinkButton}>수정</EditBtn>;

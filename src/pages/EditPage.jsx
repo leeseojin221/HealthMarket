@@ -11,22 +11,14 @@ import WriteModal from '../form/WriteModal';
 
 function EditPage() {
   const { id } = useParams();
-  // console.log('id=>', id);
 
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
 
-  // 모달관련 추가
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // console.log('productInfo=>', productInfo.title);
-  // console.log('id=>', id);
-  // console.log('data=>', data);
-  // console.log('productInfo=>', productInfo);
   const queryClient = useQueryClient();
 
   const editProductMutation = useMutation((updatedData) => editHealth(id, updatedData), {
     onSuccess: (response) => {
-      console.log('mutation API', response);
       queryClient.invalidateQueries('info');
     }
   });
@@ -48,7 +40,6 @@ function EditPage() {
   const [editedSellerInfo, setEditedSellerInfo] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
 
-  // console.log('editedTitle=>', editedTitle);
   useEffect(() => {
     if (!productInfo) {
       return;
@@ -94,9 +85,7 @@ function EditPage() {
     };
 
     try {
-      // console.log('이전mutate');
       await editProductMutation.mutate(updatedData);
-      // console.log('이후mutate');
       // 추가부분
 
       queryClient.invalidateQueries('info');
