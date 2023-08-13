@@ -15,7 +15,6 @@ export const DeleteButton = ({ handleDelete }) => {
 };
 
 export const EditLinkButton = ({ id }) => {
-  // console.log('id=>', id);
   const navigate = useNavigate();
   const editLinkButton = () => {
     if (editLinkButton) {
@@ -37,34 +36,58 @@ export const CancelButton = ({ id }) => {
 };
 
 export const EditButton = ({ editHandler }) => {
-  return <EditBtn onClick={editHandler}>수정</EditBtn>;
+  return <EditBtn onClick={editHandler}>저장</EditBtn>;
 };
 
 const DeleteBtn = styled.button`
-  background-color: white;
+  /* background-color: white;
+  cursor: pointer; */
+  align-items: center;
+  /* margin: 5px; */
+  margin-right: 10px;
+  width: 100px;
+  height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
   cursor: pointer;
+
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
 `;
 
 const EditBtn = styled.button`
-  background-color: #dddff0;
-  border-color: #dddff0;
+  /* background-color: white;
   margin-right: 10px;
-  cursor: pointer;
+  cursor: pointer; */
+  align-items: center;
+  /* margin: 5px; */
+  margin-left: 100px;
+  margin-right: 10px;
   width: 100px;
   height: 30px;
-  border-color: #dddff0;
   border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
   color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
 `;
 
 const CancelBtn = styled.button`
-  background-color: #dddff0;
-  border-color: #dddff0;
+  background-color: white;
   cursor: pointer;
-  width: 100px;
-  height: 30px;
-  border-radius: 7px;
-  color: #1a4475;
 `;
 
 // 남색 #1a4475 , 아이보리 #e9e6d8

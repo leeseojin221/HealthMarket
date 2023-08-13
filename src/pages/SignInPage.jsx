@@ -54,7 +54,7 @@ function SignInPage() {
         setGoogleUserData(data.user);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   }
 

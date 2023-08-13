@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import { useState } from 'react';
 import { CancelButton, EditButton } from '../components/Buttons';
@@ -7,36 +7,38 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
 import { storage } from './../axios/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import WriteModal from '../form/WriteModal';
 
 function EditPage() {
   const { id } = useParams();
-  // console.log('id=>', id);
 
+  // console.log('id=>', id);
   const { isLoading, data } = useQuery('info', getHealth);
   const productInfo = data?.find((item) => item.id == id);
-  // console.log('productInfo=>', productInfo.title);
-  // console.log('id=>', id);
-  // console.log('data=>', data);
-  // console.log('productInfo=>', productInfo);
-  const queryClient = useQueryClient();
 
+  const queryClient = useQueryClient();
   const editProductMutation = useMutation((updatedData) => editHealth(id, updatedData), {
     onSuccess: (response) => {
-      console.log('mutation API', response);
       queryClient.invalidateQueries('info');
     }
   });
 
-  const navigate = useNavigate();
+  const inputRef = useRef(null);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  const navigate = useNavigate();
   // 추가
   const [editImage, setEditImage] = useState('');
   const [editedTitle, setEditedTitle] = useState('');
-  const [editedPrice, setEditedPrice] = useState('');
+  const [editedPrice, setEditedPrice] = useState(0);
   const [editedSellerInfo, setEditedSellerInfo] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
 
-  // console.log('editedTitle=>', editedTitle);
   useEffect(() => {
     if (!productInfo) {
       return;
@@ -47,63 +49,75 @@ function EditPage() {
     setEditedSellerInfo(productInfo.SellerInformation);
     setEditedDescription(productInfo.body);
   }, [productInfo]);
-
   if (isLoading) {
     return <div>로딩중 ...</div>;
   }
-
   const handleImageChange = async (event) => {
     const selectedImage = event.target.files[0];
     // setEditImage(URL.createObjectURL(selectedImage));
     try {
       const storageRef = ref(storage, `images/${selectedImage.name}`);
       await uploadBytes(storageRef, selectedImage);
-
       const imageURL = await getDownloadURL(storageRef);
       setEditImage(imageURL);
     } catch (error) {
       console.error(`Error uploading image:`, error);
     }
   };
-
   // 추가
   const editHandler = async () => {
+    if (!editImage || !editedTitle || !editedPrice || !editedSellerInfo || !editedDescription) {
+      alert('모든 값을 입력해주세요.');
+      return;
+    }
+
     const updatedData = {
       title: editedTitle,
-      price: editedPrice,
+      price: Number(editedPrice),
       SellerInformation: editedSellerInfo,
       body: editedDescription,
       img: editImage
     };
-
     try {
-      // console.log('이전mutate');
       await editProductMutation.mutate(updatedData);
-      // console.log('이후mutate');
       // 추가부분
-
       queryClient.invalidateQueries('info');
-      alert('수정이완료되었습니다.');
+      alert('수정이 완료 되었습니다.');
       navigate('/myPage');
     } catch (error) {
       console.error('Error updating product:', error);
     }
   };
+  // 추가부분
+  // const handleDrop = (event) => {
+  //   event.preventDefault();
+  //   const selectedImage = event.dataTransfer.files[0];
+  //   handleImageChange(selectedImage);
+  // };
 
   return (
     <StContainer>
       <StLeftColumn>
         <StImgDiv>
           {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          {/* <input type="file" accept="image/*" onChange={handleImageChange} /> */}
+          <label htmlFor="imageInput" className="file-input-label">
+            파일 업로드
+          </label>
+          <input type="file" id="imageInput" accept="image/*" onChange={handleImageChange} className="file-input" />
         </StImgDiv>
-        <StDescriptionDiv>설명</StDescriptionDiv>
-        <StDescription
-          value={editedDescription}
-          onChange={(e) => {
-            setEditedDescription(e.target.value);
+        {/* <div
+          onDrop={handleDrop}
+          onDragOver={(event) => event.preventDefault()}
+          style={{
+            border: '2px dashed #ccc',
+            padding: '20px',
+            textAlign: 'center',
+            cursor: 'pointer'
           }}
-        />
+        >
+          {editImage ? <img src={editImage} alt="이미지" /> : <p>이미지를 선택하세요</p>}
+        </div> */}
       </StLeftColumn>
       <StRightColumn>
         <StProductDetails>
@@ -141,6 +155,15 @@ function EditPage() {
                   setEditedSellerInfo(e.target.value);
                 }}
               />
+              <div>
+                <StInfoText>설명</StInfoText>
+                <StDescription
+                  value={editedDescription}
+                  onChange={(e) => {
+                    setEditedDescription(e.target.value);
+                  }}
+                />
+              </div>
             </div>
           </StInfoTextWrapDiv>
         </StProductDetails>
@@ -154,83 +177,88 @@ export default EditPage;
 const StContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 20px;
 `;
 
 const StLeftColumn = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StRightColumn = styled.div`
-  width: 300px;
+  width: 500px;
+  padding-left: 20px;
 `;
 
 const StImgDiv = styled.div`
+  position: relative;
+  display: inline-block;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  /* padding: 20px; */
   margin: 20px;
   border-radius: 5px;
-  justify-content: center;
+  /* justify-content: center; */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  height: 550px;
+  width: 500px;
+  height: 500px;
 
   img {
-    max-width: 100%;
-    max-height: 100%;
+    /* max-width: 100%;
+    max-height: 100%; */
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     margin-bottom: 10px;
   }
 
-  input {
+  /* input {
     margin-top: 10px;
-  }
+  } */
 `;
 
 const StDescription = styled.textarea`
   /* margin-top: 10px; */
-  margin-left: 20px;
+  /* margin-left: 20px; */
   font-weight: bold;
   padding: 20px;
   width: 500px;
+  height: 100px;
   align-items: center;
   background-color: rgb(233, 233, 233);
   border: 0;
   border-radius: 10px;
   outline: none;
 `;
-
 const StProductDetails = styled.div`
-  display: grid;
+  /* display: grid; */
   /* grid-template-columns: 1fr 1fr; */
-  column-gap: 20px;
+  /* column-gap: 20px; */
   /* margin-top: 20px; */
   padding: 20px;
 `;
-
 const StContainerBtn = styled.div`
   margin-bottom: 50px;
   width: 800px;
 `;
-
 const StDescriptionDiv = styled.div`
   padding: 20px;
 `;
-
 const StInfoTextWrapDiv = styled.div`
   width: 300px;
   height: 500px;
-  margin-left: -150px;
+  /* margin-left: -150px; */
 `;
-
 const StInfoText = styled.div`
   width: 100px;
   height: 30px;
   margin-top: 20px;
   margin-left: 5px;
 `;
-
 const StInfoInput = styled.input`
   width: 250px;
   height: 30px;

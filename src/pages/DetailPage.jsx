@@ -4,6 +4,7 @@ import { DeleteButton, EditLinkButton } from '../components/Buttons';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deleteHealth, getHealth } from '../axios/api';
 import { useNavigate, useParams } from 'react-router-dom';
+import { auth } from '../axios/firebase';
 
 function DetailPage() {
   const navigate = useNavigate();
@@ -11,15 +12,15 @@ function DetailPage() {
   const { id } = useParams();
 
   const { isLoading, data } = useQuery('info', getHealth);
-  // console.log('data=>', data);
 
   const queryClient = useQueryClient();
   const productInfo = data?.find((item) => item.id == id);
-  console.log('productInfo=>', productInfo);
+
+  const user = auth.currentUser;
+  const loggedInUserEmail = user ? user.email : null;
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
-      console.log('invalidateQueries');
       queryClient.invalidateQueries('info');
 
       // alert('삭제되었습니다.');
@@ -31,8 +32,6 @@ function DetailPage() {
     return <div>로딩중 ...</div>;
   }
 
-  // console.log('productInfo=>', productInfo);
-
   // if (!productInfo) {
   //   return <div>상품 정보를 찾을 수 없습니다.</div>;
   // }
@@ -42,11 +41,10 @@ function DetailPage() {
     if (isDeletable) {
       try {
         await deleteMutation.mutate(id);
-        console.log('await 끝');
         // alert('삭제되었습니다.');
         navigate('/myPage');
       } catch (error) {
-        console.log('오류가 발생했습니다', error);
+        alert('오류가 발생했습니다', error);
       }
     }
   };
@@ -59,23 +57,33 @@ function DetailPage() {
           <StImgDiv>
             <img src={productInfo.img} alt="제품"></img>
           </StImgDiv>
-          <StDescription>설명:{productInfo.body}</StDescription>
         </StLeftColumn>
         <StRightColumn>
           <StProductDetails>
             <StContainerBtn>
-              <EditLinkButton id={id} />
-              <DeleteButton handleDelete={handleDelete} />
+              {productInfo.user == loggedInUserEmail && (
+                <>
+                  <EditLinkButton id={id} loggedInUserEmail={loggedInUserEmail} productInfo={productInfo} />
+                  <DeleteButton handleDelete={handleDelete} />
+                </>
+              )}
             </StContainerBtn>
             <div>
               <div>
-                <p>상품명: {productInfo.title} </p>
+                <StInfoTitle>상품명</StInfoTitle>
+                <StInfoText>{productInfo.title}</StInfoText>
               </div>
               <div>
-                <p>가격: {productInfo.price} 원</p>
+                <StInfoTitle>가격</StInfoTitle>
+                <StInfoText>{productInfo.price} 원</StInfoText>
               </div>
               <div>
-                <div>판매자정보:{productInfo.SellerInformation}</div>
+                <StInfoTitle>판매자정보</StInfoTitle>
+                <StInfoText>{productInfo.SellerInformation}</StInfoText>
+              </div>
+              <div>
+                <StInfoTitle>설명</StInfoTitle>
+                <StDescription>{productInfo.body}</StDescription>
               </div>
             </div>
           </StProductDetails>
@@ -92,34 +100,42 @@ export default DetailPage;
 const StContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 20px;
 `;
 
 const StLeftColumn = styled.div`
-  width: 100%;
+  /* width: 100%; */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StRightColumn = styled.div`
   width: 500px;
+  padding-left: 20px;
 `;
 
 const StImgDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid black;
-  padding: 20px;
+  border: 0px solid black;
+  /* padding: 20px; */
   margin: 20px;
   border-radius: 5px;
-  justify-content: center;
+  /* justify-content: center; */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  height: 550px;
+  width: 500px;
+  height: 500px;
 
   img {
-    max-width: 100%;
-    max-height: 100%;
+    /* max-width: 100%;
+    max-height: 100%; */
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
+    border-radius: 5px;
   }
 
   input {
@@ -128,16 +144,23 @@ const StImgDiv = styled.div`
 `;
 
 const StDescription = styled.div`
-  margin-top: 20px;
+  /* margin-top: 10px; */
+  /* margin-left: 20px; */
   font-weight: bold;
   padding: 20px;
-  width: 300px;
+  width: 500px;
+  height: 100px;
+  align-items: center;
+  background-color: rgb(233, 233, 233);
+  border: 0;
+  border-radius: 10px;
+  outline: none;
 `;
 
 const StProductDetails = styled.div`
-  display: grid;
+  /* display: grid; */
   /* grid-template-columns: 1fr 1fr; */
-  column-gap: 20px;
+  /* column-gap: 20px; */
   /* margin-top: 20px; */
   padding: 20px;
 
@@ -159,4 +182,23 @@ const StProductDetails = styled.div`
 const StContainerBtn = styled.div`
   margin-bottom: 50px;
   /* margin-left: 30%; */
+`;
+
+const StInfoTitle = styled.div`
+  width: 100px;
+  height: 30px;
+  margin-top: 20px;
+  margin-left: 5px;
+`;
+
+const StInfoText = styled.div`
+  width: 250px;
+  height: 30px;
+  text-align: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 10px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
 `;
