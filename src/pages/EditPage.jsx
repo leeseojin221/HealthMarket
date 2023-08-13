@@ -111,10 +111,10 @@ function EditPage() {
             <EditButton editHandler={editHandler} />
             <CancelButton id={id} />
           </StContainerBtn>
-          <div>
+          <StInfoTextWrapDiv>
             <div>
-              상품명{' '}
-              <input
+              <StInfoText>상품명 </StInfoText>
+              <StInfoInput
                 type="text"
                 value={editedTitle}
                 onChange={(e) => {
@@ -123,8 +123,8 @@ function EditPage() {
               />
             </div>
             <div>
-              가 격{' '}
-              <input
+              <StInfoText>가 격 </StInfoText>
+              <StInfoInput
                 type="text"
                 value={editedPrice}
                 onChange={(e) => {
@@ -133,8 +133,8 @@ function EditPage() {
               />
             </div>
             <div>
-              판매자정보{' '}
-              <input
+              <StInfoText>판매자정보 </StInfoText>
+              <StInfoInput
                 type="text"
                 value={editedSellerInfo}
                 onChange={(e) => {
@@ -142,7 +142,7 @@ function EditPage() {
                 }}
               />
             </div>
-          </div>
+          </StInfoTextWrapDiv>
         </StProductDetails>
       </StRightColumn>
     </StContainer>
@@ -168,7 +168,6 @@ const StImgDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid black;
   padding: 20px;
   margin: 20px;
   border-radius: 5px;
@@ -195,8 +194,11 @@ const StDescription = styled.textarea`
   font-weight: bold;
   padding: 20px;
   width: 500px;
-
   align-items: center;
+  background-color: rgb(233, 233, 233);
+  border: 0;
+  border-radius: 10px;
+  outline: none;
 `;
 
 const StProductDetails = styled.div`
@@ -209,8 +211,33 @@ const StProductDetails = styled.div`
 
 const StContainerBtn = styled.div`
   margin-bottom: 50px;
+  width: 800px;
 `;
 
 const StDescriptionDiv = styled.div`
   padding: 20px;
+`;
+
+const StInfoTextWrapDiv = styled.div`
+  width: 300px;
+  height: 500px;
+  margin-left: -150px;
+`;
+
+const StInfoText = styled.div`
+  width: 100px;
+  height: 30px;
+  margin-top: 20px;
+  margin-left: 5px;
+`;
+
+const StInfoInput = styled.input`
+  width: 250px;
+  height: 30px;
+  text-align: center;
+  border: 0;
+  border-radius: 10px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
 `;

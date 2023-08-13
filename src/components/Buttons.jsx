@@ -46,14 +46,25 @@ const DeleteBtn = styled.button`
 `;
 
 const EditBtn = styled.button`
-  background-color: white;
+  background-color: #dddff0;
+  border-color: #dddff0;
   margin-right: 10px;
   cursor: pointer;
+  width: 100px;
+  height: 30px;
+  border-color: #dddff0;
+  border-radius: 7px;
+  color: #1a4475;
 `;
 
 const CancelBtn = styled.button`
-  background-color: white;
+  background-color: #dddff0;
+  border-color: #dddff0;
   cursor: pointer;
+  width: 100px;
+  height: 30px;
+  border-radius: 7px;
+  color: #1a4475;
 `;
 
 // 남색 #1a4475 , 아이보리 #e9e6d8

@@ -6,7 +6,9 @@ import { getItems } from '../axios/api';
 import { auth, db } from '../axios/firebase';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { storage } from '../axios/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -34,51 +36,87 @@ function MyPage() {
     setIsModalOpen(false);
   };
 
+  const [img, setImg] = useState('');
+
+  const options = [
+    { value: '0', name: '선택해주세요' },
+    { value: '1', name: '1' },
+    { value: '2', name: '2' },
+    { value: '3', name: '3' },
+    { value: '4', name: '4' }
+  ];
+  console.log('옵션', options);
+  const [selectedCategory, setSelectedCategory] = useState(options[0].value);
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  const [productTitle, setProductTitle] = useState('');
+  const [productPrice, setProductPrice] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [body, setBody] = useState('');
+
   const handleWrite = async () => {
-    await setDoc(doc(db, 'info', 'LA'), {
-      category: '카테고리',
-      id: '이메일',
-      price: '가격',
-      title: '닉네임'
+    const docRef = await addDoc(collection(db, 'info'), {
+      title: productTitle,
+      price: productPrice,
+      nickname: nickname,
+      body: body,
+      id: loggedInUserEmail,
+      category: selectedCategory,
+      img: img
     });
+
+    console.log('Document written with ID: ', docRef.id);
     closeModal();
+  };
+
+  const handleImageUpload = async (e) => {
+    console.log('사진 올리기 ');
+    const selectedImage = e.target.files[0];
+    try {
+      const storageRef = ref(storage, `images/${selectedImage.name}`);
+      await uploadBytes(storageRef, selectedImage);
+      const imageURL = await getDownloadURL(storageRef);
+      setImg(imageURL);
+    } catch (error) {
+      console.error(`Error uploading image:`, error);
+    }
   };
 
   return (
     <>
-      <StMyPagebox>
-        <StMyContainer>
-          <StUserWrap>
-            <StUserInfo isModalOpen={isModalOpen}>회원정보</StUserInfo>
-            <StUserImg isModalOpen={isModalOpen}>회원사진</StUserImg>
-          </StUserWrap>
-          <StWriteButton onClick={openModal} isModalOpen={isModalOpen}>
-            글쓰기
-          </StWriteButton>
-          {isModalOpen && (
-            <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <div className="modal-content">
-                <input type="file" />
-                <input type="text" placeholder="상품명" />
-                <input type="text" placeholder="가격" />
-                <input type="text" placeholder="닉네임" />
-                <textarea placeholder="설명" />
-                <button onClick={handleWrite}>작성하기</button>
-              </div>
-            </Modal>
-          )}
-          <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
-          <StUserListText isModalOpen={isModalOpen}>
-            {filteredUserEmail.map((item) => (
-              <div key={item.id}>
-                <Link to={`/detail/${item.id}`}>{item.title}</Link>
-                <EditLinkButton />
-                <DeleteButton />
-              </div>
-            ))}
-          </StUserListText>
-        </StMyContainer>
-      </StMyPagebox>
+      <StMyContainer>
+        <StUserWrap>
+          <StUserInfo isModalOpen={isModalOpen}>회원정보</StUserInfo>
+          <StUserImg isModalOpen={isModalOpen}>회원사진</StUserImg>
+        </StUserWrap>
+        <StWriteButton onClick={openModal} isModalOpen={isModalOpen}>
+          글쓰기
+        </StWriteButton>
+        {isModalOpen && (
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+            <div className="modal-content">
+              <input type="file" />
+              <input type="text" placeholder="상품명" />
+              <input type="text" placeholder="가격" />
+              <input type="text" placeholder="닉네임" />
+              <textarea placeholder="설명" />
+              <button onClick={handleWrite}>작성하기</button>
+            </div>
+          </Modal>
+        )}
+        <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
+        <StUserListText isModalOpen={isModalOpen}>
+          {filteredUserEmail.map((item) => (
+            <div key={item.id}>
+              <Link to={`/detail/${item.id}`}>{item.title}</Link>
+              <EditLinkButton />
+              <DeleteButton />
+            </div>
+          ))}
+        </StUserListText>
+      </StMyContainer>
     </>
   );
 }
@@ -99,7 +137,6 @@ const StUserList = styled.div`
 `;
 const StUserListText = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
-  blackground-color: #000;
 `;
 
 const StUserWrap = styled.div`

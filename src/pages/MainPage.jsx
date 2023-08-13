@@ -4,7 +4,10 @@ import SelectBox from '../form/selectBox';
 import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router';
 import { useQuery } from 'react-query';
-import { getItems } from '../axios/api';
+import { getItems, addHealth } from '../axios/api';
+import health from '../assets/healthmarket_logo.png';
+import WriteModal from '../form/WriteModal';
+import { auth } from '../axios/firebase';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -18,8 +21,11 @@ function MainPage() {
   ];
 
   const navigate = useNavigate();
+  // 추가부분
+  // const [isModalOpen, setIsModalOpen] = useState(fasle);
   const [searchItem, setSearchItem] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(options[0].value); // 기본 카테고리
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onChange = (e) => {
     setSearchItem(e.target.value);
@@ -27,6 +33,27 @@ function MainPage() {
 
   const onSelectChange = (e) => {
     setSelectedCategory(e.target.value);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleWriteButtonClick = () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      setIsModalOpen(true);
+      console.log('글쓰기!');
+    } else {
+      alert('로그인이 필요합니다.');
+    }
   };
 
   return (
@@ -43,20 +70,26 @@ function MainPage() {
             <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
             <SearchIcon />
           </StserchInput>
-          <button>글쓰기</button>
+          <button onClick={handleWriteButtonClick}>글쓰기</button>
         </Stcontainer2>
       </Stcontainer1>
+      {isModalOpen && <WriteModal closeModal={openModal} />}
       <StContainer>
         {isLoading ? (
           <div>Loading...</div>
         ) : (
           data
             .filter((item) => selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '')
-            .filter(
-              (item) =>
-                (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') &&
-                item.title.toLowerCase().includes(searchItem.toLowerCase())
-            )
+            .filter((item) => {
+              if (item.category) {
+                // category 속성이 있는지 확인
+                return (
+                  (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') &&
+                  item.title.toLowerCase().includes(searchItem.toLowerCase())
+                );
+              }
+              return false; // category 속성이 없으면 필터링에서 제외
+            })
             .map((item) => {
               if (selectedCategory === '0' || item.category === selectedCategory || selectedCategory === '') {
                 return (
@@ -68,7 +101,7 @@ function MainPage() {
                   >
                     <StImg src={item.img} />
                     <Stp>{item.title}</Stp>
-                    <Stp>{item.price}원</Stp>
+                    <Stp>{parseInt(item.price).toLocaleString()} 원</Stp>
                     <Stp>카테고리: {item.category}</Stp>
                   </StCard>
                 );
