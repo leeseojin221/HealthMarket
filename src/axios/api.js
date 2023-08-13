@@ -1,5 +1,6 @@
 import { collection, deleteDoc, doc, getDocs, query, updateDoc, addDoc } from 'firebase/firestore';
-import { db } from './firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from './firebase';
 
 const getHealth = async () => {
   const q = query(collection(db, 'info'));

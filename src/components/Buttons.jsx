@@ -40,31 +40,80 @@ export const EditButton = ({ editHandler }) => {
 };
 
 const DeleteBtn = styled.button`
-  background-color: #e9e6d8;
-  color: #ffa596;
-  border: none;
-  width: 80px;
+  /* background-color: white;
+  cursor: pointer; */
+  align-items: center;
+  /* margin: 5px; */
+  margin-right: 10px;
+  width: 100px;
   height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
   cursor: pointer;
+
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
 `;
 
 const EditBtn = styled.button`
-  background-color: #9ab6ff;
-  color: #e9e6d8;
-  border: none;
+  /* background-color: white;
   margin-right: 10px;
-  width: 80px;
+  cursor: pointer; */
+  align-items: center;
+  /* margin: 5px; */
+  margin-left: 100px;
+  margin-right: 10px;
+  width: 100px;
   height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
   cursor: pointer;
+
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
 `;
 
 const CancelBtn = styled.button`
-  background-color: #e9e6d8;
-  color: #ffa596;
-  border: none;
-  width: 80px;
+  /* background-color: white;
+  cursor: pointer; */
+  align-items: center;
+  /* margin: 5px; */
+  margin-right: 10px;
+  width: 100px;
   height: 30px;
+  border-radius: 7px;
+  /* padding: 10px 15px; */
+  background-color: #dddff0;
+  color: #1a4475;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
   cursor: pointer;
+
+  &:hover {
+    background-color: #1a4475;
+    color: #dddff0;
+    transition: all 0.3s;
+  }
 `;
 
 // 남색 #1a4475 , 아이보리 #e9e6d8
