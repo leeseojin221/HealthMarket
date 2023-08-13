@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { getItems } from '../axios/api';
 import WriteModal from '../form/WriteModal';
 import { auth } from '../axios/firebase';
+import { CreateButton } from '../components/Buttons';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
@@ -58,7 +59,7 @@ function MainPage() {
             <InputField type="text" placeholder="검색해주세요" value={searchItem} onChange={onChange} />
             <SearchIcon />
           </StserchInput>
-          <button onClick={handleWriteButtonClick}>글쓰기</button>
+          <CreateButton handleWriteButtonClick={handleWriteButtonClick} />
         </Stcontainer2>
       </Stcontainer1>
       {isModalOpen && <WriteModal setIsModalOpen={setIsModalOpen} />}
