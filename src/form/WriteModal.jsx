@@ -70,7 +70,7 @@ function WriteModal({ setIsModalOpen }) {
 
   return (
     <StModal>
-      <div className="modal-content">
+      <StModalContainer>
         <div>
           <button
             onClick={() => {
@@ -93,7 +93,7 @@ function WriteModal({ setIsModalOpen }) {
           ))}
         </select>
         <button onClick={handleWrite}>작성하기</button>
-      </div>
+      </StModalContainer>
     </StModal>
   );
 }
@@ -107,36 +107,44 @@ const StModal = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  border-style: solid;
-  padding: 50px;
-  border-radius: 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border: solid 1px black;
+  padding: 20px;
+  border-radius: 0px;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 `;
 
 const StModalTitleInput = styled.input`
-  border-style: solid;
+  border: solid 1px black;
   padding: 10px;
   margin-bottom: 20px;
   font-size: 15px;
 `;
 
 const StModalPriceInput = styled.input`
-  border-style: solid;
+  border: solid 1px black;
   padding: 10px;
   margin-bottom: 20px;
   font-size: 15px;
 `;
 
 const StModalTextarea = styled.textarea`
-  border-style: solid;
+  border: solid 1px black;
   margin-bottom: 20px;
   font-size: 15px;
 `;
 
 const StModalCategorySelect = styled.select`
-  border-style: solid;
+  border: solid 1px black;
   padding: 5px;
   margin-bottom: 20px;
   font-size: 15px;
 `;
+
+const StModalContainer = styled.div`
+ display: flex;
+ flex-direction: column;
+ width:  100%;
+ height: 100%;
+ gap: 10px;
+`
