@@ -4,6 +4,7 @@ import { DeleteButton, EditLinkButton } from '../components/Buttons';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deleteHealth, getHealth } from '../axios/api';
 import { useNavigate, useParams } from 'react-router-dom';
+import { auth } from '../axios/firebase';
 
 function DetailPage() {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ function DetailPage() {
   const queryClient = useQueryClient();
   const productInfo = data?.find((item) => item.id == id);
   console.log('productInfo=>', productInfo);
+
+  const user = auth.currentUser;
+  const loggedInUserEmail = user ? user.email : null;
 
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
@@ -41,10 +45,14 @@ function DetailPage() {
     const isDeletable = window.confirm('정말 삭제하시겠습니까?');
     if (isDeletable) {
       try {
-        await deleteMutation.mutate(id);
-        console.log('await 끝');
-        // alert('삭제되었습니다.');
-        navigate('/myPage');
+        if (productInfo.user == loggedInUserEmail) {
+          await deleteMutation.mutate(id);
+          console.log('await 끝');
+          // alert('삭제되었습니다.');
+          navigate('/myPage');
+        } else {
+          alert('작성자만 삭제할 수 있습니다.');
+        }
       } catch (error) {
         console.log('오류가 발생했습니다', error);
       }
@@ -64,8 +72,12 @@ function DetailPage() {
         <StRightColumn>
           <StProductDetails>
             <StContainerBtn>
-              <EditLinkButton id={id} />
-              <DeleteButton handleDelete={handleDelete} />
+              {productInfo.user == loggedInUserEmail && (
+                <>
+                  <EditLinkButton id={id} loggedInUserEmail={loggedInUserEmail} productInfo={productInfo} />
+                  <DeleteButton handleDelete={handleDelete} />
+                </>
+              )}
             </StContainerBtn>
             <div>
               <div>
