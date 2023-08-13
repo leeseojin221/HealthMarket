@@ -206,7 +206,27 @@ const StImgDiv = styled.div`
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   width: 500px;
   height: 500px;
-
+  
+  .file-input-label {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: #F8F8F8; */
+    padding: 10px 20px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+    cursor: pointer;
+  }
+  .file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
   img {
     /* max-width: 100%;
     max-height: 100%; */
@@ -269,3 +289,4 @@ const StInfoInput = styled.input`
   padding-left: 10px;
   background-color: rgb(233, 233, 233);
 `;
+

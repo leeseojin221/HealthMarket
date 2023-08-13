@@ -6,6 +6,7 @@ import { getItems, deleteHealth } from '../axios/api';
 import { auth } from '../axios/firebase';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
+import health from '../assets/healthmarket_logo.png';
 
 function MyPage() {
   const navigate = useNavigate();
@@ -50,9 +51,9 @@ function MyPage() {
   return (
     <>
       <StMyContainer>
-        <StUserWrap>
-          <StUserInfo isModalOpen={isModalOpen}>회원정보</StUserInfo>
-          <StUserImg isModalOpen={isModalOpen}>회원사진</StUserImg>
+        <StUserWrap isModalOpen={isModalOpen}>
+          <StUserInfo >회원정보</StUserInfo>
+          <StUserImg ><StImg src={health}/></StUserImg>
         </StUserWrap>
         <StWriteButton onClick={handleWriteButtonClick} isModalOpen={isModalOpen}>
           글쓰기
@@ -79,14 +80,25 @@ function MyPage() {
 
 export default MyPage;
 
-const StUserInfo = styled.span`
-  display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+const StUserInfo = styled.div`
+width: 90%;
+height: 60%;
+border: solid 1px black;
 `;
-const StUserImg = styled.span`
-  display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+const StUserImg = styled.div`
+padding-right: 0px;
+margin-right:  0px;
 `;
+
+const StImg = styled.img`
+  width: 90%;
+  height: 60%;
+  border: solid 1px black;
+  border-radius: 100%;
+`
 const StWriteButton = styled.button`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+  
 `;
 const StUserList = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
@@ -96,46 +108,16 @@ const StUserListText = styled.div`
 `;
 
 const StUserWrap = styled.div`
-  display: flex;
-  align-items: center;
+  display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'flex')};
+  width: 650px;
+  height: 250px;
+  gap: 40px;
+  padding-right: 0px;
+  margin-right: 0px;
 `;
 const StMyContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-export const StFlex = styled.div`
-  transform: translate(80px, 0px);
   display: flex;
-  margin-bottom: 30px;
-`;
-
-const StListTitle = styled.div`
-  transform: translate(85px, 0px);
-  margin: 50px auto 50px auto;
-  font-size: 25px;
-  font-weight: bolder;
-  text-decoration-line: none;
-  color: black;
-`;
-
-export const StListTitleBox = styled.div`
-  width: 250px;
-  padding: 4px;
-  margin-right: 30px;
-  font-size: 20px;
-  font-weight: bolder;
-  color: black;
-`;
-export const StListBodyBox = styled.div`
-  width: 600px;
-  padding: 4px;
-  font-size: 20px;
-  font-weight: bolder;
-  color: black;
-`;
-
-const StList = styled.div`
-  text-decoration: none;
-  color: white;
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
 `;
