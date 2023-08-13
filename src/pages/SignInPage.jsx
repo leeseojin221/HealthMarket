@@ -54,7 +54,7 @@ function SignInPage() {
         setGoogleUserData(data.user);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   }
 
@@ -183,7 +183,7 @@ const StSignInput = styled.input`
   border-radius: 8px;
   border: 1px solid lightgrey;
   padding: 8px;
-  boxsizing: border-box;
+  box-sizing: border-box;
   margin-bottom: 10px;
   margin-top: 5px;
 `;

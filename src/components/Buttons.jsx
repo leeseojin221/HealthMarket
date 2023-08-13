@@ -15,7 +15,6 @@ export const DeleteButton = ({ handleDelete }) => {
 };
 
 export const EditLinkButton = ({ id }) => {
-  // console.log('id=>', id);
   const navigate = useNavigate();
   const editLinkButton = () => {
     if (editLinkButton) {
