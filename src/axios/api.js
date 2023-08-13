@@ -56,19 +56,4 @@ const getItems = async () => {
   return Items;
 };
 
-const addHealth = async (title, price, content, category) => {
-  try {
-    const healthCollection = collection(db, 'info');
-    const newHealthRef = await addDoc(healthCollection, {
-      title: title,
-      price: price,
-      content: content,
-      category: category
-    });
-    console.log('Document written with ID: ', newHealthRef.id);
-  } catch (error) {
-    throw new Error('Error adding document: ' + error.message);
-  }
-};
-
-export { getItems, getHealth, deleteHealth, editHealth, addHealth };
+export { getItems, getHealth, deleteHealth, editHealth };

@@ -1,8 +1,22 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { addHealth } from '../axios/api';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from '../axios/firebase';
+import { addDoc, collection } from 'firebase/firestore';
+import { auth, db } from '../axios/firebase';
 
-function WriteModal({ isOpen, onClose, onUpload, children }) {
+function WriteModal() {
+  const user = auth.currentUser; // 로그인된 사용자 정보 가져오기
+  const loggedInUserEmail = user ? user.email : null; // 로그인된 사용자의 이메일
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    console.log(isModalOpen);
+  };
+
+  const [img, setImg] = useState('');
+
   const options = [
     { value: '0', name: '선택해주세요' },
     { value: '1', name: '1' },
@@ -11,62 +25,63 @@ function WriteModal({ isOpen, onClose, onUpload, children }) {
     { value: '4', name: '4' }
   ];
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [priec, setPriec] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(options[0].value);
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
-
-  const handlePriceChange = (e) => {
-    setPriec(e.target.value);
-  };
-
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
 
-  const handleUpload = async () => {
+  const [productTitle, setProductTitle] = useState('');
+  const [productPrice, setProductPrice] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [body, setBody] = useState('');
+
+  const handleWrite = async () => {
+    const docRef = await addDoc(collection(db, 'info'), {
+      title: productTitle,
+      price: productPrice,
+      nickname: nickname,
+      body: body,
+      user: loggedInUserEmail,
+      category: selectedCategory,
+      img: img
+    });
+    closeModal();
+  };
+  const handleImageUpload = async (e) => {
+    const selectedImage = e.target.files[0];
     try {
-      await addHealth(title, priec, content, selectedCategory);
-      onClose();
+      const storageRef = ref(storage, `images/${selectedImage.name}`);
+      await uploadBytes(storageRef, selectedImage);
+      const imageURL = await getDownloadURL(storageRef);
+      setImg(imageURL);
     } catch (error) {
-      console.error('Error adding health: ', error);
+      console.error(`Error uploading image:`, error);
     }
-    window.location.reload('/');
   };
 
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <StModal>
-      <h2>글 작성</h2>
-      <StModalTitleInput type="text" placeholder="제목" value={title} onChange={handleTitleChange} />
-      <StModalPriceInput type="text" placeholder="가격" value={priec} onChange={handlePriceChange} />
-      <StModalTextarea placeholder="내용" value={content} onChange={handleContentChange} />
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      <StModalCategorySelect value={selectedCategory} onChange={handleCategoryChange}>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.name}
-          </option>
-        ))}
-      </StModalCategorySelect>
-      <button onClick={handleUpload}>작성</button>
-      <button onClick={onClose}>닫기</button>
+    <StModal isOpen={isModalOpen} onClose={closeModal}>
+      <div className="modal-content">
+        <button onClick={closeModal}>닫기</button>
+        <input type="file" onChange={handleImageUpload} />
+        <input
+          type="text"
+          placeholder="상품명"
+          value={productTitle}
+          onChange={(e) => setProductTitle(e.target.value)}
+        />
+        <input type="text" placeholder="가격" value={productPrice} onChange={(e) => setProductPrice(e.target.value)} />
+        <input type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+        <input type="text" placeholder="설명" value={body} onChange={(e) => setBody(e.target.value)} />
+        <select value={selectedCategory} onChange={handleCategoryChange}>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleWrite}>작성하기</button>
+      </div>
     </StModal>
   );
 }
@@ -74,6 +89,7 @@ function WriteModal({ isOpen, onClose, onUpload, children }) {
 export default WriteModal;
 
 const StModal = styled.div`
+  display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
   position: fixed;
   top: 50%;
   left: 50%;
