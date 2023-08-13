@@ -7,6 +7,7 @@ import { auth, db } from '../axios/firebase';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
+import health from '../assets/healthmarket_logo.png'
 
 // 회원정보 : e-mail 확인 가능하도록.
 // 회원사진 : firebase에서 아이디에 저장된 사진 불러오기.
@@ -48,9 +49,9 @@ function MyPage() {
   return (
     <>
       <StMyContainer>
-        <StUserWrap>
-          <StUserInfo isModalOpen={isModalOpen}>회원정보</StUserInfo>
-          <StUserImg isModalOpen={isModalOpen}>회원사진</StUserImg>
+        <StUserWrap isModalOpen={isModalOpen}>
+          <StUserInfo >회원정보</StUserInfo>
+          <StUserImg ><StImg src={health}/></StUserImg>
         </StUserWrap>
         <StWriteButton onClick={openModal} isModalOpen={isModalOpen}>
           글쓰기
@@ -84,14 +85,25 @@ function MyPage() {
 
 export default MyPage;
 
-const StUserInfo = styled.span`
-  display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+const StUserInfo = styled.div`
+width: 90%;
+height: 60%;
+border: solid 1px black;
 `;
-const StUserImg = styled.span`
-  display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+const StUserImg = styled.div`
+padding-right: 0px;
+margin-right:  0px;
 `;
+
+const StImg = styled.img`
+  width: 90%;
+  height: 60%;
+  border: solid 1px black;
+  border-radius: 100%;
+`
 const StWriteButton = styled.button`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
+  
 `;
 const StUserList = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
@@ -102,16 +114,16 @@ const StUserListText = styled.div`
 `;
 
 const StUserWrap = styled.div`
-  align-items: center;
-  border:solid 1px black;
+  display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'flex')};
+  width: 650px;
+  height: 250px;
+  gap: 40px;
+  padding-right: 0px;
+  margin-right: 0px;
 `;
 const StMyContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-export const StFlex = styled.div`
-  transform: translate(80px, 0px);
   display: flex;
-  margin-bottom: 30px;
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
 `;
