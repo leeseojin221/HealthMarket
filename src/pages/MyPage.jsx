@@ -34,14 +34,20 @@ function MyPage() {
     setIsModalOpen(false);
   };
 
-  // category, body, price, title, nickname, img
-  let name = 'Tokyo';
+  const [productTitle, setProductTitle] = useState('');
+  const [productPrice, setProductPrice] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [body, setBody] = useState('');
 
   const handleWrite = async () => {
     const docRef = await addDoc(collection(db, 'info'), {
-      name,
-      country: 'Japan'
+      title: productTitle,
+      price: productPrice,
+      nickname: nickname,
+      body: body,
+      id: loggedInUserEmail
     });
+
     console.log('Document written with ID: ', docRef.id);
     closeModal();
   };
@@ -60,12 +66,23 @@ function MyPage() {
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             <div className="modal-content">
               <input type="file" />
-              <input type="text" placeholder="상품명" />
-              <input type="text" placeholder="가격" />
-              <input type="text" placeholder="닉네임" />
-              <textarea placeholder="설명" />
+              <input
+                type="text"
+                placeholder="상품명"
+                value={productTitle}
+                onChange={(e) => setProductTitle(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="가격"
+                value={productPrice}
+                onChange={(e) => setProductPrice(e.target.value)}
+              />
+              <input type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+              <input type="text" placeholder="설명" value={body} onChange={(e) => setBody(e.target.value)} />
               <button onClick={handleWrite}>작성하기</button>
             </div>
+            {/* title, price, category, body, img, nickname, id */}
           </Modal>
         )}
         <StUserList isModalOpen={isModalOpen}>작성한 글목록</StUserList>
@@ -99,7 +116,6 @@ const StUserList = styled.div`
 `;
 const StUserListText = styled.div`
   display: ${({ isModalOpen }) => (isModalOpen ? 'none' : 'block')};
-  blackground-color: #000;
 `;
 
 const StUserWrap = styled.div`
