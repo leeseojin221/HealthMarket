@@ -8,16 +8,17 @@ import { getItems } from '../axios/api';
 import WriteModal from '../form/WriteModal';
 import { auth } from '../axios/firebase';
 import { CreateButton } from '../components/Buttons';
+import { needLogin } from '../components/Alert';
 
 function MainPage() {
   const { data, isLoading } = useQuery('info', getItems);
 
   const options = [
     { value: '0', name: '모든 상품' },
-    { value: '1', name: '1' },
-    { value: '2', name: '2' },
-    { value: '3', name: '3' },
-    { value: '4', name: '4' }
+    { value: '1', name: '유산소' },
+    { value: '2', name: '근력' },
+    { value: '3', name: '스포츠잡화' },
+    { value: '4', name: '건강식품' }
   ];
 
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function MainPage() {
     if (user) {
       setIsModalOpen(true);
     } else {
-      alert('로그인이 필요합니다.');
+      needLogin();
     }
   };
 

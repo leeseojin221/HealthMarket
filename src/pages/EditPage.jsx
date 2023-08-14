@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { editHealth, getHealth } from '../axios/api';
 import { storage } from './../axios/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { editSuccess } from '../components/Alert';
 
 function EditPage() {
   const { id } = useParams();
@@ -78,7 +79,7 @@ function EditPage() {
     try {
       await editProductMutation.mutate(updatedData);
       queryClient.invalidateQueries('info');
-      alert('수정이 완료 되었습니다.');
+      editSuccess();
       navigate('/myPage');
     } catch (error) {
       console.error('Error updating product:', error);

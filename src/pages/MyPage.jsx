@@ -7,6 +7,7 @@ import { auth } from '../axios/firebase';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import health from '../assets/healthmarket_logo.png';
+import { deleteSuccess } from '../components/Alert';
 
 function MyPage() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function MyPage() {
     if (isDeletable) {
       try {
         await deleteMutation.mutate(id);
-        alert('삭제되었습니다.');
+        deleteSuccess();
         navigate('/myPage');
       } catch (error) {
         alert('오류가 발생했습니다', error);

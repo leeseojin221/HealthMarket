@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { editNavigate } from '../components/Alert';
 
 function Buttons({ children, ...props }) {
   return <></>;
@@ -16,7 +17,7 @@ export const EditLinkButton = ({ id }) => {
   const navigate = useNavigate();
   const editLinkButton = () => {
     if (editLinkButton) {
-      alert('수정페이지로 이동합니다.');
+      editNavigate();
       navigate(`/editPage/${id}`);
     }
   };

@@ -19,10 +19,10 @@ function WriteModal({ setIsModalOpen }) {
 
   const options = [
     { value: '0', name: '선택해주세요' },
-    { value: '1', name: '1' },
-    { value: '2', name: '2' },
-    { value: '3', name: '3' },
-    { value: '4', name: '4' }
+    { value: '1', name: '유산소' },
+    { value: '2', name: '근력' },
+    { value: '3', name: '스포츠잡화' },
+    { value: '4', name: '건강식품' }
   ];
 
   const [selectedCategory, setSelectedCategory] = useState(options[0].value);
@@ -32,7 +32,7 @@ function WriteModal({ setIsModalOpen }) {
 
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
-  const [nickname, setNickname] = useState('');
+  // const [nickname, setNickname] = useState('');
   const [body, setBody] = useState('');
 
   const queryClient = useQueryClient();
@@ -48,7 +48,7 @@ function WriteModal({ setIsModalOpen }) {
     const addData = {
       title: title,
       price: price,
-      nickname: nickname,
+      // nickname: nickname,
       body: body,
       user: loggedInUserEmail,
       category: selectedCategory,
@@ -89,7 +89,6 @@ function WriteModal({ setIsModalOpen }) {
         </StFileInput>
         <StTextInput type="text" placeholder="상품명" value={title} onChange={(e) => setTitle(e.target.value)} />
         <StTextInput type="text" placeholder="가격" value={price} onChange={(e) => setPrice(e.target.value)} />
-        <StTextInput type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
         <StDescriptionInput type="text" placeholder="설명" value={body} onChange={(e) => setBody(e.target.value)} />
         <StSelect value={selectedCategory} onChange={handleCategoryChange}>
           {options.map((option) => (
