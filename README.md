@@ -21,7 +21,7 @@
 
 - # 페이지 소개
 
-  1. Main 페이지: 상품이 나열되는 페이지 입니다. (./src/assets/mainPage2.png)<br/>
+  1. Main 페이지: 상품이 나열되는 페이지 입니다. ![Alt text](./src/assets/mainPage2.png)
   2. MyPage 페이지: 나의 정보와 글 목록이 뜹니다. (./src/assets/MyPage.png)<br/>
   3. Detail 페이지: 카드를 누르면 상품 세부 내용을 확인할 수 있습니다. (./src/assets/detailPage.png)<br/>
   4. Login 페이지: 로그인과 회원가입 페이지 입니다. (./src/assets/SingupPage.png)<br/>
