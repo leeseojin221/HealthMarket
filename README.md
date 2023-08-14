@@ -21,9 +21,9 @@
 
 - # 페이지 소개
 
-  1. Main 페이지: 상품이 나열되는 페이지 입니다. ![Alt text](./src/assets/mainPage2.png)![Alt text](./src/assets/mainPage2.png) <br/>
-  2. MyPage 페이지: 나의 정보와 글 목록이 뜹니다. ![Alt text](./src/assets/MyPage.png)![Alt text](./src/assets/MyPage.png) <br/>
-  3. Detail 페이지: 카드를 누르면 상품 세부 내용을 확인할 수 있습니다. ![Alt text](./src/assets/detailPage.png)![Alt text](./src/assets/detailPage.png) <br/>
-  4. Login 페이지: 로그인과 회원가입 페이지 입니다. ![Alt text](./src/assets/SingupPage.png)![Alt text](./src/assets/SingupPage.png) <br/>
-  5. Edit 페이지: 페이지 소개 페이지입니다. ![Alt text](./src/assets/SingupPage.png)![Alt text](./src/assets/SingupPage.png) <br/>
-  6. Write 페이지: 에디터가 글을 작성할 수 있는 페이지입니다. ![Alt text](./src/assets/Writemodal)![Alt text](./src/assets/Writemodal) <br/>
+  1. Main 페이지: 상품이 나열되는 페이지 입니다. ![Alt text](./src/assets/mainPage2.png)<br/>
+  2. MyPage 페이지: 나의 정보와 글 목록이 뜹니다. ![Alt text](./src/assets/MyPage.png)<br/>
+  3. Detail 페이지: 카드를 누르면 상품 세부 내용을 확인할 수 있습니다. ![Alt text](./src/assets/detailPage.png)<br/>
+  4. Login 페이지: 로그인과 회원가입 페이지 입니다. ![Alt text](./src/assets/SingupPage.png)<br/>
+  5. Edit 페이지: 페이지 소개 페이지입니다. ![Alt text](./src/assets/SingupPage.png)<br/>
+  6. Write 페이지: 에디터가 글을 작성할 수 있는 페이지입니다. ![Alt text](./src/assets/Writemodal)<br/>
