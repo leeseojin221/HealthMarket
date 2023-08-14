@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deleteHealth, getHealth } from '../axios/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { auth } from '../axios/firebase';
-
+import { deleteSuccess } from '../components/Alert';
 function DetailPage() {
   const navigate = useNavigate();
 
@@ -22,6 +22,7 @@ function DetailPage() {
   const deleteMutation = useMutation(deleteHealth, {
     onSuccess: () => {
       queryClient.invalidateQueries('info');
+      deleteSuccess();
     }
   });
 

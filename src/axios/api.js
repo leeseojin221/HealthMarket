@@ -1,6 +1,6 @@
 import { collection, deleteDoc, doc, getDocs, query, updateDoc, addDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from './firebase';
+import { db } from './firebase';
+import { needAllContent, addAllContent, failAllContent } from '../components/Alert';
 
 const getHealth = async () => {
   const q = query(collection(db, 'info'));
@@ -53,8 +53,27 @@ const getItems = async () => {
   return Items;
 };
 
+const options = [
+  { value: '0', name: '선택해주세요' },
+  { value: '1', name: '유산소' },
+  { value: '2', name: '근력' },
+  { value: '3', name: '스포츠잡화' },
+  { value: '4', name: '건강식품' }
+];
+
 const addHealth = async (addData) => {
-  await addDoc(collection(db, 'info'), addData);
+  const { title, price, body, user, category, img } = addData;
+
+  if (!title || !price || !body || !user || !img || category === options[0]) {
+    needAllContent();
+    return;
+  }
+  try {
+    await addDoc(collection(db, 'info'), addData);
+    addAllContent();
+  } catch (error) {
+    failAllContent();
+  }
 };
 
 export { getItems, getHealth, deleteHealth, editHealth, addHealth };
