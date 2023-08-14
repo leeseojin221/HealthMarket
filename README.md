@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+- # 프로젝트
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+  아웃소싱 프로젝트
 
-## Available Scripts
+  프로젝트 이름 : 헬스 마켓
 
-In the project directory, you can run:
+  프로젝트 내용 : 피트니스 시대에 맞춰 사용자가 원하는 헬스 전용 물품들을 사고 팔 수 있는 중고 거래 사이트
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  기능 소개 요약: 파이어베이스를 활용하여 드라마 추천 페이지를 구성하였습니다.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  프로젝트 목표 : 핵심 기능 이해 및 마감시간 전 완성.
 
-### `yarn test`
+- # 팀원 소개
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+이서진 ENFJ https://blossomflower2214.tistory.com/https://github.com/leeseojin221 <br/>
+박지환 INFP https://orasio.tistory.com/https://github.com/orasio3477 <br/>
+조인재 ISTP https://tnrnr910.tistory.com/manage/posts/ https://github.com/tnrnr910 <br/>
+김진우 ENTP https://velog.io/@wlsdn090909 https://github.com/orasio3477 <br/>
+김의진 INFP https://velog.io/@palpalkim https://github.com/kimpalpal <br/>
 
-### `yarn build`
+- # 페이지 소개
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  1. Main 페이지: 상품이 나열되는 페이지 입니다. ![Alt text](./src/assets/mainPage2.png)
+  2. MyPage 페이지: 나의 정보와 글 목록이 뜹니다. ![Alt text](./src/assets/MyPage.png)
+  3. Detail 페이지: 카드를 누르면 상품 세부 내용을 확인할 수 있습니다. ![Alt text](./src/assets/detailPage.png)
+  4. Login 페이지: 로그인과 회원가입 페이지 입니다. ![Alt text](./src/assets/SingupPage.png)
+  5. Edit 페이지: 페이지 소개 페이지입니다. ![Alt text](./src/assets/SingupPage.png)
+  6. Write 페이지: 에디터가 글을 작성할 수 있는 페이지입니다. ![Alt text](./src/assets/Writemodal.png)
