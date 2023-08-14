@@ -26,4 +26,4 @@
   3. Detail 페이지: 카드를 누르면 상품 세부 내용을 확인할 수 있습니다. ![Alt text](./src/assets/detailPage.png)
   4. Login 페이지: 로그인과 회원가입 페이지 입니다. ![Alt text](./src/assets/SingupPage.png)
   5. Edit 페이지: 페이지 소개 페이지입니다. ![Alt text](./src/assets/SingupPage.png)
-  6. Write 페이지: 에디터가 글을 작성할 수 있는 페이지입니다. ![Alt text](./src/assets/Writemodal)
+  6. Write 페이지: 에디터가 글을 작성할 수 있는 페이지입니다. ![Alt text](./src/assets/Writemodal.png)
